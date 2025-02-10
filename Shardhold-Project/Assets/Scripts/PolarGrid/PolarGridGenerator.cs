@@ -91,6 +91,7 @@ public class PolarGridGenerator : MonoBehaviour
 
     void DetectSectorSelection()
     {
+        // ENSURE POLAR COORDINATE GAME OBJECT CONTAINS A COLLIDER
         if (Input.GetMouseButtonDown(0)) // Detect click
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
