@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using JsonUtility;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -23,9 +24,29 @@ public class SaveLoad : MonoBehaviour
     public string fileToUse = "";   //default save file
     public string saveFolder = Application.persistentDataPath;  //where save files go
 
+    public string playerStatsFile;
 
-	
-	#region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
+    #region Text File I/O
+    public void WriteFile(string filename, string contents)
+    {
+        using (StreamWriter writer = new StreamWriter(saveFolder + "/" + filename, ))
+        {
+            writer.Write(contents);
+        }
+    }
+
+    public string ReadFile(string filename)
+    {
+        string contents = "";
+        using (StreamReader reader = new StreamReader(saveFolder + "/" + filename)) {
+            contents = reader.ReadToEnd();
+        }
+        return contents;
+    }
+    #endregion
+
+
+    #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
     public bool SaveToDefault(SaveType saveType = SaveType.chooseDefault){
         if(debugging){
             Debug.Log("Saving game to default file \"" + fileToUse = "\"");
@@ -198,13 +219,38 @@ public class SaveLoad : MonoBehaviour
     }
 
     //TODO? I'm not sure if we need this
-	/*public bool LoadInAddition(string filename)
+    /*public bool LoadInAddition(string filename)
 	{
 		//same thing as Load(), but doesn't unload previous things
 	}*/
-	#endregion
+    #endregion
 
+    #region Player Stats Save/Load
+    //Reading json file into a string: https://stackoverflow.com/questions/30502222/read-and-parse-a-json-file-in-c-sharp-in-unity
+    //To Json: https://docs.unity3d.com/ScriptReference/JsonUtility.ToJson.html
 
+    //text file io: https://support.unity.com/hc/en-us/articles/115000341143-How-do-I-read-and-write-data-from-a-text-file
+
+    public void SaveStats()
+    {
+        //first ready the player data
+        PlayerStats playerStats = new PlayerStats();
+        //TODO: get the player stats
+
+        //now convert player data into a json
+        string jsonStats = ToJson(playerStats, true);
+
+        //finally, save the json string into a file
+        //TODO
+
+    }
+
+    public void LoadStats()
+    {
+        //TODO
+    }
+
+    #endregion
 }
 
 [Serializable]
@@ -219,7 +265,8 @@ class GameStateData
     int maxActualRange;     //maxVisibleRange plus the hidden range stuff that is used for spawning and such
     int curTurn;            //the turn counter's current value
     
-    //the terrains are stored in a 1D list; this will correlate to a spiral starting with the innermost ring and the "northernmost" direction of the map and working its way slowly outward
+    //the terrains are stored in a 1D list
+    //this will correlate to a spiral starting with the innermost ring and the "northernmost" direction of the map and working its way slowly outward
     public List<int> terrains = new List<int>();
     #endregion
 
@@ -241,6 +288,26 @@ class GameStateData
     //special abilities: TODO
     #endregion
 
+
+#pragma warning restore 0649
+}
+
+
+[Serializable]
+class PlayerStats
+{
+#pragma warning disable 0649
+
+    //the next level for the user to play
+    //0 = new player
+    //1 = player has played tutorial, so next they will play level 1
+    //2 = player has played level 1, so next level is level 2
+    //unlocked levels should generally be <= nextLevel
+    int nextLevel;
+
+    //each card is an index value; the value at that index is the number of copies of that card unlocked
+    //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
+    List<int> cardsUnlocked = new List<int>();
 
 #pragma warning restore 0649
 }
