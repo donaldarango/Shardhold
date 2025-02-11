@@ -14,6 +14,8 @@ public class SaveLoad : MonoBehaviour
 
     #endregion
 
+    public static SaveLoad saveLoad;
+
     public enum SaveType{
         chooseDefault,
         binary
@@ -36,6 +38,21 @@ public class SaveLoad : MonoBehaviour
             Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
             Debug.Log("Attempting to read that test file...");
             Debug.Log("Successful read, contents are as follows:\n" + ReadFile(testFileName));
+            if(saveLoad != null)
+            {
+                if (saveLoad == this)
+                {
+                    Debug.Log("NOTE: SaveLoad.Awake() is running mutliple times.");
+                }
+                else
+                {
+                    Debug.Log("Multiple SaveLoad objects detected; be careful.");
+                }
+            }
+        }
+        if(saveLoad == null)
+        {
+            saveLoad = this;
         }
     }
 
