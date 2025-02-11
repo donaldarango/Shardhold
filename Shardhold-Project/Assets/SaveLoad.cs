@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using JsonUtility;
+using static UnityEngine.JsonUtility;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -22,14 +22,27 @@ public class SaveLoad : MonoBehaviour
 
     public SaveType defaultSaveType = SaveType.binary;
     public string fileToUse = "";   //default save file
-    public string saveFolder = Application.persistentDataPath;  //where save files go
+    public string saveFolder;  //where save files go
 
     public string playerStatsFile;
+
+    public void Awake()
+    {
+        saveFolder = Application.persistentDataPath;
+        if (debugging)
+        {
+            string testFileName = "text_io_test.txt";
+            WriteFile(testFileName, "Test line 1\nTest line 2");
+            Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
+            Debug.Log("Attempting to read that test file...");
+            Debug.Log("Successful read, contents are as follows:\n" + ReadFile(testFileName));
+        }
+    }
 
     #region Text File I/O
     public void WriteFile(string filename, string contents)
     {
-        using (StreamWriter writer = new StreamWriter(saveFolder + "/" + filename, ))
+        using (StreamWriter writer = new StreamWriter(saveFolder + "/" + filename))
         {
             writer.Write(contents);
         }
@@ -49,33 +62,34 @@ public class SaveLoad : MonoBehaviour
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
     public bool SaveToDefault(SaveType saveType = SaveType.chooseDefault){
         if(debugging){
-            Debug.Log("Saving game to default file \"" + fileToUse = "\"");
+            Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
         return Save(fileToUse, saveType);
     }
 
     public bool LoadFromDefault(SaveType saveType = SaveType.chooseDefault){
         if(debugging){
-            Debug.Log("Loading game from default file \"" + fileToUse = "\"");
+            Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
         return Load(fileToUse, saveType);
     }
 
     public bool Save(string filename, SaveType saveType = SaveType.chooseDefault){
         if(debugging){
-            Debug.Log("Saving game to specified file \"" + fileToUse = "\"");
+            Debug.Log("Saving game to specified file \"" + fileToUse + "\"");
         }
-        if(saveType = SaveType.chooseDefault){
+        if(saveType == SaveType.chooseDefault){
             saveType = defaultSaveType;
         }
         switch(saveType){
             case SaveType.binary:
                 return BinarySave(filename);
-                break;
+                //break;
             default:
                 if(debugging){
                     Debug.LogError("Unidentified save type!");
                 }
+                return false;
         }
     }
 
@@ -143,19 +157,20 @@ public class SaveLoad : MonoBehaviour
 
     public bool Load(string filename, SaveType saveType = SaveType.chooseDefault){
         if(debugging){
-            Debug.Log("Loading game from specified file \"" + fileToUse = "\"");
+            Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
-        if(saveType = SaveType.chooseDefault){
+        if(saveType == SaveType.chooseDefault){
             saveType = defaultSaveType;
         }
         switch(saveType){
             case SaveType.binary:
                 return BinaryLoad(filename);
-                break;
+                //break;
             default:
                 if(debugging){
                     Debug.LogError("Unidentified save type!");
                 }
+                return false;
         }
     }
 
@@ -201,7 +216,7 @@ public class SaveLoad : MonoBehaviour
             if(debugging){
                 Debug.Log("Successfully loaded file.");
             }
-
+            return true;
         }else{
             if(debugging){
                 Debug.LogError("Error with file; failed to load.");
@@ -241,12 +256,19 @@ public class SaveLoad : MonoBehaviour
         string jsonStats = ToJson(playerStats, true);
 
         //finally, save the json string into a file
-        //TODO
+        WriteFile(playerStatsFile, jsonStats);
 
     }
 
     public void LoadStats()
     {
+        //first read the file into a string
+        string jsonStats = ReadFile(playerStatsFile);
+
+        //now convert json into player data object
+        PlayerStats playerStats = FromJson<PlayerStats>(jsonStats);
+
+        //finally, use the player statistics as needed
         //TODO
     }
 
@@ -260,10 +282,10 @@ class GameStateData
 
     //we will assume that the game is only ever saved on the player's turn
     #region Map Info
-    int sectorCount;        //how many directions there are (currently this will always be 4)
-    int maxVisibleRange;    //the gameboard as it apears to the player
-    int maxActualRange;     //maxVisibleRange plus the hidden range stuff that is used for spawning and such
-    int curTurn;            //the turn counter's current value
+    public int sectorCount;        //how many directions there are (currently this will always be 4)
+    public int maxVisibleRange;    //the gameboard as it apears to the player
+    public int maxActualRange;     //maxVisibleRange plus the hidden range stuff that is used for spawning and such
+    public int curTurn;            //the turn counter's current value
     
     //the terrains are stored in a 1D list
     //this will correlate to a spiral starting with the innermost ring and the "northernmost" direction of the map and working its way slowly outward
@@ -271,8 +293,8 @@ class GameStateData
     #endregion
 
     #region Base
-    int baseHP;
-    int baseWeapon;
+    public int baseHP;
+    public int baseWeapon;
     //include active base defenses/effects here; TODO
     #endregion
 
