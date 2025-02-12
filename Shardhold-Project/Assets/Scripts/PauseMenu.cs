@@ -4,6 +4,18 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenu;
     [SerializeField]
     private bool menuActiveStatus = false;
+
+
+    void Start()
+    {
+        if (pauseMenu!= null) 
+        {
+            pauseMenu.SetActive(false);
+            if (Time.timeScale == 0) {
+                Time.timeScale = 1;
+            }
+        }
+    }
     // Update is called once per frame
     void Update()
     {
