@@ -31,7 +31,7 @@ public class MapGenerator : MonoBehaviour
 
         GenerateTiles();
         DrawCircles();
-        DrawRadialSections();
+        //DrawRadialSections();
     }
 
     void Update()

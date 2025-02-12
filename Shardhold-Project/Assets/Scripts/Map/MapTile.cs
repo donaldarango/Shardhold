@@ -8,7 +8,6 @@ public class MapTile : MonoBehaviour
     private int sectorNumber;
 
     private int terrainType; // PLACEHOLDER TYPE
-    private List<GameObject> player_units = new List<GameObject>(); // PLACEHOLDER TYPE
     private List<GameObject> enemy_units = new List<GameObject>(); // PLACEHOLDER TYPE
     private List<GameObject> structures = new List<GameObject>(); // PLACEHOLDER TYPE
 
