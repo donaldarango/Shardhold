@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class TileActor : MonoBehaviour
+public class EnemyUnit : TileActor
 {
-    public enum ObjType{
-        placeholder
-    }
+    private int turnSpawned;
+    private int movementRange = 1;
+    private int terrainType;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
