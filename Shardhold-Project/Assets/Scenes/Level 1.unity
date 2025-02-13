@@ -1560,18 +1560,18 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1769756699}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1952252513}
+        m_TargetAssemblyTypeName: SaveLoad, Assembly-CSharp
+        m_MethodName: SaveToDefault
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1625,6 +1625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1952252511}
   - component: {fileID: 1952252512}
+  - component: {fileID: 1952252513}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1661,6 +1662,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1253734558}
   menuActiveStatus: 0
+--- !u!114 &1952252513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952252508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b566b9f09578d8d4986a465cdf7718dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugging: 1
+  mapGenerator: {fileID: 0}
+  defaultSaveType: 2
+  fileToUse: current_save.json
+  saveFolder: 
+  playerStatsFile: 
 --- !u!1 &2054340765
 GameObject:
   m_ObjectHideFlags: 0
