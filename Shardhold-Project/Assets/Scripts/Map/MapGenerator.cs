@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -24,10 +24,15 @@ public class MapGenerator : MonoBehaviour
         sectionAngle = 360f / sectionCount;
         circleRadii = new float[circleCount];
 
+        Assert.IsTrue(circleRadii.Length > 0);
+        Assert.IsTrue(sectionCount % 4 == 0); // Sections must be divided into 4 directions
+
         for (int i = 0; i < circleCount; i++)
         {
             circleRadii[i] = ((i + 1) / (float)circleCount) * maxRadius;
         }
+
+        MapManager.Instance.InitializeQuadrants();
 
         GenerateTiles();
         DrawCircles();
@@ -39,6 +44,8 @@ public class MapGenerator : MonoBehaviour
         HandleTileSelection();
     }
 
+    // TODO: Optimize so that inner circle is either not drawn or does not have mesh collider
+    //       Also change selected tile to have 0 indexed circle number (dont include inner circle)
     void GenerateTiles()
     {
         for (int c = 0; c < circleCount; c++)
@@ -48,8 +55,11 @@ public class MapGenerator : MonoBehaviour
 
             for (int s = 0; s < sectionCount; s++)
             {
+                int q = (int)(s / 3);
+
                 float startAngle = (s * sectionAngle) * Mathf.Deg2Rad;
                 float endAngle = ((s + 1) * sectionAngle) * Mathf.Deg2Rad;
+
 
                 GameObject tileObj = new GameObject($"Tile_C{c}_S{s}");
                 tileObj.transform.parent = transform;
@@ -59,11 +69,12 @@ public class MapGenerator : MonoBehaviour
                 // Do not add map tiles to first circle
                 if (c != 0)
                 {
-                    MapTile mapTile = tileObj.AddComponent<MapTile>();
-
-                    mapTile.setCircleNumber(c);
-                    mapTile.setSectorNumber(s);
+                    
+                    MapTile mapTile = new MapTile(c,s, new Vector2(0,0));
                     // TODO: Set terrain type
+                    // TODO: Set map center coordinates of map tile
+
+                    MapManager.Instance.AddTileToQuadrant(q, mapTile);
                 }
 
                 meshRenderer.material = new Material(defaultMaterial);
@@ -74,8 +85,6 @@ public class MapGenerator : MonoBehaviour
                 Mesh tileMesh = CreateCurvedTileMesh(innerRadius, outerRadius, startAngle, endAngle);
                 meshFilter.mesh = tileMesh;
                 meshCollider.sharedMesh = tileMesh;
-
-                //AddTileBorder(tileObj, innerRadius, outerRadius, startAngle, endAngle);
             }
         }
     }

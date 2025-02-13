@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EnemyUnit : TileActor
 {
-    private int turnSpawned;
-    private int movementRange = 1;
-    private int terrainType;
+    public int turnSpawned = -1; // default for not spawned
+    public int movementRange = 1;
+    public int terrainType = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

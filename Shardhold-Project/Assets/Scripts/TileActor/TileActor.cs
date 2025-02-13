@@ -8,16 +8,16 @@ abstract public class TileActor : MonoBehaviour
 
     public enum TileActorType
     {
-        enemyUnit,
-        structure,
-        trap,
+        EnemyUnit,
+        Structure,
+        Trap,
     }
 
-    private int attackRange;
-    private int damage;
-    private int currentHealth;
-    private int maxHealth;
-    private (int, int)? currentTile = null;
+    [SerializeField] private int attackRange;
+    [SerializeField] private int damage;
+    [SerializeField] private int currentHealth;
+    [SerializeField] private int maxHealth;
+    [SerializeField] private (int, int)? currentTile = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

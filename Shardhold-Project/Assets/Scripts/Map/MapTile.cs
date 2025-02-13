@@ -1,35 +1,42 @@
+using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
-public class MapTile : MonoBehaviour
+[Serializable]
+public class MapTile
 {
+    // Name for serializiation in Unity Editor
+    public string name;
+
     private int circleNumber;
     private int sectorNumber;
+    private Vector2 centerCoords;
 
     private int terrainType; // PLACEHOLDER TYPE
-    private List<GameObject> enemy_units = new List<GameObject>(); // PLACEHOLDER TYPE
-    private List<GameObject> structures = new List<GameObject>(); // PLACEHOLDER TYPE
+                             //[SerializeField] private List<EnemyUnit> enemy_units = new List<EnemyUnit>(); // PLACEHOLDER TYPE
+                             //[SerializeField] private List<StructureUnit> structures = new List<StructureUnit>(); // PLACEHOLDER TYPE
+    [SerializeField] private TileActor currentTileActor = null; 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void setCircleNumber(int circleNumber)
+    public MapTile(int circleNumber,  int sectorNumber, Vector2 centerCoords)
     {
         this.circleNumber = circleNumber;
+        this.sectorNumber = sectorNumber;
+        this.centerCoords = centerCoords;
+        name = $"Cir: {this.circleNumber}, Sec: {this.sectorNumber}";
     }
 
-    public void setSectorNumber(int circleNumber)
+    public int GetCircleNumber()
     {
-        this.circleNumber = circleNumber;
+        return circleNumber;
+    }
+
+    public int GetSectorNumber()
+    {
+        return sectorNumber;
+    }
+
+    public Vector2 GetCenterCoords()
+    {
+        return centerCoords;
     }
 }
