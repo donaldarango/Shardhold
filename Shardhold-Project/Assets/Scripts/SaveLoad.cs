@@ -26,7 +26,7 @@ public class SaveLoad : MonoBehaviour
     }
 
     public SaveType defaultSaveType = SaveType.json;
-    public string fileToUse = "";   //default save file
+    public string fileToUse = "current_save.json";   //default save file
     public string saveFolder;  //where save files go
 
     public string playerStatsFile;
