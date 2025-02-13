@@ -23,13 +23,14 @@ public class SaveLoad : MonoBehaviour
         chooseDefault,
         binary,
         json
+        //TODO smart choosing of saveType that looks at file extension
     }
 
     public SaveType defaultSaveType = SaveType.json;
     public string fileToUse = "current_save.json";   //default save file
-    public string saveFolder;  //where save files go
+    public string saveFolder = "on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go
 
-    public string playerStatsFile;
+    public string playerStatsFile = "player_stats.json";
 
     public void Awake()
     {
@@ -88,18 +89,20 @@ public class SaveLoad : MonoBehaviour
 
 
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
-    public bool SaveToDefault(SaveType saveType = SaveType.chooseDefault){
-        if(debugging){
+    public void SaveToDefault(){
+        SaveType saveType = SaveType.chooseDefault;
+        if (debugging){
             Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
-        return Save(fileToUse, saveType);
+        Save(fileToUse, saveType);
     }
 
-    public bool LoadFromDefault(SaveType saveType = SaveType.chooseDefault){
-        if(debugging){
+    public void LoadFromDefault(){
+        SaveType saveType = SaveType.chooseDefault;
+        if (debugging){
             Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
-        return Load(fileToUse, saveType);
+        Load(fileToUse, saveType);
     }
 
     public bool Save(string filename, SaveType saveType = SaveType.chooseDefault){
