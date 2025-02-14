@@ -8,35 +8,37 @@ public class MapTile
     // Name for serializiation in Unity Editor
     public string name;
 
-    private int circleNumber;
-    private int sectorNumber;
-    private Vector2 centerCoords;
-
+    private int ringNumber;
+    private int laneNumber;
     private int terrainType; // PLACEHOLDER TYPE
-                             //[SerializeField] private List<EnemyUnit> enemy_units = new List<EnemyUnit>(); // PLACEHOLDER TYPE
-                             //[SerializeField] private List<StructureUnit> structures = new List<StructureUnit>(); // PLACEHOLDER TYPE
-    [SerializeField] private TileActor currentTileActor = null; 
+    [SerializeField] private TileActor currentTileActor = null;
+    [SerializeField] private Vector3 tileCenter;
 
-    public MapTile(int circleNumber,  int sectorNumber, Vector2 centerCoords)
+    public MapTile(int ringNumber,  int laneNumber, Vector3 tileCenter)
     {
-        this.circleNumber = circleNumber;
-        this.sectorNumber = sectorNumber;
-        this.centerCoords = centerCoords;
-        name = $"Cir: {this.circleNumber}, Sec: {this.sectorNumber}";
+        this.ringNumber = ringNumber;
+        this.laneNumber = laneNumber;
+        this.tileCenter = tileCenter;
+        name = $"Ring: {this.ringNumber}, Lane: {this.laneNumber}";
     }
 
-    public int GetCircleNumber()
+    public int GetRingNumber()
     {
-        return circleNumber;
+        return ringNumber;
     }
 
-    public int GetSectorNumber()
+    public int GetLaneNumber()
     {
-        return sectorNumber;
+        return laneNumber;
     }
 
-    public Vector2 GetCenterCoords()
+    public Vector3 GetTileCenter()
     {
-        return centerCoords;
+        return tileCenter;
+    }
+
+    public void SetCurrentTileActor(TileActor tileActor)
+    {
+        currentTileActor = tileActor;
     }
 }

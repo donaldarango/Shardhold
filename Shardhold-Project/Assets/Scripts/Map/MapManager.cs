@@ -7,7 +7,10 @@ public class MapManager : MonoBehaviour
 
     public static MapManager Instance {  get { return _instance; } }
 
-    [SerializeField] List<MapQuadrant> quadrantData = new List<MapQuadrant>();
+    private int ringCount; 
+    private int laneCount;
+
+    [SerializeField] private List<MapQuadrant> quadrantData = new List<MapQuadrant>();
 
     private void Awake()
     {
@@ -22,9 +25,35 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void AddEnemyToTile(Quadrant quadrant, int circleNumber, int sectorNumber)
+    public int GetRingCount()
     {
-        //quadrantData[(int)quadrant].
+        return ringCount;
+    }
+
+    public void SetRingCount(int ringCount)
+    {
+        this.ringCount = ringCount;
+    }
+
+    public int GetLaneCount()
+    {
+        return laneCount;
+    }
+
+    public void SetLaneCount(int laneCount)
+    {
+        this.laneCount = laneCount;
+    }
+
+    public void AddEnemyToTile(int quadrant, int ringNumber, int laneNumber, int enemyIndex)
+    {
+        MapTile tile = quadrantData[quadrant].getTile(ringNumber, laneNumber);
+        TileActor ta = TileActorManager.Instance.GetTileActor(enemyIndex);
+        GameObject prefab = TileActorManager.Instance.GetTAPrefab(enemyIndex); // For test purposes
+        prefab.transform.position = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
+        tile.SetCurrentTileActor(ta);
+        Instantiate(prefab, TileActorManager.Instance.transform);
+        Debug.Log($"Enemy added to tile {tile.name}");
     }
 
     public void InitializeQuadrants()

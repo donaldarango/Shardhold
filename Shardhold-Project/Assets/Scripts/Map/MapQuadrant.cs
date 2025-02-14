@@ -18,7 +18,6 @@ public class MapQuadrant
     public string name;
 
     private Quadrant quadrant;
-    // Key: (Circle Number, Sector Number)
     [SerializeField] private List<MapTile> mapTiles = new List<MapTile>();
 
     public MapQuadrant(Quadrant quadrant)
@@ -37,8 +36,11 @@ public class MapQuadrant
         mapTiles.Remove(tile);
     }
 
-    //public MapTile getTile(int circleNumber, int sectorNumber)
-    //{
-        
-    //}
+    public MapTile getTile(int ringNumber, int laneNumber)
+    {
+        int laneCount = MapManager.Instance.GetLaneCount();
+        int index = (ringNumber * 3) + (laneNumber % laneCount);
+        Debug.Log(index);
+        return mapTiles[index];
+    }
 }

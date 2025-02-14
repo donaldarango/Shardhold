@@ -119,6 +119,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &553120044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 553120046}
+  - component: {fileID: 553120045}
+  m_Layer: 0
+  m_Name: TileActorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &553120045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553120044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85298cca5272bc045b70d1004a5feaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileActors:
+  - {fileID: 2386779281966005913, guid: 741a4d89f5d8c1548932293583ecac33, type: 3}
+  testPrefabs:
+  - {fileID: 9028454918137198027, guid: 741a4d89f5d8c1548932293583ecac33, type: 3}
+--- !u!4 &553120046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553120044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &665258011
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,11 +455,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e47b5af4eae6b64db1551216a82ec71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleCount: 4
-  sectionCount: 12
+  ringCount: 4
+  laneCount: 3
   maxRadius: 6
   defaultMaterial: {fileID: 2100000, guid: dc9f9f3e95eab3c4e9fdd8190c400e03, type: 2}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultColor: {r: 0.24270204, g: 0.509434, b: 0.24688607, a: 1}
   hoverColor: {r: 1, g: 1, b: 0, a: 0.5}
   clickColor: {r: 1, g: 0, b: 0, a: 0.5}
 --- !u!4 &1738759043
@@ -423,7 +471,7 @@ Transform:
   m_GameObject: {fileID: 1738759041}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -449,3 +497,4 @@ SceneRoots:
   - {fileID: 1508377379}
   - {fileID: 665258013}
   - {fileID: 1738759043}
+  - {fileID: 553120046}

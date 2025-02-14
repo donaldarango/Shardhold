@@ -4,15 +4,16 @@ using UnityEngine.Assertions;
 
 public class MapGenerator : MonoBehaviour
 {
-    public int circleCount = 5;
-    public int sectionCount = 12;
-    public float maxRadius = 5f;
+    public int ringCount = 4; // Number of rings from the center base circle
+    public int laneCount = 3; // Number of lanes per quadrant
+    public float maxRadius = 6f;
     public Material defaultMaterial;
     public Color defaultColor = new Color(1f, 1f, 1f, 0.3f);
     public Color hoverColor = new Color(1f, 1f, 0.5f, 0.6f); // Yellowish hover effect
     public Color clickColor = new Color(0.8f, 0.3f, 0.3f, 0.6f); // Red when clicked
     // ADD MAP CONFIG (TERRAIN INFO)
 
+    private int totalLaneCount;
     private float[] circleRadii;
     private float sectionAngle;
     private Dictionary<(int, int), MeshRenderer> tileMeshes = new Dictionary<(int, int), MeshRenderer>();
@@ -21,22 +22,29 @@ public class MapGenerator : MonoBehaviour
 
     void Start()
     {
-        sectionAngle = 360f / sectionCount;
-        circleRadii = new float[circleCount];
+        // Always set map at 0,0,0
+        transform.position = Vector3.zero;
 
+        totalLaneCount = laneCount * 4; 
+        sectionAngle = 360f / totalLaneCount;
+        circleRadii = new float[ringCount + 1];
+
+        // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
-        Assert.IsTrue(sectionCount % 4 == 0); // Sections must be divided into 4 directions
+        Assert.IsTrue(laneCount > 0);
+        Assert.IsTrue(ringCount > 0);
 
-        for (int i = 0; i < circleCount; i++)
+        for (int i = 0; i < ringCount + 1; i++)
         {
-            circleRadii[i] = ((i + 1) / (float)circleCount) * maxRadius;
+            circleRadii[i] = ((i + 1) / (float)(ringCount + 1)) * (maxRadius);
         }
 
+        MapManager.Instance.SetLaneCount(laneCount);
+        MapManager.Instance.SetRingCount(ringCount);
         MapManager.Instance.InitializeQuadrants();
 
         GenerateTiles();
         DrawCircles();
-        //DrawRadialSections();
     }
 
     void Update()
@@ -44,47 +52,48 @@ public class MapGenerator : MonoBehaviour
         HandleTileSelection();
     }
 
-    // TODO: Optimize so that inner circle is either not drawn or does not have mesh collider
-    //       Also change selected tile to have 0 indexed circle number (dont include inner circle)
     void GenerateTiles()
     {
-        for (int c = 0; c < circleCount; c++)
+        for (int r = 0; r < ringCount; r++)
         {
-            float innerRadius = c == 0 ? 0f : circleRadii[c - 1];
-            float outerRadius = circleRadii[c];
+            float innerRadius = circleRadii[r];
+            float outerRadius = circleRadii[r + 1];
 
-            for (int s = 0; s < sectionCount; s++)
+            for (int l = 0; l < totalLaneCount; l++)
             {
-                int q = (int)(s / 3);
+                int q = (int)(l / 3);
 
-                float startAngle = (s * sectionAngle) * Mathf.Deg2Rad;
-                float endAngle = ((s + 1) * sectionAngle) * Mathf.Deg2Rad;
+                float startAngle = (l * sectionAngle) * Mathf.Deg2Rad;
+                float endAngle = ((l + 1) * sectionAngle) * Mathf.Deg2Rad;
 
-
-                GameObject tileObj = new GameObject($"Tile_C{c}_S{s}");
+                GameObject tileObj = new GameObject($"Tile_R{r}_L{l}");
                 tileObj.transform.parent = transform;
                 MeshFilter meshFilter = tileObj.AddComponent<MeshFilter>();
                 MeshRenderer meshRenderer = tileObj.AddComponent<MeshRenderer>();
 
-                // Do not add map tiles to first circle
-                if (c != 0)
-                {
-                    
-                    MapTile mapTile = new MapTile(c,s, new Vector2(0,0));
-                    // TODO: Set terrain type
-                    // TODO: Set map center coordinates of map tile
-
-                    MapManager.Instance.AddTileToQuadrant(q, mapTile);
-                }
-
                 meshRenderer.material = new Material(defaultMaterial);
                 meshRenderer.material.color = defaultColor;
-                tileMeshes[(c, s)] = meshRenderer;
+                tileMeshes[(r, l)] = meshRenderer;
 
                 MeshCollider meshCollider = tileObj.AddComponent<MeshCollider>();
                 Mesh tileMesh = CreateCurvedTileMesh(innerRadius, outerRadius, startAngle, endAngle);
                 meshFilter.mesh = tileMesh;
                 meshCollider.sharedMesh = tileMesh;
+
+                // Calculate center position of tile
+                float centerDist = (innerRadius + outerRadius) / 2.0f;
+                float centerRad = (startAngle + endAngle) / 2.0f;
+                float x = Mathf.Cos(centerRad);
+                float z = Mathf.Sin(centerRad);
+                Vector3 tileCenter = new Vector3(x, 0.0f, z) * centerDist;
+
+                MapTile mapTile = new MapTile(r, l, tileCenter);
+                // TODO: Set terrain type
+
+                MapManager.Instance.AddTileToQuadrant(q, mapTile);
+
+                // Add enemy to every tile to test tile centers
+                MapManager.Instance.AddEnemyToTile(q, r, l, 0);
             }
         }
     }
@@ -133,10 +142,10 @@ public class MapGenerator : MonoBehaviour
 
     void DrawCircles()
     {
-        for (int i = 0; i < circleCount; i++)
+        for (int i = 0; i < ringCount + 1; i++)
         {
             float radius = circleRadii[i];
-            LineRenderer circle = CreateLineRenderer($"Circle_{i}", Color.white);
+            LineRenderer circle = CreateLineRenderer($"Circle_{i}", Color.black);
 
             int segments = 50; // Smoothness of circles
             Vector3[] points = new Vector3[segments + 1];
@@ -152,27 +161,9 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void DrawRadialSections()
-    {
-        if (circleCount < 1) return; // Ensure there's at least 1 circle
-
-        float innerRadius = circleRadii[0]; // Start from circle 1
-
-        for (int i = 0; i < sectionCount; i++)
-        {
-            float angle = i * sectionAngle * Mathf.Deg2Rad;
-            Vector3 start = new Vector3(innerRadius * Mathf.Cos(angle), 0.01f, innerRadius * Mathf.Sin(angle)); // XZ plane
-            Vector3 end = new Vector3(maxRadius * Mathf.Cos(angle), 0.01f, maxRadius * Mathf.Sin(angle));
-
-            LineRenderer section = CreateLineRenderer($"Section_{i}", Color.white);
-            section.positionCount = 2;
-            section.SetPosition(0, start);
-            section.SetPosition(1, end);
-        }
-    }
-
     LineRenderer CreateLineRenderer(string name, Color color)
     {
+        // TODO: Fix Line coloring
         GameObject obj = new GameObject(name);
         obj.transform.parent = transform;
         LineRenderer lr = obj.AddComponent<LineRenderer>();
@@ -192,40 +183,38 @@ public class MapGenerator : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             string tileName = hit.collider.gameObject.name;
-            if (tileName.StartsWith("Tile_C"))
+            if (tileName.StartsWith("Tile_R"))
             {
                 string[] parts = tileName.Split('_');
-                int c = int.Parse(parts[1].Substring(1));
-                int s = int.Parse(parts[2].Substring(1));
+                int r = int.Parse(parts[1].Substring(1));
+                int l = int.Parse(parts[2].Substring(1));
 
-                if (c != 0) // First circle not selectable
+                
+                if (hoveredTile.HasValue && hoveredTile.Value != (r, l))
                 {
-                    if (hoveredTile.HasValue && hoveredTile.Value != (c, s))
-                    {
-                        ResetTileColor(hoveredTile.Value);
-                    }
+                    ResetTileColor(hoveredTile.Value);
+                }
 
-                    hoveredTile = (c, s);
-                    tileMeshes[(c, s)].material.color = hoverColor;
+                hoveredTile = (r, l);
+                tileMeshes[(r, l)].material.color = hoverColor;
 
-                    // Handle mouse click
-                    if (Input.GetMouseButtonDown(0)) // Left click
+                // Handle mouse click
+                if (Input.GetMouseButtonDown(0)) // Left click
+                {
+                    // Reset previously clicked tile if any
+                    if (clickedTile.HasValue)
                     {
-                        // Reset previously clicked tile if any
-                        if (clickedTile.HasValue)
-                        {
-                            (int, int) prevTile = clickedTile.Value;
-                            clickedTile = (c, s);
-                            ResetTileColor(prevTile);
-                        }
-                        else
-                        {
-                            clickedTile = (c, s);
-                        }
-                        // Update clicked tile
-                        tileMeshes[(c, s)].material.color = clickColor;
-                        Debug.Log($"Selected {clickedTile.Value}");
+                        (int, int) prevTile = clickedTile.Value;
+                        clickedTile = (r, l);
+                        ResetTileColor(prevTile);
                     }
+                    else
+                    {
+                        clickedTile = (r, l);
+                    }
+                    // Update clicked tile
+                    tileMeshes[(r, l)].material.color = clickColor;
+                    Debug.Log($"Selected {clickedTile.Value}");
                 }
             }
         }
