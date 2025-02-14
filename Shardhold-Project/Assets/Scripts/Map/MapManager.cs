@@ -53,7 +53,6 @@ public class MapManager : MonoBehaviour
         prefab.transform.position = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
         tile.SetCurrentTileActor(ta);
         Instantiate(prefab, TileActorManager.Instance.transform);
-        Debug.Log($"Enemy added to tile {tile.name}");
     }
 
     public void InitializeQuadrants()

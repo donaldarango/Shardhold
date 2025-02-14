@@ -40,7 +40,6 @@ public class MapQuadrant
     {
         int laneCount = MapManager.Instance.GetLaneCount();
         int index = (ringNumber * 3) + (laneNumber % laneCount);
-        Debug.Log(index);
         return mapTiles[index];
     }
 }
