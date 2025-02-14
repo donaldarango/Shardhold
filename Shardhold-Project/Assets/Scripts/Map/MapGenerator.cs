@@ -17,8 +17,8 @@ public class MapGenerator : MonoBehaviour
     private float[] circleRadii;
     private float sectionAngle;
     private Dictionary<(int, int), MeshRenderer> tileMeshes = new Dictionary<(int, int), MeshRenderer>();
-    private (int, int)? hoveredTile = null;
-    private (int, int)? clickedTile = null;
+    private (int, int)? hoveredTile = null; // (ringNumber, laneNumber)
+    private (int, int)? clickedTile = null; // (ringNumber, laneNumber)
 
     void Start()
     {

@@ -12,6 +12,7 @@ public class MapTile
     private int laneNumber;
     private int terrainType; // PLACEHOLDER TYPE
     [SerializeField] private TileActor currentTileActor = null;
+    // TODO: Add Current Trap once traps implemented
     [SerializeField] private Vector3 tileCenter;
 
     public MapTile(int ringNumber,  int laneNumber, Vector3 tileCenter)

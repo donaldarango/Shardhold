@@ -3,14 +3,13 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+    public static MapManager Instance { get { return _instance; } }
+
     private static MapManager _instance;
-
-    public static MapManager Instance {  get { return _instance; } }
-
-    private int ringCount; 
-    private int laneCount;
-
+    private int ringCount; // rings around the map
+    private int laneCount; // lanes per quadrant
     [SerializeField] private List<MapQuadrant> quadrantData = new List<MapQuadrant>();
+
 
     private void Awake()
     {
