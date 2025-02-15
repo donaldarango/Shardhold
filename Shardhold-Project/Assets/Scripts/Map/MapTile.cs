@@ -37,7 +37,10 @@ public class MapTile
     {
         return tileCenter;
     }
-
+    public TileActor GetCurrentTileActor()
+    {
+        return currentTileActor;
+    }
     public void SetCurrentTileActor(TileActor tileActor)
     {
         currentTileActor = tileActor;

@@ -13,6 +13,7 @@ abstract public class TileActor : MonoBehaviour
         Trap,
     }
 
+    [SerializeField] public TileActorType TAtype;
     [SerializeField] private int attackRange;
     [SerializeField] private int damage;
     [SerializeField] private int currentHealth;

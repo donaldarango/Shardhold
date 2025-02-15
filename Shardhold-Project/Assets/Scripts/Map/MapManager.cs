@@ -10,7 +10,6 @@ public class MapManager : MonoBehaviour
     private int laneCount; // lanes per quadrant
     [SerializeField] private List<MapQuadrant> quadrantData = new List<MapQuadrant>();
 
-
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -67,6 +66,25 @@ public class MapManager : MonoBehaviour
     public void AddTileToQuadrant(int quadrantIndex, MapTile tile)
     {
         quadrantData[quadrantIndex].AddTile(tile);
+    }
+
+    public List<TileActor> GetTileActorList()
+    {
+        List<TileActor> tileActorTypes = new List<TileActor>();
+        for (int i = 0; i < 4; i++) // for each quadrant
+        {
+            List<MapTile> mapTiles = quadrantData[i].GetMapTilesList();
+            for (int j = 0; j < mapTiles.Count; j++)
+            {
+                TileActor ta = mapTiles[j].GetCurrentTileActor();
+                if (ta != null)
+                {
+                    tileActorTypes.Add(ta);
+                }
+                    
+            }
+        }
+        return tileActorTypes;
     }
 
 }

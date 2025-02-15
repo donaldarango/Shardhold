@@ -36,6 +36,11 @@ public class MapQuadrant
         mapTiles.Remove(tile);
     }
 
+    public List<MapTile> GetMapTilesList()
+    {
+        return mapTiles;
+    }
+
     public MapTile getTile(int ringNumber, int laneNumber)
     {
         int laneCount = MapManager.Instance.GetLaneCount();
