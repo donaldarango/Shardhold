@@ -118,9 +118,9 @@ public class SaveLoad : MonoBehaviour
 
         #region Map Info
 
-        data.sectorCount = getSectionCount();
-        data.maxVisibleRange = getCircleCount() - 1;
-        data.maxActualRange = getCircleCount();
+        data.sectorCount = getLaneCount();
+        data.maxVisibleRange = getRingCount() - 1;
+        data.maxActualRange = getRingCount();
         data.curTurn = getCurTurn();
 
         //TODO iterate over the map to gather terrain data
@@ -260,8 +260,8 @@ public class SaveLoad : MonoBehaviour
             RanUnimplementedCode("Terrains, base effects and map effects, and TileActors are not yet loadable (or saveable).");
 
             //general map stuff
-            setSectionCount(data.sectorCount);
-            setCircleCount(data.maxActualRange);
+            setLaneCount(data.sectorCount);
+            setRingCount(data.maxActualRange);
             setCurTurn(data.curTurn);
 
             //TODO iterate over the map to gather terrain data
@@ -362,7 +362,7 @@ public class SaveLoad : MonoBehaviour
     #region Getting and Setting of Variables when Saving and Loading
 
     //get the number of directions on the map
-    private int getSectionCount()
+    private int getLaneCount()
     {
         if (mapGenerator == null)
         {
@@ -374,12 +374,12 @@ public class SaveLoad : MonoBehaviour
         }
         else
         {
-            return mapGenerator.sectionCount;
+            return mapGenerator.laneCount;
         }
     }
 
     //set the number of directions on the map
-    private void setSectionCount(int amt)
+    private void setLaneCount(int amt)
     {
         if (mapGenerator == null)
         {
@@ -389,12 +389,12 @@ public class SaveLoad : MonoBehaviour
         }
         else
         {
-            mapGenerator.sectionCount = amt;
+            mapGenerator.laneCount = amt;
         }
     }
 
     //get the number of rings around the base; does not include the base but does include invisible spawning rings (currently assumes 1 spawning ring, see load and save functions)
-    private int getCircleCount()
+    private int getRingCount()
     {
         if (mapGenerator == null)
         {
@@ -406,12 +406,12 @@ public class SaveLoad : MonoBehaviour
         }
         else
         {
-            return mapGenerator.circleCount;
+            return mapGenerator.ringCount;
         }
     }
 
     //set the number of rings around the base
-    private void setCircleCount(int amt)
+    private void setRingCount(int amt)
     {
         if (mapGenerator == null)
         {
@@ -422,7 +422,7 @@ public class SaveLoad : MonoBehaviour
         }
         else
         {
-            mapGenerator.sectionCount = amt;
+            mapGenerator.ringCount = amt;
         }
     }
 
