@@ -1,35 +1,48 @@
+using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
-public class MapTile : MonoBehaviour
+[Serializable]
+public class MapTile
 {
-    private int circleNumber;
-    private int sectorNumber;
+    // Name for serializiation in Unity Editor
+    public string name;
 
+    private int ringNumber;
+    private int laneNumber;
     private int terrainType; // PLACEHOLDER TYPE
-    private List<GameObject> enemy_units = new List<GameObject>(); // PLACEHOLDER TYPE
-    private List<GameObject> structures = new List<GameObject>(); // PLACEHOLDER TYPE
+    [SerializeField] private TileActor currentTileActor = null;
+    // TODO: Add Current Trap once traps implemented
+    [SerializeField] private Vector3 tileCenter;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public MapTile(int ringNumber,  int laneNumber, Vector3 tileCenter)
     {
-        
+        this.ringNumber = ringNumber;
+        this.laneNumber = laneNumber;
+        this.tileCenter = tileCenter;
+        name = $"Ring: {this.ringNumber}, Lane: {this.laneNumber}";
     }
 
-    // Update is called once per frame
-    void Update()
+    public int GetRingNumber()
     {
-        
+        return ringNumber;
     }
 
-    public void setCircleNumber(int circleNumber)
+    public int GetLaneNumber()
     {
-        this.circleNumber = circleNumber;
+        return laneNumber;
     }
 
-    public void setSectorNumber(int circleNumber)
+    public Vector3 GetTileCenter()
     {
-        this.circleNumber = circleNumber;
+        return tileCenter;
+    }
+    public TileActor GetCurrentTileActor()
+    {
+        return currentTileActor;
+    }
+    public void SetCurrentTileActor(TileActor tileActor)
+    {
+        currentTileActor = tileActor;
     }
 }
