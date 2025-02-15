@@ -7,7 +7,7 @@ using static Card;
 public class MapGenerator : MonoBehaviour
 {
     public event EventHandler<SelectTileEventArgs> SelectTile;
-
+    public event EventHandler<SelectTileSetEventArgs> SelectTileSet;
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
     public float maxRadius = 6f;
@@ -38,7 +38,11 @@ public class MapGenerator : MonoBehaviour
 
     private (int, int)? hoveredTile = null; // (ringNumber, laneNumber)
     private (int, int)? clickedTile = null; // (ringNumber, laneNumber)
-	private static List<(int, int)> targetedTiles = null;
+	//private static List<(int, int)> targetedTiles = null;
+
+    private static HashSet<(int, int)> targetedTiles = null;
+    private static HashSet<(int, int)> clickedTiles = null;
+
     void Start()
     {
         // Always set map at 0,0,0
@@ -48,7 +52,8 @@ public class MapGenerator : MonoBehaviour
         sectionAngle = 360f / totalLaneCount;
         circleRadii = new float[ringCount + 1];
 
-		targetedTiles = new List<(int, int)>();
+		targetedTiles = new HashSet<(int, int)>();
+        clickedTiles = new HashSet<(int, int)>();
 
         // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
@@ -274,146 +279,158 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public void HandleTargeting(TargetType type) // in my head this would pull from the current card from the hand class
+    void HandleTargeting(TargetType type)
     {
+        if(type != oldType) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
+        {
+            clickedTile = null;
+            clickedTiles.Clear();
+            targetedTiles.Clear();
+            oldType = type;
+
+            foreach(var tile in tileMeshes)
+            {
+                tile.Value.material.color = defaultColor;
+            }
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             string tileName = hit.collider.gameObject.name;
-            if (tileName.StartsWith("Tile_C"))
+            if (tileName.StartsWith("Tile_R"))
             {
                 string[] parts = tileName.Split('_');
-                int c = int.Parse(parts[1].Substring(1));
-                int s = int.Parse(parts[2].Substring(1));
+                int r = int.Parse(parts[1].Substring(1));
+                int l = int.Parse(parts[2].Substring(1));
 
-                if (c != 0) // First circle not selectable
+                // If set of hovered tiles doesn't include this new tile, then we need to make a new highlight
+                if (!targetedTiles.Contains((r, l))) // We can do this because given quadrant locking, each tile is in one unique selection per targeting type
                 {
-                    if (hoveredTile.HasValue && hoveredTile.Value != (c, s))
+                    foreach (var tile in targetedTiles)
                     {
-                        ResetTileColor(hoveredTile.Value);
+                        ResetTileColor(tile);
                     }
+                    targetedTiles.Clear();
+                }
 
-                    if(hoveredTile.HasValue && !targetedTiles.Contains((c,s)))
-                    {
-                        foreach(var tile in targetedTiles)
+                int offset = Mathf.FloorToInt(l / 3) * 3; // Cull targeting into either 0, 3, 6, or 9 so quadrants are respected
+                switch (type)
+                {
+                    case TargetType.Tile: // Single tile, like the prior implementation
+
+                        AppendTile((r, l));
+                        break;
+
+                    case TargetType.Lane: // Entire column of tiles
+
+                        for (int i = 0; i < 4; ++i)
                         {
-                            
-                            ResetTileColor(tile);
+                            AppendTile((i, l));
+                        }
+                        break;
+
+                    case TargetType.Row: // Quarter of a ring
+
+                        AppendTile((r, offset));
+                        AppendTile((r, offset + 1));
+                        AppendTile((r, offset + 2));
+                        break;
+
+                    case TargetType.Quadrant: // Quarter of the board
+
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            AppendTile((i, offset));
+                            AppendTile((i, offset + 1));
+                            AppendTile((i, offset + 2));
+                        }
+                        break;
+
+                    case TargetType.Ring: // Full circle of tiles
+
+                        for (int i = 0; i < 12; ++i)
+                        {
+                            AppendTile((r, i));
+                        }
+                        break;
+
+                    case TargetType.Board: // Every tile
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            for (int j = 0; j < 12; ++j)
+                            {
+                                AppendTile((i, j));
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+                // Handle mouse click
+                if (Input.GetMouseButtonDown(0)) // Left click
+                {
+                    if(clickedTiles.Count > 0) // If there are already some tiles clicked,
+                    {
+                        if (clickedTiles.Contains((r, l))){ //...remove the red highlight since we reselected the same section.
+                            Debug.Log("Delete Target");
+                            foreach (var tile in clickedTiles)
+                            {
+                                tileMeshes[tile].material.color = defaultColor;
+                            }
+                            clickedTiles.Clear();
+                            targetedTiles.Clear();
+                            SelectTileSet?.Invoke(this, new SelectTileSetEventArgs(null));
+                        }
+                        else //...remove the old red highlight and make a new one since we made a new selection.
+                        {
+                            Debug.Log("New Target - tile: " + (r, l));
+                            foreach (var tile in clickedTiles)
+                            {
+                                tileMeshes[tile].material.color = defaultColor;
+                            }
+                            clickedTiles.Clear();
+
+
+                            foreach (var tile in targetedTiles)
+                            {
+                                clickedTiles.Add(tile);
+                                tileMeshes[tile].material.color = clickColor;
+                            }
+                            targetedTiles.Clear();
+                            SelectTileSet?.Invoke(this, new SelectTileSetEventArgs(targetedTiles));
+                        }
+                    }
+                    else // If there isn't a red highlight, this is the first selection.
+                    {
+                        Debug.Log("First Target - tile: " + (r, l));
+                        foreach (var tile in targetedTiles)
+                        {
+                            tileMeshes[tile].material.color = clickColor;
+                            clickedTiles.Add(tile);
                         }
                         targetedTiles.Clear();
-                        //ResetTileColor(hoveredTile.Value);
-                    }
-
-                    hoveredTile = (c, s);
-                    switch (type)
-                    {
-                        case TargetType.Tile:
-
-                            AppendTile((c, s));
-
-                            //tileMeshes[(c, s)].material.color = hoverColor;
-                            //targetedTiles.Add(tileMeshes[(c, s)]);
-                            break; 
-
-                        case TargetType.Lane:
-                            
-                            for (int i = 1; i < 5; ++i)
-                            {
-                                AppendTile((i, s));
-                                //tileMeshes[(i, s)].material.color = hoverColor;
-                                //targetedTiles.Add(tileMeshes[(i, s)]);
-                            }
-                            break;
-
-                        case TargetType.Row:
-
-                            AppendTile((c, s));
-                            AppendTile((c, (s - 1) % 12));
-                            AppendTile((c, (s + 1) % 12));
-
-                            //tileMeshes[(c, s)].material.color = hoverColor;
-                            //tileMeshes[(c, (s - 1) % 12)].material.color = hoverColor;
-                            //tileMeshes[(c, (s + 1) % 12)].material.color = hoverColor;
-                            //
-                            //targetedTiles.Add(tileMeshes[(c, s)]);
-                            //targetedTiles.Add(tileMeshes[((c, (s - 1) % 12)]);
-                            //targetedTiles.Add(tileMeshes[(c, (s + 1) % 12)]);
-                            break;
-
-                        case TargetType.Quadrant:
-                            
-                            for (int i = 1; i < 5; ++i)
-                            {
-                                AppendTile((c, s));
-                                AppendTile((c, (s - 1) % 12));
-                                AppendTile((c, (s + 1) % 12));
-                                //tileMeshes[(i, s)].material.color = hoverColor;
-                                //tileMeshes[(i, (s - 1) % 12)].material.color = hoverColor;
-                                //tileMeshes[(i, (s + 1) % 12)].material.color = hoverColor;
-                            }
-                            break;
-
-                        case TargetType.Ring:
-
-                            for (int i = 0; i < 13; ++i)
-                            {
-                                AppendTile((c, i));
-                                //tileMeshes[(c, i)].material.color = hoverColor;
-                            }
-                            break;
-
-                        case TargetType.Board:
-                            for (int i = 1; i < 5; ++i)
-                            {
-                                for (int j = 0; j < 13; ++j)
-                                {
-                                    AppendTile((i, j));
-                                    //tileMeshes[(i, j)].material.color = hoverColor;
-                                }
-                            }
-
-                            break;
-
-                        default:
-                            break;
-
-                    }
-
-
-                    hoveredTile = (c, s);
-                    tileMeshes[(c, s)].material.color = hoverColor;
-
-                    // Handle mouse click
-                    if (Input.GetMouseButtonDown(0)) // Left click
-                    {
-                        // Reset previously clicked tile if any
-                        if (clickedTile.HasValue)
-                        {
-                            (int, int) prevTile = clickedTile.Value;
-                            clickedTile = (c, s);
-                            ResetTileColor(prevTile);
-                        }
-                        else
-                        {
-                            clickedTile = (c, s);
-                        }
-                        // Update clicked tile
-                        tileMeshes[(c, s)].material.color = clickColor;
-                        Debug.Log($"Selected {clickedTile.Value}");
+                        SelectTileSet?.Invoke(this, new SelectTileSetEventArgs(targetedTiles));
                     }
                 }
             }
         }
         else
         {
-            // Reset hover if no tile is hit
-            if (hoveredTile.HasValue)
+            if (targetedTiles.Count > 0) //Reset group hover if the mouse is off the board
             {
-                ResetTileColor(hoveredTile.Value);
-                hoveredTile = null;
+                foreach (var tile in targetedTiles)
+                {
+                    ResetTileColor(tile);
+                }
+                targetedTiles.Clear();
             }
         }
     }
+
 
     void AppendTile((int, int) tile)
     {
@@ -421,9 +438,10 @@ public class MapGenerator : MonoBehaviour
         targetedTiles.Add(tile);
     }
 
+
     void ResetTileColor((int, int) tile)
     {
-        if (clickedTile.HasValue && clickedTile.Value == tile)
+        if ((clickedTile.HasValue && clickedTile.Value == tile) || (clickedTiles.Count > 0 && clickedTiles.Contains(tile)))
         {
             // Keep clicked tile color as clickColor
             tileMeshes[tile].material.color = clickColor;
@@ -442,5 +460,17 @@ public class SelectTileEventArgs
     public SelectTileEventArgs((int, int)? coords)
     {
         this.coords = coords;
+
+    }
+
+}
+
+public class SelectTileSetEventArgs //just to differentiate & give it all the relevant tiles
+{
+    public HashSet<(int, int)> coordSet;
+    public SelectTileSetEventArgs(HashSet<(int, int)> coords)
+    {
+        this.coordSet = coords;
+
     }
 }
