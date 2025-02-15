@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 public class MapGenerator : MonoBehaviour
 {
+    public event EventHandler<SelectTileEventArgs> SelectTile;
+
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
     public float maxRadius = 6f;
@@ -201,20 +204,33 @@ public class MapGenerator : MonoBehaviour
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    // Reset previously clicked tile if any
-                    if (clickedTile.HasValue)
+                    
+                    if (clickedTile.HasValue) // There is a selected tile
                     {
-                        (int, int) prevTile = clickedTile.Value;
-                        clickedTile = (r, l);
-                        ResetTileColor(prevTile);
+                        if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it
+                        {
+                            ResetTileColor(clickedTile.Value);
+                            Debug.Log($"Deselected {clickedTile.Value}");
+                            SelectTile?.Invoke(this, new SelectTileEventArgs(null));
+                            clickedTile = null;
+                        }
+                        else // New tile selected
+                        {
+                            (int, int) prevTile = clickedTile.Value;
+                            clickedTile = (r, l);
+                            ResetTileColor(prevTile);
+                            tileMeshes[(r, l)].material.color = clickColor;
+                            SelectTile?.Invoke(this, new SelectTileEventArgs((r, l)));
+                            Debug.Log($"Selected {clickedTile.Value}");
+                        }
                     }
-                    else
+                    else // No currently selected tile
                     {
                         clickedTile = (r, l);
-                    }
-                    // Update clicked tile
-                    tileMeshes[(r, l)].material.color = clickColor;
-                    Debug.Log($"Selected {clickedTile.Value}");
+                        tileMeshes[(r, l)].material.color = clickColor;
+                        SelectTile?.Invoke(this, new SelectTileEventArgs((r, l)));
+                        Debug.Log($"Selected {clickedTile.Value}");
+                    }   
                 }
             }
         }
@@ -241,5 +257,14 @@ public class MapGenerator : MonoBehaviour
             // Reset other tile to default color
             tileMeshes[tile].material.color = defaultColor;
         }
+    }
+}
+
+public class SelectTileEventArgs
+{
+    public (int, int)? coords;
+    public SelectTileEventArgs((int, int)? coords)
+    {
+        this.coords = coords;
     }
 }
