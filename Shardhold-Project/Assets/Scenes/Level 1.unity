@@ -1053,7 +1053,7 @@ GameObject:
   - component: {fileID: 1082002928}
   - component: {fileID: 1082002927}
   m_Layer: 5
-  m_Name: PAUSE
+  m_Name: PAUSED
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
