@@ -2,10 +2,6 @@ using UnityEngine;
 
 public abstract class TileActor : MonoBehaviour
 {
-    public enum ObjType{
-        placeholder
-    }
-
     public enum TileActorType
     {
         EnemyUnit,
@@ -30,6 +26,7 @@ public abstract class TileActor : MonoBehaviour
             Debug.Log("Attack Range: " + tileActorStats.attackRange);
             Debug.Log("Damage: " + tileActorStats.damage);
             Debug.Log("Max Health: " + tileActorStats.maxHealth);
+
             currentHealth = tileActorStats.maxHealth;
             Debug.Log("Current Health: " + currentHealth);
         }
@@ -42,6 +39,21 @@ public abstract class TileActor : MonoBehaviour
         
     }
 
+    // VIRTUAL CLASS. Structures and EnemyUnits attack similarly, Traps will need to override.
+    // Any special units we make will probably override this as well.
+    public virtual void Attack(TileActor target)
+    {
+        if (target == null) return; // Invalid target
+
+        // Structures & Enemies will target other TileActors, which should be the opposite ActorType excluding traps (unless unique enemy, ie Engineer)
+        if((GetTileActorType() == TileActorType.EnemyUnit && target.GetTileActorType() == TileActorType.Structure ||
+            GetTileActorType() == TileActorType.Structure && target.GetTileActorType() == TileActorType.EnemyUnit))
+        {
+            Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
+            target.TakeDamage(tileActorStats.damage);
+        }
+    }
+
     public TileActorType GetTileActorType()
     {
         return tileActorStats.actorType;
@@ -52,16 +64,16 @@ public abstract class TileActor : MonoBehaviour
         this.currentTile = currentTile;
     }
 
+    public MapTile GetCurrentTile()
+    {
+        return currentTile;
+    }
+
     public void TakeDamage(int damageAmount)
     {
-        if (tileActorStats.actorType.ToString() == "trap")
-        {
-            currentHealth -= 1; // Traps go down per use
-        }
-        else
-        {
-            currentHealth -= damageAmount; // Health goes down based on damage inflicted
-        }
+        // Damage amount is a variable, special cases like Traps will pass in a low number like 1 to reduce usage number.
+        currentHealth -= damageAmount;
+        Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining HP: {currentHealth}");
 
         if (currentHealth <= 0)
         {
