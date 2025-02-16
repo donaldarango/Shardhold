@@ -46,13 +46,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d92131bc801c944a01ca6f5f87d2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TAtype: 0
   attackRange: 0
   damage: 0
   currentHealth: 0
   maxHealth: 0
+  currentTile:
+    name: 'Ring: 3, Lane: 11'
+    quadrant: 3
+    ringNumber: 3
+    laneNumber: 11
+    terrain:
+      rid: 3607770707012354154
+    currentTileActor: {fileID: 2386779281966005913}
   turnSpawned: -1
   movementRange: 1
   terrainType: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3607770707012354154
+      type: {class: MountainTerrain, ns: , asm: Assembly-CSharp}
+      data:
+        terrainType: 3
+        terrainMaterial: {fileID: 2100000, guid: 7e22c0341f8cd5f4e871d57c0c7120ce, type: 2}
+        damageModifier: 1
+        hitChanceModifier: 0.75
 --- !u!114 &3813313640588697007
 MonoBehaviour:
   m_ObjectHideFlags: 0

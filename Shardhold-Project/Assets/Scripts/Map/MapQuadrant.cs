@@ -41,7 +41,7 @@ public class MapQuadrant
         return mapTiles;
     }
 
-    public MapTile getTile(int ringNumber, int laneNumber)
+    public MapTile GetTileFromQuadrant(int ringNumber, int laneNumber)
     {
         int laneCount = MapManager.Instance.GetLaneCount();
         int index = (ringNumber * 3) + (laneNumber % laneCount);

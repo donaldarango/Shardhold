@@ -5,10 +5,20 @@ using UnityEngine;
 [Serializable]
 public class TileActorManager : MonoBehaviour
 {
+    [Serializable]
+    public struct EnemySpawnData
+    {
+        [SerializeField] private int spawnTurn;
+        [SerializeField] private int laneNumber;
+        [SerializeField] private EnemyUnit enemyUnit;
+    }
+
     private static TileActorManager _instance;
     [SerializeField] private List<TileActor> tileActors = new List<TileActor>();
     [SerializeField] private List<GameObject> testPrefabs = new List<GameObject>(); // For test purposes
+
     public static TileActorManager Instance { get { return _instance; } }
+    
 
     private void Awake()
     {
