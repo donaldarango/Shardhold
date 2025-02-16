@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class MountainTerrain : Terrain
 {
     public MountainTerrain(TerrainSO terrainData) : base(terrainData)
