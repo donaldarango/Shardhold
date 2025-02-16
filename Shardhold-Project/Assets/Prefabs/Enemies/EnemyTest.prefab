@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 9028454918137198027}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.2159996, y: 0.35, z: -1.3976218}
+  m_LocalPosition: {x: 2.8977776, y: 0.35, z: 0.77645713}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,10 +46,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d92131bc801c944a01ca6f5f87d2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TAtype: 0
   attackRange: 0
   damage: 0
   currentHealth: 0
   maxHealth: 0
+  currentTile:
+    name: 'Ring: 1, Lane: 0'
+    quadrant: 0
+    ringNumber: 1
+    laneNumber: 0
+    terrainType: 0
+    currentTileActor: {fileID: 2386779281966005913}
+  canMoveForward: 0
+  canAdvanceRow: 0
   turnSpawned: -1
   movementRange: 1
   terrainType: 0

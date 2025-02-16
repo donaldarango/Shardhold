@@ -124,7 +124,7 @@ public class MapGenerator : MonoBehaviour
                 float z = Mathf.Sin(centerRad);
                 Vector3 tileCenter = new Vector3(x, 0.0f, z) * centerDist;
 
-                MapTile mapTile = new MapTile(r, l, tileCenter);
+                MapTile mapTile = new MapTile((Quadrant)q, r, l, tileCenter);
                 // TODO: Set terrain type
 
                 MapManager.Instance.AddTileToQuadrant(q, mapTile);
