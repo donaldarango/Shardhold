@@ -2,6 +2,10 @@ using UnityEngine;
 
 public abstract class TileActor : MonoBehaviour
 {
+    public enum ObjType
+    {
+        placeholder,
+    }
     public enum TileActorType
     {
         EnemyUnit,
