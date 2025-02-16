@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 1738759043}
   - component: {fileID: 1738759042}
   - component: {fileID: 1738759044}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MapManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -458,10 +458,17 @@ MonoBehaviour:
   ringCount: 4
   laneCount: 3
   maxRadius: 6
-  defaultMaterial: {fileID: 2100000, guid: dc9f9f3e95eab3c4e9fdd8190c400e03, type: 2}
-  defaultColor: {r: 0.24270204, g: 0.509434, b: 0.24688607, a: 1}
-  hoverColor: {r: 1, g: 1, b: 0, a: 0.5}
-  clickColor: {r: 1, g: 0, b: 0, a: 0.5}
+  lineMaterial: {fileID: 2100000, guid: 09fd0569f3b75214cadcfb1a38be6f42, type: 2}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 0, g: 0.12460327, b: 1, a: 0.7058824}
+  clickColor: {r: 1, g: 0, b: 0, a: 0.7058824}
+  farColor: {r: 0.2, g: 0.6, b: 0.5, a: 1}
+  selectedCard: {fileID: 0}
+  terrainConfigs:
+  - {fileID: 11400000, guid: 1c1e56264cd89274a846b75e8282d12d, type: 2}
+  - {fileID: 11400000, guid: eaa45c9ce077eb145b47511fc924131c, type: 2}
+  type: 6
+  range: 4
 --- !u!4 &1738759043
 Transform:
   m_ObjectHideFlags: 0
@@ -470,13 +477,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1738759041}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1738759044
 MonoBehaviour:
   m_ObjectHideFlags: 0

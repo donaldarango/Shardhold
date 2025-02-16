@@ -11,17 +11,18 @@ public class MapTile
     [SerializeField] private Quadrant quadrant;
     [SerializeField] private int ringNumber;
     [SerializeField] private int laneNumber;
-    [SerializeField] private int terrainType; // PLACEHOLDER TYPE
+    [SerializeField] private Terrain currentTerrain; 
     [SerializeField] private TileActor currentTileActor = null;
     // TODO: Add Current Trap once traps implemented
     private Vector3 tileCenter;
 
-    public MapTile(Quadrant quadrant, int ringNumber,  int laneNumber, Vector3 tileCenter)
+    public MapTile(Quadrant quadrant, int ringNumber, int laneNumber, Vector3 tileCenter, Terrain terrain)
     {
         this.quadrant = quadrant;
         this.ringNumber = ringNumber;
         this.laneNumber = laneNumber;
         this.tileCenter = tileCenter;
+        this.currentTerrain = terrain;
         name = $"Ring: {this.ringNumber}, Lane: {this.laneNumber}";
     }
 

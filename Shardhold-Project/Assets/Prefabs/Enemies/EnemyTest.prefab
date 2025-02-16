@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 9028454918137198027}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.8977776, y: 0.35, z: 0.77645713}
+  m_LocalPosition: {x: 5.2159996, y: 0.35, z: -1.3976218}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -52,14 +52,11 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 0
   currentTile:
-    name: 'Ring: 1, Lane: 0'
-    quadrant: 0
-    ringNumber: 1
-    laneNumber: 0
-    terrainType: 0
+    name: 'Ring: 3, Lane: 11'
+    quadrant: 3
+    ringNumber: 3
+    laneNumber: 11
     currentTileActor: {fileID: 2386779281966005913}
-  canMoveForward: 0
-  canAdvanceRow: 0
   turnSpawned: -1
   movementRange: 1
   terrainType: 0
