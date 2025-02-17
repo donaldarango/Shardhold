@@ -60,9 +60,9 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    public void RanUnimplementedCode(string descriptor = "<no description>")
+    public static void RanUnimplementedCode(string descriptor = "<no description>")
     {
-        if (debugging)
+        if (saveLoad.debugging)
         {
             Debug.Log("WARNING: A section of code has just been executed that was not completely impelement: " + descriptor + "\nIf this section was completed, please locate the section and remove the RanUnimplementedCode() function call.");
         }
