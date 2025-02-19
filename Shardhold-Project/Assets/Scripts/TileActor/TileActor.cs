@@ -18,7 +18,7 @@ abstract public class TileActor : MonoBehaviour
     [SerializeField] private int damage;
     [SerializeField] private int currentHealth;
     [SerializeField] private int maxHealth;
-    [SerializeField] private (int, int)? currentTile = null;
+    [SerializeField] protected MapTile currentTile;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,5 +30,15 @@ abstract public class TileActor : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public TileActorType GetTileActorType()
+    {
+        return TAtype;
+    }
+
+    public void SetCurrentTile(MapTile currentTile)
+    {
+        this.currentTile = currentTile;
     }
 }

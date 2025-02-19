@@ -11,12 +11,13 @@ public class MapGenerator : MonoBehaviour
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
     public float maxRadius = 6f;
-    public Material defaultMaterial;
-    public Color defaultColor = new Color(1f, 1f, 1f, 0.3f);
+    public Material lineMaterial;
+    public Color defaultColor = new Color(1f, 1f, 1f, 1.0f);
     public Color hoverColor = new Color(1f, 1f, 0.5f, 0.6f); // Yellowish hover effect
     public Color clickColor = new Color(0.8f, 0.3f, 0.3f, 0.6f); // Red when clicked
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
     public Card selectedCard = null;
+    public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
 
     public enum TargetType
     {
@@ -32,7 +33,6 @@ public class MapGenerator : MonoBehaviour
     private TargetType oldType = TargetType.Invalid;
     public int range = 4; //same as above - would be accessed via selectedCard or similar
     private int oldRange = 4;
-
 
     // ADD MAP CONFIG (TERRAIN INFO)
 
@@ -113,8 +113,6 @@ public class MapGenerator : MonoBehaviour
                 MeshFilter meshFilter = tileObj.AddComponent<MeshFilter>();
                 MeshRenderer meshRenderer = tileObj.AddComponent<MeshRenderer>();
 
-                meshRenderer.material = new Material(defaultMaterial);
-                meshRenderer.material.color = defaultColor;
                 tileMeshes[(r, l)] = meshRenderer;
 
                 MeshCollider meshCollider = tileObj.AddComponent<MeshCollider>();
@@ -129,9 +127,22 @@ public class MapGenerator : MonoBehaviour
                 float z = Mathf.Sin(centerRad);
                 Vector3 tileCenter = new Vector3(x, 0.0f, z) * centerDist;
 
-                MapTile mapTile = new MapTile(r, l, tileCenter);
-                // TODO: Set terrain type
+                // Determine Terrain Type and update materials
+                // TODO: read in map terrain info
 
+                // TESTING: even quadrant = default ; odd = mountain
+                Terrain terrain;
+                if (q % 2 == 0)
+                {
+                    terrain = CreateTerrain(TerrainType.Default);
+                }
+                else
+                {
+                    terrain = CreateTerrain(TerrainType.Mountain);
+                }
+                SetMeshRendererTerrainMaterial(terrain, meshRenderer);
+
+                MapTile mapTile = new MapTile((Quadrant)q, r, l, tileCenter, terrain);
                 MapManager.Instance.AddTileToQuadrant(q, mapTile);
 
                 // Add enemy to every tile to test tile centers
@@ -144,6 +155,7 @@ public class MapGenerator : MonoBehaviour
     {
         int segments = 10;
         List<Vector3> vertices = new List<Vector3>();
+        List<Vector2> uvs = new List<Vector2>();
 
         for (int i = 0; i <= segments; i++)
         {
@@ -151,6 +163,10 @@ public class MapGenerator : MonoBehaviour
             float angle = Mathf.Lerp(startAngle, endAngle, t);
             vertices.Add(new Vector3(innerRadius * Mathf.Cos(angle), 0, innerRadius * Mathf.Sin(angle)));
             vertices.Add(new Vector3(outerRadius * Mathf.Cos(angle), 0, outerRadius * Mathf.Sin(angle)));
+            float u = t;
+
+            uvs.Add(new Vector2(u, 0));
+            uvs.Add(new Vector2(u, 1));
         }
 
         List<int> triangles = new List<int>();
@@ -174,7 +190,8 @@ public class MapGenerator : MonoBehaviour
         Mesh mesh = new Mesh
         {
             vertices = vertices.ToArray(),
-            triangles = triangles.ToArray()
+            triangles = triangles.ToArray(),
+            uv = uvs.ToArray()
         };
 
         mesh.RecalculateNormals();
@@ -211,7 +228,7 @@ public class MapGenerator : MonoBehaviour
 
         lr.startWidth = 0.05f;
         lr.endWidth = 0.05f;
-        lr.material = defaultMaterial;
+        lr.material = lineMaterial;
         lr.startColor = color;
         lr.endColor = color;
         lr.useWorldSpace = false;
@@ -489,6 +506,35 @@ public class MapGenerator : MonoBehaviour
             // Reset other tile to default color
             tileMeshes[tile].material.color = defaultColor;
         }
+    }
+
+    public Terrain CreateTerrain(TerrainType terrainType)
+    {
+        TerrainSO terrainData;
+        for (int i = 0; i < terrainConfigs.Count; i++)
+        {
+            terrainData = terrainConfigs[i];
+            if (terrainData.terrainType == terrainType)
+            {
+                switch (terrainType)
+                {
+                    case TerrainType.Default:
+                        return new DefaultTerrain(terrainData);
+                    case TerrainType.Mountain:
+                        return new MountainTerrain(terrainData);
+                    default:
+                        throw new Exception("TerrainType needs to be added to CreateTerrain switch case");
+                }
+            }
+        }
+        throw new Exception("Terraintype needs to be added to config list");
+    }
+
+    public void SetMeshRendererTerrainMaterial(Terrain terrain, MeshRenderer meshRenderer)
+    {
+        meshRenderer.material = new Material(terrain.terrainMaterial);
+        meshRenderer.material.color = defaultColor;
+        meshRenderer.material.mainTextureScale = new Vector2(1, 1);
     }
 }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -43,10 +44,16 @@ public class MapManager : MonoBehaviour
         this.laneCount = laneCount;
     }
 
+    public MapTile GetTile(int quadrant, int ringNumber, int laneNumber)
+    {
+        return quadrantData[quadrant].GetTileFromQuadrant(ringNumber, laneNumber);
+    }
+
     public void AddEnemyToTile(int quadrant, int ringNumber, int laneNumber, int enemyIndex)
     {
-        MapTile tile = quadrantData[quadrant].getTile(ringNumber, laneNumber);
+        MapTile tile = GetTile(quadrant, ringNumber, laneNumber);
         TileActor ta = TileActorManager.Instance.GetTileActor(enemyIndex);
+        ta.SetCurrentTile(tile);
         GameObject prefab = TileActorManager.Instance.GetTAPrefab(enemyIndex); // For test purposes
         prefab.transform.position = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
         tile.SetCurrentTileActor(ta);
@@ -70,7 +77,7 @@ public class MapManager : MonoBehaviour
 
     public List<TileActor> GetTileActorList()
     {
-        List<TileActor> tileActorTypes = new List<TileActor>();
+        List<TileActor> tileActors = new List<TileActor>();
         for (int i = 0; i < 4; i++) // for each quadrant
         {
             List<MapTile> mapTiles = quadrantData[i].GetMapTilesList();
@@ -79,12 +86,133 @@ public class MapManager : MonoBehaviour
                 TileActor ta = mapTiles[j].GetCurrentTileActor();
                 if (ta != null)
                 {
-                    tileActorTypes.Add(ta);
-                }
-                    
+                    tileActors.Add(ta);
+                }  
             }
         }
-        return tileActorTypes;
+        return tileActors;
+    }
+
+    // Returns current TileActor of specified tile, if none returns null
+    public TileActor DoesTileContainTileActor(int quadrant, int ringNumber, int laneNumber) 
+    {
+        MapTile tile = GetTile(quadrant, ringNumber, laneNumber);
+        if (tile.GetCurrentTileActor() != null)
+        {
+            return tile.GetCurrentTileActor();
+        }
+        return null;
+    }
+
+    // Returns current TileActor of specified tile, if none returns null
+    public TileActor DoesTileContainTileActor(MapTile tile)
+    {
+        if (tile.GetCurrentTileActor() != null)
+        {
+            return tile.GetCurrentTileActor();
+        }
+        return null;
+    }
+
+    // Returns MapTile if tile in front is available, if full returns null
+    public MapTile EnemyCheckOpenTileInFront(int currentQuadrant, int currentRingNumber, int currentLaneNumber)
+    {
+        
+        if (currentRingNumber == 0) { return null; } // if enemy is in front of base
+
+        MapTile frontTile = GetTile(currentQuadrant, currentRingNumber - 1, currentLaneNumber);
+        if (frontTile.GetCurrentTileActor() == null)
+        {
+            return frontTile;
+        }
+        return null;
+    }
+
+    public MapTile EnemyCheckOpenTileInFront(MapTile currentMapTile)
+    {
+        int currentRingNumber = currentMapTile.GetRingNumber();
+        if (currentRingNumber == 0) { Debug.Log("Base");  return null; } // if enemy is in front of base
+
+        int currentQuadrant = (int)currentMapTile.GetQuadrant();
+        int currentLaneNumber = currentMapTile.GetLaneNumber();
+
+        MapTile frontTile = GetTile(currentQuadrant, currentRingNumber - 1, currentLaneNumber);
+        if (frontTile.GetCurrentTileActor() == null)
+        {
+            Debug.Log("CanMoveForward");
+            return frontTile;
+        }
+        Debug.Log("CannotMoveForward");
+        return null;
+    }
+
+    // Returns first available MapTile, null if none available
+    public MapTile EnemyCheckRowAvailabilityInFront(int currentQuadrant, int currentRingNumber, int currentLaneNumber)
+    {
+        if (currentRingNumber == 0) { return null; } // if enemy is in front of base
+
+        for (int i = 0; i < laneCount; i++)
+        {
+            MapTile tile = GetTile(currentQuadrant, currentRingNumber - 1, currentQuadrant * laneCount + i);
+            if (DoesTileContainTileActor(tile) == null)
+            {
+                return tile;
+            }
+        }
+        return null;
+    }
+
+    public MapTile EnemyCheckRowAvailabilityInFront(MapTile currentMapTile)
+    {
+        int currentRingNumber = currentMapTile.GetRingNumber();
+        if (currentRingNumber == 0) { return null; } // if enemy is in front of base
+
+        int currentQuadrant = (int)currentMapTile.GetQuadrant();
+        int currentLaneNumber = currentMapTile.GetLaneNumber();
+
+        for (int i = 0; i < laneCount; i++)
+        {
+            MapTile tile = GetTile(currentQuadrant, currentRingNumber - 1, currentQuadrant * laneCount + i);
+            if (DoesTileContainTileActor(tile) == null)
+            {
+                return tile;
+            }
+        }
+        return null;
+    }
+
+    public StructureUnit EnemyCheckStructureInFront(int currentQuadrant, int currentRingNumber, int currentLaneNumber)
+    {
+        if (currentRingNumber == 0) { return null; } // if enemy is in front of base
+
+        MapTile frontTile = GetTile(currentQuadrant, currentRingNumber - 1, currentLaneNumber);
+        if (frontTile.GetCurrentTileActor() == null)
+        {
+            if ((frontTile.GetCurrentTileActor().GetTileActorType()) == TileActor.TileActorType.Structure)
+            {
+                return frontTile.GetCurrentTileActor() as StructureUnit;
+            }
+        }
+        return null;
+    }
+
+    public StructureUnit EnemyCheckStructureInFront(MapTile currentMapTile)
+    {
+        int currentRingNumber = currentMapTile.GetRingNumber();
+        if (currentRingNumber == 0) { return null; } // if enemy is in front of base
+
+        int currentQuadrant = (int)currentMapTile.GetQuadrant();
+        int currentLaneNumber = currentMapTile.GetLaneNumber();
+
+        MapTile frontTile = GetTile(currentQuadrant, currentRingNumber - 1, currentLaneNumber);
+        if (frontTile.GetCurrentTileActor() == null)
+        {
+            if ((frontTile.GetCurrentTileActor().GetTileActorType()) == TileActor.TileActorType.Structure)
+            {
+                return frontTile.GetCurrentTileActor() as StructureUnit;
+            }
+        }
+        return null;
     }
 
 }
