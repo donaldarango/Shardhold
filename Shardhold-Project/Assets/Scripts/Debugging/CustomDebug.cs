@@ -5,9 +5,11 @@ public class CustomDebug : MonoBehaviour
     public static CustomDebug instance;
     public bool debugging = true;
 
-    //per-class debugging bool controls:
+    //FOR INTIAL SETTING ONLY; USE GET METHODS
+    //per-class debugging bool controls (the respective class will check this, rather than holding its own debugging variable):
     public bool deckDebugging = true;
-    public bool SaveLoadDebugging = true;
+    public bool saveLoadDebugging = true;
+    public bool cusmtomMathDebugging = true;
 
     public static void RanUnimplementedCode(string descriptor = "<no descriptor>")
     {
@@ -17,9 +19,27 @@ public class CustomDebug : MonoBehaviour
         }
     }
 
+    #region Logic for Determining Whether to Have Debugging Active
 
     private static bool Debugging()
     {
         return instance != null && instance.debugging;
     }
+
+    public static bool DeckDebugging()
+    {
+        return Debugging() && instance.deckDebugging;
+    }
+
+    public static bool SaveLoadDebugging()
+    {
+        return Debugging() && instance.saveLoadDebugging;
+    }
+
+    public static bool CustomMathDebugging()
+    {
+        return Debugging() && instance.cusmtomMathDebugging;
+    }
+
+    #endregion
 }
