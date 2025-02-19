@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+
+
     //stores what has been unlocked for the player; is not the actual deck necessarily
     //each card is an index value; the value at that index is the number of copies of that card unlocked
     //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
@@ -27,8 +30,10 @@ public class Deck : MonoBehaviour
 
     public void DrawCardsUntilFull()
     {
+        int safety = 200;
         while (CountCardsInHand() < handCapacity)
         {
+            if(safety-- < 0) {  break; }
             DrawCard();
         }
     }
@@ -36,6 +41,6 @@ public class Deck : MonoBehaviour
     public void DrawCard()
     {
         //TODO
-        SaveLoad.RanUnimplementedCode("DrawCard()");
+        CustomDebug.RanUnimplementedCode("DrawCard()");
     }
 }
