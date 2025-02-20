@@ -7,11 +7,46 @@ public class EnemyUnit : TileActor
     public int terrainType = 0;
 
     private BasicEnemyStats enemyStats;
+    private int moveSpeed;
 
-    private void Awake()
+    void Start()
     {
-        // Ensures tileActorStats is of type BasicEnemyStats to access movement.
+        if (enemyStats == null)
+        {
+            Debug.LogError("EnemyUnit missing EnemyStats!");
+            return;
+        }
+
         enemyStats = tileActorStats as BasicEnemyStats;
+
+        SetEnemyData(enemyStats);
+    }
+
+    private void Update()
+    {
+        // Check game state, if enemy turn then run Move()?
+    }
+
+    public void SetEnemyData(BasicEnemyStats enemyData)
+    {
+        if(enemyData == null)
+        {
+            Debug.LogError("Attempted to set EnemyData with null reference.");
+            return;
+        }
+
+        moveSpeed = enemyData.moveSpeed;
+        Debug.Log("Enemy move speed: " + moveSpeed);
+    }
+
+    public int GetMoveSpeed()
+    {
+        return moveSpeed;
+    }
+
+    public BasicEnemyStats GetEnemyStats()
+    {
+        return enemyStats;
     }
 
     public void EnemyMove()
