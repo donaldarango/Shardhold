@@ -92,19 +92,48 @@ public class Deck : MonoBehaviour
         discardPile = temp;
     }
 
+    #region Pile to Unlocked Cards Comparisons
+    
     /// <summary>
-    /// Check if the given draw pile is possible based on what cards are unlocked; should only be used when hand and discard pile are empty
+    /// How many of a given card are unlocked but not yet in the pile
+    /// ASSUMES THAT DISCARD AND HAND ARE EMPTY
+    /// </summary>
+    /// <param name="card">the int representation of the card to check</param>
+    /// <returns>how many of that card are still available to add to draw pile</returns>
+    public int InstancesOfCardRemaining(int card)
+    {
+        int numInPile = 0;
+        for (int i = 0; i < drawPile.Count; i++)
+        {
+            if (drawPile[i] == card)
+            {
+                numInPile++;
+            }
+        }
+
+        return cardsUnlocked[card] - numInPile;
+    }
+
+    /// <summary>
+    /// Check if the given draw pile is possible based on what cards are unlocked
+    /// ASSUMES THAT DISCARD AND HAND ARE EMPTY
     /// </summary>
     /// <returns>true: pile is valid; false: pile is invalid, containing some cards that are not unlocked OR more cards of a kind than are unlcoked of that kind</returns>
     public bool ValidatePile()
     {
-        //TODO
-        if (CustomDebug.DeckDebugging())
+        //slow version; does a lot of looping that could be avoided
+        //TODO make a more efficient version if necessary
+        for (int i = 0;i < drawPile.Count; i++)
         {
-            CustomDebug.RanUnimplementedCode("ValidatePile");
+            if (InstancesOfCardRemaining(drawPile[i]) < 0)
+            {
+                return false;
+            }
         }
         return true;
     }
+
+    #endregion
 
     #region Gets, Sets, etc.
 
