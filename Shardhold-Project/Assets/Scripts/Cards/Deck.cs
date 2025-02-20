@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -12,14 +13,16 @@ public class Deck : MonoBehaviour
     List<int> cardsUnlocked = new List<int>();
 
     //stores the cards in the current draw pile/deck
-    //the index position in this list determines order of draw(? - undecided)
-    //the values indicate the card, which correlates to the index in cardsUnlocked
+    //>>>>>>>>>>NO LONGER TRUE: the index position in this list determines order of draw(? - undecided)
+    //STILL TRUE: the values indicate the card, which correlates to the index in cardsUnlocked
     List<int> drawPile = new List<int>();
 
+    //uses same rules as drawPile
     List<int> discardPile = new List<int>();
 
     public int handCapacity = 3;
 
+    //uses same rules as drawPile
     List<int> hand = new List<int>();
 
 
@@ -40,7 +43,23 @@ public class Deck : MonoBehaviour
 
     public void DrawCard()
     {
-        //TODO
-        CustomDebug.RanUnimplementedCode("DrawCard()");
+        //choose a card from the draw pile
+        int choice = CustomMath.RandomInt(0, drawPile.Count);
+
+        //add it to hand
+        hand.Add(drawPile[choice]);
+
+        //remove from draw pile
+        drawPile.RemoveAt(choice);
+    }
+
+    //remove a card from the hand based on its position in the hand list and send it to the discard pile
+    public void DiscardCard(int handPosition)
+    {
+        //send to discard pile
+        discardPile.Add(hand[handPosition]);
+
+        //remove from hand
+        hand.RemoveAt(handPosition);
     }
 }
