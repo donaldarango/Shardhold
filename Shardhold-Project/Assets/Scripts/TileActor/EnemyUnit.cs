@@ -6,25 +6,25 @@ public class EnemyUnit : TileActor
     //public int movementRange = 1; //Movement is in the enemystats SO
     public int terrainType = 0;
 
-    private BasicEnemyStats enemyStats;
+    public BasicEnemyStats enemyStats;
     private int moveSpeed;
 
     void Start()
     {
-        if (enemyStats == null)
+        if (tileActorStats == null)
         {
-            Debug.LogError("EnemyUnit missing EnemyStats!");
+            Debug.LogError("Enemy missing base TileActorStats!");
             return;
         }
 
-        enemyStats = tileActorStats as BasicEnemyStats;
+        enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
 
         SetEnemyData(enemyStats);
     }
 
     private void Update()
     {
-        // Check game state, if enemy turn then run Move()?
+        // Check game state, if enemy turn then run Move()? Should be handled by GameManager or whatever, so should I make Move public/static?
     }
 
     public void SetEnemyData(BasicEnemyStats enemyData)
@@ -35,7 +35,18 @@ public class EnemyUnit : TileActor
             return;
         }
 
-        moveSpeed = enemyData.moveSpeed;
+        Debug.Log("Stats for " + enemyData.unitName + ":");
+
+        Debug.Log("Tile Actor Type: " + enemyData.actorType.ToString());
+
+        Debug.Log("Attack Range: " + enemyData.attackRange);
+        Debug.Log("Damage: " + enemyData.damage);
+        Debug.Log("Max Health: " + enemyData.maxHealth);
+
+        currentHealth = enemyData.maxHealth;
+        Debug.Log("Current Health: " + currentHealth);
+
+        moveSpeed = enemyData.moveSpeed; // Store move speed
         Debug.Log("Enemy move speed: " + moveSpeed);
     }
 
