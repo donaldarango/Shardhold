@@ -60,53 +60,21 @@ public class EnemyUnit : TileActor
         return enemyStats;
     }
 
-    public void EnemyMove()
+    public void MoveEnemy()
     {
         // Needs to check tile in front of enemy for 3 things.
         // 1. Is there a Structure? If so, attack.
         // 2. Is there another enemy? If so, move around them if possible.
         // 3. Is there a free space? If so, move up.
 
-        // Debugging check to make sure stats are properly read for movement.
-        if (enemyStats != null)
-        {
-            int moveRange = enemyStats.moveSpeed;
-            Debug.Log("Enemy has movement range of: " + moveRange);
-        }
-        else
-        {
-            Debug.LogError("No EnemyStats assigned to this EnemyUnit.");
-        }
-
-        if (currentTile == null) return; // Ensure enemy is on valid tile
-
-        // 1. Check tile in front.
-        MapTile frontTile = MapManager.Instance.EnemyCheckOpenTileInFront(currentTile);
-        if (frontTile != null)
-        {
-            // If front tile is empty, move forward.
-            MoveToTile(frontTile);
-            return;
-        }
-
-        // 2. Check if there is a structure
-        StructureUnit structure = MapManager.Instance.EnemyCheckStructureInFront(currentTile);
-        if (structure != null)
-        {
-            //Attack(structure);
-            return;
-        }
-
-        // 3. Check if another enemy is in front
-
-    }
-
-    public void MoveEnemy()
-    {
         if (enemyStats == null)
         {
             Debug.LogError("EnemyStats is not set!");
             return;
+        }
+        else
+        {
+            Debug.Log(enemyStats.name + " has movement range of: " + GetMoveSpeed());
         }
 
         int moveSpeed = enemyStats.moveSpeed;
@@ -117,6 +85,7 @@ public class EnemyUnit : TileActor
             return;
         }
 
+        // HELPER FUNCTION START FOR BETTER IMPLEMENTATION
         int currentQuadrant = (int)currentTile.GetQuadrant();
         int currentRing = currentTile.GetRingNumber();
         int currentLane = currentTile.GetLaneNumber();
@@ -154,11 +123,14 @@ public class EnemyUnit : TileActor
                 }
             }
         }
+        // HELPER FUNCTION END
 
-        // Move forward up to moveSpeed tiles if no obstruction
+        // Call helper function for each movespeed the enemy has, checking each tile in front before they move
+
+        // Move forward up to moveSpeed tiles if no obstruction - WHAT TO DO IF MOVESPEED > 1, CAN THEY ATTACK AND MOVE
         for (int i = 1; i <= moveSpeed; i++)
         {
-            MapTile nextTile = MapManager.Instance.EnemyCheckOpenTileInFront(currentTile); // need to change this to be in class
+            MapTile nextTile = MapManager.Instance.EnemyCheckOpenTileInFront(currentTile); // CHANGE TO HELPER FUNCTION
             if (nextTile == null) break; // Stop if no open tile
 
             MoveToTile(nextTile);
