@@ -25,16 +25,7 @@ public class Deck : MonoBehaviour
     public int handCapacity = 3;
 
     //uses same rules as drawPile
-    List<int> hand = new List<int>();
-
-    /// <summary>
-    /// returns the number of cards in the hand
-    /// </summary>
-    /// <returns></returns>
-    public int CountCardsInHand()
-    {
-        return hand.Count;
-    }
+    List<Card> hand = new List<Card>();
 
     /// <summary>
     /// To be used at the beginning of the player's turn to fill their hand
@@ -58,7 +49,7 @@ public class Deck : MonoBehaviour
         int choice = CustomMath.RandomInt(0, drawPile.Count);
 
         //add it to hand
-        hand.Add(drawPile[choice]);
+        hand.Add(cardLookup[drawPile[choice]]);
 
         //remove from draw pile
         drawPile.RemoveAt(choice);
@@ -76,7 +67,7 @@ public class Deck : MonoBehaviour
     public void DiscardCard(int handPosition)
     {
         //send to discard pile
-        discardPile.Add(hand[handPosition]);
+        discardPile.Add(hand[handPosition].GetId());
 
         //remove from hand
         hand.RemoveAt(handPosition);
@@ -158,9 +149,19 @@ public class Deck : MonoBehaviour
     /// <returns></returns>
     public Card GetCardInHandPos(int handPosition)
     {
-        int cardInt = hand[handPosition];   //get the int representation of the card at the given position in the hand
-        Card card = cardLookup[cardInt];    //turn the int representation into an actual Card object
-        return card;
+        //int cardInt = hand[handPosition];   //get the int representation of the card at the given position in the hand
+        //Card card = cardLookup[cardInt];    //turn the int representation into an actual Card object
+        //return card;
+        return hand[handPosition];
+    }
+
+    /// <summary>
+    /// returns the number of cards in the hand
+    /// </summary>
+    /// <returns></returns>
+    public int CountCardsInHand()
+    {
+        return hand.Count;
     }
 
     #endregion
