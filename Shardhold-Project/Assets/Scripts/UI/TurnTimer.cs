@@ -33,8 +33,9 @@ public class TurnTimer : MonoBehaviour
             time -= Time.deltaTime;
             sliderRight.value -= Time.deltaTime;
             sliderLeft.value -= Time.deltaTime;
-            RightBar.color = gradient.Evaluate(time);
-            LeftBar.color = gradient.Evaluate(time);
+            float timeNormalized = time/resetTime;
+            RightBar.color = gradient.Evaluate(timeNormalized);
+            LeftBar.color = gradient.Evaluate(timeNormalized);
 
         }
         if (time <= 0 && playerTurn == true) {
@@ -53,7 +54,7 @@ public class TurnTimer : MonoBehaviour
         Debug.Log("Player turn started");
         time = resetTime;
         sliderLeft.maxValue = resetTime;
-        sliderLeft.maxValue = resetTime;
+        sliderRight.maxValue = resetTime;
         sliderLeft.value = resetTime;
         sliderRight.value = resetTime;
         playerTurn = true;
