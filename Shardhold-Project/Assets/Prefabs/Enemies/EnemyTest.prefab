@@ -54,7 +54,7 @@ MonoBehaviour:
     ringNumber: 3
     laneNumber: 11
     terrain:
-      rid: 5115033019048526406
+      rid: 5115033019048526655
     currentTileActor: {fileID: 2386779281966005913}
   turnSpawned: -1
   terrainType: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5115033019048526406
+    - rid: 5115033019048526655
       type: {class: MountainTerrain, ns: , asm: Assembly-CSharp}
       data:
         terrainType: 3

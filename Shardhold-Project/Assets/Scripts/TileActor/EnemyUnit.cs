@@ -101,17 +101,95 @@ public class EnemyUnit : TileActor
 
     }
 
-    // Helper function that actually moves enemy unit to a new tile, might be useful to have separate?
+    public void MoveEnemy()
+    {
+        if (enemyStats == null)
+        {
+            Debug.LogError("EnemyStats is not set!");
+            return;
+        }
+
+        int moveSpeed = enemyStats.moveSpeed;
+        MapTile currentTile = GetCurrentTile();
+        if (currentTile == null)
+        {
+            Debug.LogError("Enemy has no assigned tile!");
+            return;
+        }
+
+        int currentQuadrant = (int)currentTile.GetQuadrant();
+        int currentRing = currentTile.GetRingNumber();
+        int currentLane = currentTile.GetLaneNumber();
+
+        if (currentRing == 0)
+        {
+            Debug.Log("Enemy is at the base and cannot move further.");
+            return;
+        }
+
+        // Check tiles in front within the enemy's attack range
+        for (int i = 1; i <= enemyStats.attackRange; i++)
+        {
+            int targetRing = currentRing - i;
+            if (targetRing < 0) break; // Prevent index underflow
+
+            MapTile frontTile = MapManager.Instance.GetTile(currentQuadrant, targetRing, currentLane);
+            if (frontTile == null) continue;
+
+            TileActor actor = frontTile.GetCurrentTileActor();
+            if (actor != null)
+            {
+                if (actor.GetTileActorType() == TileActorType.Structure)
+                {
+                    Debug.Log("Enemy attacks structure!");
+                    Attack((StructureUnit)actor);
+                    return; // Stop moving if attacking
+                }
+                else if (actor.GetTileActorType() == TileActorType.EnemyUnit)
+                {
+                    Debug.Log("Enemy stops because another enemy is in front.");
+                    MapTile sideTile = CheckSideAvailability(currentQuadrant, currentRing, currentLane);
+                    MoveToTile(sideTile);
+                    return; // Find availability on the side.
+                }
+            }
+        }
+
+        // Move forward up to moveSpeed tiles if no obstruction
+        for (int i = 1; i <= moveSpeed; i++)
+        {
+            MapTile nextTile = MapManager.Instance.EnemyCheckOpenTileInFront(currentTile); // need to change this to be in class
+            if (nextTile == null) break; // Stop if no open tile
+
+            MoveToTile(nextTile);
+        }
+    }
+
     private void MoveToTile(MapTile newTile)
     {
-        if (newTile == null) return; // Invalid tile.
+        if(newTile == null)
+        {
+            return;
+        }
 
-        // Update tile references.
-        currentTile.SetCurrentTileActor(null); // clear previous tile.
-        newTile.SetCurrentTileActor(this); // Set new tile.
-        SetCurrentTile(newTile); // Sets current tile for TileActor / Enemy
-
-        // Update GameObject position
+        SetCurrentTile(newTile);
         transform.position = new Vector3(newTile.GetTileCenter().x, 0.35f, newTile.GetTileCenter().z);
+        Debug.Log($"Enemy moved to {newTile.GetRingNumber()}, {newTile.GetLaneNumber()}");
+    }
+
+    private MapTile CheckSideAvailability(int currentQuadrant, int currentRingNumber, int currentLaneNumber)
+    {
+        int laneCount = MapManager.Instance.GetLaneCount();
+
+        for (int i = 0; i < laneCount; i++)
+        {
+            MapTile tile = MapManager.Instance.GetTile(currentQuadrant, currentRingNumber - 1, currentQuadrant * laneCount + i);
+
+            if (MapManager.Instance.DoesTileContainTileActor(tile) == null)
+            {
+                return tile;
+            }
+        }
+        return null;
     }
 }
