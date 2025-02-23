@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public abstract class TileActor : MonoBehaviour
@@ -18,9 +19,18 @@ public abstract class TileActor : MonoBehaviour
     public int currentHealth; // Keep track of this separately?
     [SerializeField] protected MapTile currentTile;
 
+    private string actorName;
+    private TileActorType actorType;
+    private int maxHealth;
+    private int attackRange;
+    private int damage;
+    private PrefabAssetType actorPrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        SetActorData(tileActorStats);
+
         if (tileActorStats != null)
         {
             Debug.Log("Stats for " + tileActorStats.unitName + ":");
@@ -41,6 +51,15 @@ public abstract class TileActor : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetActorData(TileActorStats actorData)
+    {
+        actorName = actorData.name;
+        actorType = actorData.actorType;
+        maxHealth = actorData.maxHealth;
+        attackRange = actorData.attackRange;
+        damage = actorData.damage;
     }
 
     // VIRTUAL CLASS. Structures and EnemyUnits attack similarly, Traps will need to override.
