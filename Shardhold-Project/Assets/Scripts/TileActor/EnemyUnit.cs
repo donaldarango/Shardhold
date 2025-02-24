@@ -198,4 +198,10 @@ public class EnemyUnit : TileActor
         }
         return null;
     }
+
+    public override void ShowStats()
+    {
+        base.ShowStats();
+        Debug.Log($"Current Health: {currentHealth}\nMoveSpeed: {moveSpeed}");
+    }
 }

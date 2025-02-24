@@ -6,10 +6,10 @@ using static Card;
 
 public class MapGenerator : MonoBehaviour
 {
-    public static event EventHandler<SelectTileEventArgs> SelectTile;
-    public static event EventHandler<SelectTileSetEventArgs> SelectTileSet;
     public delegate void HoverEventHandler(TileActor ta);
     public static event HoverEventHandler HoverTile;
+    public static event EventHandler<SelectTileEventArgs> SelectTile;
+    public static event EventHandler<SelectTileSetEventArgs> SelectTileSet;
 
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
@@ -258,9 +258,10 @@ public class MapGenerator : MonoBehaviour
                 tileMeshes[(r, l)].material.color = hoverColor;
 
                 // Quadrant check and also debugging messages to check for tileactor
-                int quadrant = (int)(l/3);
-                TileActor actor = MapManager.Instance.DoesTileContainTileActor(quadrant,r,l);
-                HoverTile?.Invoke(actor);
+                MapTile tile = MapManager.Instance.GetTile(r, l);
+                HoverTile?.Invoke(tile.GetCurrentTileActor());
+
+
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {

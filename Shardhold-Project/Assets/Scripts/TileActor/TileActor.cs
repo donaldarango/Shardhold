@@ -116,6 +116,11 @@ public abstract class TileActor : MonoBehaviour
         }
     }
 
+    public virtual void ShowStats()
+    {
+        Debug.Log($"Name: {actorName}\nActor Type: {actorType}\nCurrentHP: {currentHealth}\nMaxHP: {maxHealth}\nAtkRange: {attackRange}\nDamage: {damage}");
+    }
+
     public virtual void Die()
     {
         // Remove Enemy from grid if necessary.
