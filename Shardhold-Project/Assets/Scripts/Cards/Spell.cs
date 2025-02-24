@@ -20,8 +20,7 @@ class Spell : Card
     {
         foreach(var tile in coordSet)
         {
-            int quad = (int)(tile.Item2 / 3);
-            MapTile target = MapManager.Instance.GetTile(quad, tile.Item1, tile.Item2);
+            MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
             if(actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.Structure || friendlyFire))
@@ -35,8 +34,7 @@ class Spell : Card
     {
         foreach (var tile in coordSet)
         {
-            int quad = (int)(tile.Item2 / 3);
-            MapTile target = MapManager.Instance.GetTile(quad, tile.Item1, tile.Item2);
+            MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
             if (actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.EnemyUnit || friendlyFire))
