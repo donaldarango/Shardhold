@@ -265,7 +265,6 @@ public class MapGenerator : MonoBehaviour
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    
                     if (clickedTile.HasValue) // There is a selected tile
                     {
                         if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it

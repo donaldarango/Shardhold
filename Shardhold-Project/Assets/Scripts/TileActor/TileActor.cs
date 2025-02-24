@@ -17,37 +17,32 @@ public abstract class TileActor : MonoBehaviour
 
     [Header("Scriptable Object Data")]
     public TileActorStats tileActorStats;
-    public int currentHealth; // Keep track of this separately?
-    [SerializeField] protected MapTile currentTile;
-    public bool printStats = false;
+    [SerializeField]protected int currentHealth; // Keep track of this separately?
+    [SerializeField]protected MapTile currentTile;
 
-    [SerializeField] private string actorName;
-    [SerializeField] private TileActorType actorType;
-    [SerializeField] private int maxHealth;
-    [SerializeField] private int attackRange;
-    [SerializeField] private int damage;
-    private PrefabAssetType actorPrefab;
+    [SerializeField]protected string actorName;
+    [SerializeField]protected TileActorType actorType;
+    [SerializeField]protected int maxHealth;
+    [SerializeField]protected int attackRange;
+    [SerializeField]protected int damage;
+    [SerializeReference]protected PrefabAssetType actorPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SetActorData(tileActorStats);
+        SetActorData();
 
         if (tileActorStats != null)
         {
-            if (printStats)
-            {
-                Debug.Log("Stats for " + tileActorStats.unitName + ":");
+            //Debug.Log("Stats for " + tileActorStats.unitName + ":");
 
-                Debug.Log("Tile Actor Type: " + tileActorStats.actorType.ToString());
+            //Debug.Log("Tile Actor Type: " + tileActorStats.actorType.ToString());
 
-                Debug.Log("Attack Range: " + tileActorStats.attackRange);
-                Debug.Log("Damage: " + tileActorStats.damage);
-                Debug.Log("Max Health: " + tileActorStats.maxHealth);
+            //Debug.Log("Attack Range: " + tileActorStats.attackRange);
+            //Debug.Log("Damage: " + tileActorStats.damage);
+            //Debug.Log("Max Health: " + tileActorStats.maxHealth);
 
-                Debug.Log("Current Health: " + currentHealth);
-            }
-            currentHealth = tileActorStats.maxHealth;
+            //Debug.Log("Current Health: " + currentHealth);
         }
         
     }
@@ -58,13 +53,14 @@ public abstract class TileActor : MonoBehaviour
         
     }
 
-    public virtual void SetActorData(TileActorStats actorData)
+    public virtual void SetActorData()
     {
-        actorName = actorData.name;
-        actorType = actorData.actorType;
-        maxHealth = actorData.maxHealth;
-        attackRange = actorData.attackRange;
-        damage = actorData.damage;
+        actorName = tileActorStats.unitName;
+        actorType = tileActorStats.actorType;
+        maxHealth = tileActorStats.maxHealth;
+        currentHealth = tileActorStats.maxHealth;
+        attackRange = tileActorStats.attackRange;
+        damage = tileActorStats.damage;
     }
 
     // VIRTUAL CLASS. Structures and EnemyUnits attack similarly, Traps will need to override.
@@ -104,6 +100,16 @@ public abstract class TileActor : MonoBehaviour
         return currentTile;
     }
 
+    public void SetCurrentHealth(int health)
+    {
+        currentHealth = health;
+    }
+
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
     public void TakeDamage(int damageAmount)
     {
         // Damage amount is a variable, special cases like Traps will pass in a low number like 1 to reduce usage number.
@@ -126,4 +132,5 @@ public abstract class TileActor : MonoBehaviour
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
     }
+
 }

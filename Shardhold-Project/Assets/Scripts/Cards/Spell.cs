@@ -39,7 +39,7 @@ class Spell : Card
 
             if (actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.EnemyUnit || friendlyFire))
             {
-                actor.currentHealth = Math.Min(actor.tileActorStats.maxHealth, actor.currentHealth + heal); //no overheal. heal enemy units if friendly fire is enabled 
+                actor.SetCurrentHealth(Math.Min(actor.tileActorStats.maxHealth, actor.GetCurrentHealth() + heal)); //no overheal. heal enemy units if friendly fire is enabled 
             }
         }
     }

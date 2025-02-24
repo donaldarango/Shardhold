@@ -7,17 +7,19 @@ public class EnemyUnit : TileActor
     public int terrainType = 0;
 
     public BasicEnemyStats enemyStats;
-    [SerializeField] private int moveSpeed;
 
-    //private void OnEnable()
-    //{
-    //    TileActorManager.NextRound += OnNextTurn;
-    //}
-    //private void OnDisable()
-    //{
-    //    TileActorManager.NextRound -= OnNextTurn;
-    //}
-
+    [SerializeField]private int moveSpeed;
+    // [SerializeField]private int currentHealth;
+    // void Awake()
+    // {
+    //     if (tileActorStats == null)
+    //     {
+    //         Debug.LogError("Enemy missing base TileActorStats!");
+    //         return;
+    //     }
+    //     enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
+    //     SetActorData();  
+    // }
     void Start()
     {
 
@@ -28,8 +30,8 @@ public class EnemyUnit : TileActor
         }
 
         enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
-        SetEnemyData(enemyStats);
-        SetActorData(enemyStats);
+        
+        SetActorData();
     }
 
     private void Update()
@@ -37,27 +39,17 @@ public class EnemyUnit : TileActor
         // Check game state, if enemy turn then run Move()? Should be handled by GameManager or whatever, so should I make Move public/static?
     }
 
-    public void SetEnemyData(BasicEnemyStats enemyData)
+    public override void SetActorData()
     {
-        if(enemyData == null)
+        if(enemyStats == null)
         {
             Debug.LogError("Attempted to set EnemyData with null reference.");
             return;
         }
-
-        //Debug.Log("Stats for " + enemyData.unitName + ":");
-
-        //Debug.Log("Tile Actor Type: " + enemyData.actorType.ToString());
-
-        //Debug.Log("Attack Range: " + enemyData.attackRange);
-        //Debug.Log("Damage: " + enemyData.damage);
-        //Debug.Log("Max Health: " + enemyData.maxHealth);
-
-        currentHealth = enemyData.maxHealth;
-        //Debug.Log("Current Health: " + currentHealth);
-
-        moveSpeed = enemyData.moveSpeed; // Store move speed
-        //Debug.Log("Enemy move speed: " + moveSpeed);
+        base.SetActorData();
+        /// SET DATA make it virtual in tileactor and add movement speed in here
+        moveSpeed = enemyStats.moveSpeed; // Store move speed
+        Debug.Log("Enemy move speed: " + moveSpeed);
     }
 
     public int GetMoveSpeed()
@@ -156,6 +148,11 @@ public class EnemyUnit : TileActor
             MoveToTile(nextTile);
         }
     }
+    public override void ShowStats() {
+        base.ShowStats();
+        Debug.Log(currentHealth);
+        Debug.Log($"FROM EnemyUnit.CS MoveSpeed: {moveSpeed}, CurrentHP: {currentHealth}");
+    }
 
     private void MoveToTile(MapTile newTile)
     {
@@ -199,9 +196,7 @@ public class EnemyUnit : TileActor
         return null;
     }
 
-    public override void ShowStats()
-    {
-        base.ShowStats();
-        Debug.Log($"Current Health: {currentHealth}\nMoveSpeed: {moveSpeed}");
-    }
+    // public int GetCurrentHealth(){
+    //     return currentHealth;
+    // }
 }
