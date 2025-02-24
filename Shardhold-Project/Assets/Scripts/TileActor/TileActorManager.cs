@@ -26,6 +26,7 @@ public class TileActorManager : MonoBehaviour
     private static TileActorManager _instance;
     [SerializeField] private TextAsset levelSettingsJSON;
     [SerializeField] private List<BasicEnemyStats> enemyTileActorsStats = new List<BasicEnemyStats>();
+    [SerializeField] private List<BasicStructureStats> structureTileActorStats = new List<BasicStructureStats>();
     [SerializeField] private List<EnemyUnit> currentEnemyUnits = new List<EnemyUnit>();
     [SerializeField] private List<RoundSpawnInfo> gameSpawnList = new List<RoundSpawnInfo>();
 
@@ -78,7 +79,7 @@ public class TileActorManager : MonoBehaviour
             {
                 string unitName = enemyRoundData[j]["EnemyUnit"].stringValue;
                 int laneNumber = enemyRoundData[j]["LaneNumber"].intValue;
-                BasicEnemyStats enemyStats = GetTileActorByName(unitName);
+                BasicEnemyStats enemyStats = GetEnemyTileActorByName(unitName);
 
                 if (roundNumber == 0) // Add starting round enemies to spawn tiles
                 {
@@ -132,7 +133,7 @@ public class TileActorManager : MonoBehaviour
         AddUnitsToSpawnTiles(currentRound);
     }
 
-    public BasicEnemyStats GetTileActorByName(string unitName)
+    public BasicEnemyStats GetEnemyTileActorByName(string unitName)
     {
         for (int i = 0; i < enemyTileActorsStats.Count; i++)
         {
@@ -140,6 +141,16 @@ public class TileActorManager : MonoBehaviour
                 return enemyTileActorsStats[i];
         }
         throw new System.Exception($"Enemy unit with name: {unitName} not found");
+    }
+
+    public BasicStructureStats GetStructureTileActorByName(string unitName)
+    {
+        for (int i = 0; i < structureTileActorStats.Count; i++)
+        {
+            if (unitName == structureTileActorStats[i].unitName)
+                return structureTileActorStats[i];
+        }
+        throw new System.Exception($"Structure unit with name: {unitName} not found");
     }
 
     public void AddEnemyToCurrentEnemyList(EnemyUnit unit)

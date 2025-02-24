@@ -18,7 +18,7 @@ public abstract class TileActor : MonoBehaviour
     [Header("Scriptable Object Data")]
     public TileActorStats tileActorStats;
     [SerializeField]protected int currentHealth; // Keep track of this separately?
-    [SerializeField]protected MapTile currentTile;
+    [SerializeField]protected MapTile currentTile = null;
 
     [SerializeField]protected string actorName;
     [SerializeField]protected TileActorType actorType;

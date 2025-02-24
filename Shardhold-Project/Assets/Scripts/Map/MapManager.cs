@@ -80,10 +80,21 @@ public class MapManager : MonoBehaviour
         return quadrantData[quadrant].GetTileFromQuadrant(ringNumber, laneNumber);
     }
 
+    public void AddStructureToMapTile(int ringNumber, int laneNumber, BasicStructureStats structure)
+    {
+        MapTile tile = GetTile(ringNumber, laneNumber);
+        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
+        GameObject structureUnitPrefab = Instantiate(structure.actorPrefab, tilePosition, Quaternion.identity);
+        structureUnitPrefab.transform.parent = TileActorManager.Instance.transform;
+        StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
+        structureUnit.SetCurrentTile(tile);
+        tile.SetCurrentTileActor(structureUnit);
+    }
+
     public void AddEnemyToMapTile(int ringNumber, int laneNumber, string unitName)
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
-        BasicEnemyStats ta = TileActorManager.Instance.GetTileActorByName(unitName);
+        BasicEnemyStats ta = TileActorManager.Instance.GetEnemyTileActorByName(unitName);
         Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
         GameObject enemyUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         enemyUnitPrefab.transform.parent = TileActorManager.Instance.transform;
