@@ -27,37 +27,16 @@ public class Deck : MonoBehaviour
     //uses same rules as drawPile
     List<Card> hand = new List<Card>();
 
-    /// <summary>
-    /// To be used at the beginning of the player's turn to fill their hand
-    /// </summary>
-    public void DrawCardsUntilFull()
-    {
-        int safety = 200;
-        while (CountCardsInHand() < handCapacity)
-        {
-            if(safety-- < 0) {  break; }
-            DrawCard();
-        }
-    }
+
+
+    #region Public Methods (not including Gets and Sets)
 
     /// <summary>
-    /// move a card from the draw pile to the hand
+    /// Call this at the start of the player's turn
     /// </summary>
-    public void DrawCard()
+    public void NextTurn()
     {
-        //choose a card from the draw pile
-        int choice = CustomMath.RandomInt(0, drawPile.Count);
-
-        //add it to hand
-        hand.Add(cardLookup[drawPile[choice]]);
-
-        //remove from draw pile
-        drawPile.RemoveAt(choice);
-
-        if(drawPile.Count <= 0)
-        {
-            SwapDrawAndDiscard();
-        }
+        DrawCardsUntilFull();
     }
 
     /// <summary>
@@ -74,9 +53,76 @@ public class Deck : MonoBehaviour
     }
 
     /// <summary>
+    /// remove a card from the hand and send it to the discard pile
+    /// </summary>
+    /// <param name="card">Which card to discard</param>
+    public void DiscardCard(Card card)
+    {
+        //send to discard pile
+        discardPile.Add(card.GetId());
+
+        //remove from hand
+        hand.Remove(card);
+
+        //TODO
+        if (CustomDebug.DeckDebugging())
+        {
+            CustomDebug.RanUnimplementedCode("Card not destroyed in DiscardCard()");
+        }
+    }
+     
+
+    #endregion
+
+    private void CreateCard(int cardInt)
+    {
+        //TODO
+        if (CustomDebug.DeckDebugging())
+        {
+            CustomDebug.RanUnimplementedCode("CreateCard()");
+        }
+    }
+
+    /// <summary>
+    /// To be used at the beginning of the player's turn to fill their hand
+    /// </summary>
+    private void DrawCardsUntilFull()
+    {
+        int safety = 200;
+        while (CountCardsInHand() < handCapacity)
+        {
+            if(safety-- < 0) {  break; }
+            DrawCard();
+        }
+    }
+
+    /// <summary>
+    /// move a card from the draw pile to the hand
+    /// </summary>
+    private void DrawCard()
+    {
+        //choose a card from the draw pile
+        int choice = CustomMath.RandomInt(0, drawPile.Count);
+
+        //add it to hand
+        hand.Add(cardLookup[drawPile[choice]]);
+        CreateCard(drawPile[choice]);
+
+        //remove from draw pile
+        drawPile.RemoveAt(choice);
+
+        if(drawPile.Count <= 0)
+        {
+            SwapDrawAndDiscard();
+        }
+    }
+
+
+
+    /// <summary>
     /// use this when draw pile is empty to send the discard pile to the draw pile (and vice versa)
     /// </summary>
-    public void SwapDrawAndDiscard()
+    private void SwapDrawAndDiscard()
     {
         List<int> temp = drawPile;
         drawPile = discardPile;
