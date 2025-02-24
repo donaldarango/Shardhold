@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BasicEnemyStats", menuName = "Scriptable Objects/BasicEnemy")]
+[CreateAssetMenu(fileName = "BasicEnemyStats", menuName = "Scriptable Objects/Enemies")]
 public class BasicEnemyStats : TileActorStats
 {
     private void OnValidate()

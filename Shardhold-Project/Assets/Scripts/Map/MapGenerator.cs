@@ -256,10 +256,29 @@ public class MapGenerator : MonoBehaviour
                 hoveredTile = (r, l);
                 tileMeshes[(r, l)].material.color = hoverColor;
 
+
+                // Quadrant check and also debugging messages to check for tileactor
+                int quadrant = (int)(l/3);
+                TileActor actor = MapManager.Instance.DoesTileContainTileActor(quadrant,r,l);
+                if (actor != null) {
+                    Debug.Log($"FROM MAP GEN Quadrant: {quadrant}, Row: {r}, Lane: {l}\nTileActorType: {actor.GetTileActorType()}");
+                    if (actor is EnemyUnit) {
+                        EnemyUnit enemy = actor as EnemyUnit;
+                        Debug.Log("TESTING");
+                        actor.ShowStats();
+                        ((EnemyUnit)actor).ShowStats();
+                        // actor.ShowStats();
+                        enemy.ShowStats();
+                        // Debug.Log($": {((EnemyUnit)actor).ShowStats()}");
+                        // Debug.Log(actor);
+                        // ((EnemyUnit)actor).ShowStats();
+                    }
+       
+                }
+
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    
                     if (clickedTile.HasValue) // There is a selected tile
                     {
                         if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it

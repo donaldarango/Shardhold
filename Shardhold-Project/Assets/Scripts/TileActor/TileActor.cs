@@ -16,20 +16,20 @@ public abstract class TileActor : MonoBehaviour
 
     [Header("Scriptable Object Data")]
     public TileActorStats tileActorStats;
-    public int currentHealth; // Keep track of this separately?
-    [SerializeField] protected MapTile currentTile;
+    [SerializeField]protected int currentHealth; // Keep track of this separately?
+    [SerializeField]protected MapTile currentTile;
 
-    private string actorName;
-    private TileActorType actorType;
-    private int maxHealth;
-    private int attackRange;
-    private int damage;
-    private PrefabAssetType actorPrefab;
+    [SerializeField]protected string actorName;
+    [SerializeField]protected TileActorType actorType;
+    [SerializeField]protected int maxHealth;
+    [SerializeField]protected int attackRange;
+    [SerializeField]protected int damage;
+    [SerializeReference]protected PrefabAssetType actorPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SetActorData(tileActorStats);
+        SetActorData();
 
         if (tileActorStats != null)
         {
@@ -41,7 +41,7 @@ public abstract class TileActor : MonoBehaviour
             Debug.Log("Damage: " + tileActorStats.damage);
             Debug.Log("Max Health: " + tileActorStats.maxHealth);
 
-            currentHealth = tileActorStats.maxHealth;
+            // currentHealth = tileActorStats.maxHealth;
             Debug.Log("Current Health: " + currentHealth);
         }
         
@@ -53,13 +53,14 @@ public abstract class TileActor : MonoBehaviour
         
     }
 
-    public void SetActorData(TileActorStats actorData)
+    public virtual void SetActorData()
     {
-        actorName = actorData.name;
-        actorType = actorData.actorType;
-        maxHealth = actorData.maxHealth;
-        attackRange = actorData.attackRange;
-        damage = actorData.damage;
+        actorName = tileActorStats.unitName;
+        actorType = tileActorStats.actorType;
+        maxHealth = tileActorStats.maxHealth;
+        currentHealth = tileActorStats.maxHealth;
+        attackRange = tileActorStats.attackRange;
+        damage = tileActorStats.damage;
     }
 
     // VIRTUAL CLASS. Structures and EnemyUnits attack similarly, Traps will need to override.
@@ -109,4 +110,8 @@ public abstract class TileActor : MonoBehaviour
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
     }
+    public virtual void ShowStats() {
+        Debug.Log($"FROM TileActor.CS Name: {actorName}\nActor Type: {actorType}\nCurrentHP: {currentHealth}\nMaxHP: {maxHealth}\nAtkRange: {attackRange}\nDamage: {damage}");
+    }
+
 }

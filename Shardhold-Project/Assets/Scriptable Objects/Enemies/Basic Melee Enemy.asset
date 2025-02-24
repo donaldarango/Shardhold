@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Basic Melee Enemy
   actorType: 0
-  maxHealth: 2
+  maxHealth: 3
   attackRange: 1
   damage: 1
   actorPrefab: {fileID: 0}
