@@ -6,8 +6,8 @@ using static Card;
 
 public class MapGenerator : MonoBehaviour
 {
-    public event EventHandler<SelectTileEventArgs> SelectTile;
-    public event EventHandler<SelectTileSetEventArgs> SelectTileSet;
+    public static event EventHandler<SelectTileEventArgs> SelectTile;
+    public static event EventHandler<SelectTileSetEventArgs> SelectTileSet;
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
     public float maxRadius = 6f;
@@ -73,6 +73,7 @@ public class MapGenerator : MonoBehaviour
         MapManager.Instance.SetLaneCount(laneCount);
         MapManager.Instance.SetRingCount(ringCount);
         MapManager.Instance.InitializeQuadrants();
+        MapManager.Instance.InitializeSpawnTiles();
 
         GenerateTiles();
         DrawCircles();
@@ -144,9 +145,6 @@ public class MapGenerator : MonoBehaviour
 
                 MapTile mapTile = new MapTile((Quadrant)q, r, l, tileCenter, terrain);
                 MapManager.Instance.AddTileToQuadrant(q, mapTile);
-
-                // Add enemy to every tile to test tile centers
-                MapManager.Instance.AddEnemyToTile(q, r, l, 0);
             }
         }
     }

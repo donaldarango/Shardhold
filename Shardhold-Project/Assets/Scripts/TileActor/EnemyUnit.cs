@@ -7,10 +7,20 @@ public class EnemyUnit : TileActor
     public int terrainType = 0;
 
     public BasicEnemyStats enemyStats;
-    private int moveSpeed;
+    [SerializeField] private int moveSpeed;
+
+    //private void OnEnable()
+    //{
+    //    TileActorManager.NextRound += OnNextTurn;
+    //}
+    //private void OnDisable()
+    //{
+    //    TileActorManager.NextRound -= OnNextTurn;
+    //}
 
     void Start()
     {
+
         if (tileActorStats == null)
         {
             Debug.LogError("Enemy missing base TileActorStats!");
@@ -18,8 +28,8 @@ public class EnemyUnit : TileActor
         }
 
         enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
-
         SetEnemyData(enemyStats);
+        SetActorData(enemyStats);
     }
 
     private void Update()
@@ -35,19 +45,19 @@ public class EnemyUnit : TileActor
             return;
         }
 
-        Debug.Log("Stats for " + enemyData.unitName + ":");
+        //Debug.Log("Stats for " + enemyData.unitName + ":");
 
-        Debug.Log("Tile Actor Type: " + enemyData.actorType.ToString());
+        //Debug.Log("Tile Actor Type: " + enemyData.actorType.ToString());
 
-        Debug.Log("Attack Range: " + enemyData.attackRange);
-        Debug.Log("Damage: " + enemyData.damage);
-        Debug.Log("Max Health: " + enemyData.maxHealth);
+        //Debug.Log("Attack Range: " + enemyData.attackRange);
+        //Debug.Log("Damage: " + enemyData.damage);
+        //Debug.Log("Max Health: " + enemyData.maxHealth);
 
         currentHealth = enemyData.maxHealth;
-        Debug.Log("Current Health: " + currentHealth);
+        //Debug.Log("Current Health: " + currentHealth);
 
         moveSpeed = enemyData.moveSpeed; // Store move speed
-        Debug.Log("Enemy move speed: " + moveSpeed);
+        //Debug.Log("Enemy move speed: " + moveSpeed);
     }
 
     public int GetMoveSpeed()
@@ -58,6 +68,13 @@ public class EnemyUnit : TileActor
     public BasicEnemyStats GetEnemyStats()
     {
         return enemyStats;
+    }
+
+    public override void Die()
+    {
+        GetCurrentTile().SetCurrentTileActor(null);
+        TileActorManager.Instance.RemoveEnemyFromCurrentEnemyList(this);
+        base.Die();
     }
 
     public void MoveEnemy()
@@ -74,11 +91,10 @@ public class EnemyUnit : TileActor
         }
         else
         {
-            Debug.Log(enemyStats.name + " has movement range of: " + GetMoveSpeed());
+            //Debug.Log(enemyStats.name + " has movement range of: " + GetMoveSpeed());
         }
 
         int moveSpeed = enemyStats.moveSpeed;
-        MapTile currentTile = GetCurrentTile();
         if (currentTile == null)
         {
             Debug.LogError("Enemy has no assigned tile!");
@@ -102,8 +118,10 @@ public class EnemyUnit : TileActor
             int targetRing = currentRing - i;
             if (targetRing < 0) break; // Prevent index underflow
 
-            MapTile frontTile = MapManager.Instance.GetTile(currentQuadrant, targetRing, currentLane);
-            if (frontTile == null) continue;
+            MapTile frontTile = MapManager.Instance.GetTile(targetRing, currentLane);
+            if (frontTile == null) {
+                continue;
+            } 
 
             TileActor actor = frontTile.GetCurrentTileActor();
             if (actor != null)
@@ -120,6 +138,8 @@ public class EnemyUnit : TileActor
                     MapTile sideTile = CheckSideAvailability(currentQuadrant, currentRing, currentLane);
                     MoveToTile(sideTile);
                     return; // Find availability on the side.
+
+                    // TEST!! Might not work. If enemy is 2 tiles away and has attack range 2, then enemy will move to side
                 }
             }
         }
@@ -130,7 +150,7 @@ public class EnemyUnit : TileActor
         // Move forward up to moveSpeed tiles if no obstruction - WHAT TO DO IF MOVESPEED > 1, CAN THEY ATTACK AND MOVE
         for (int i = 1; i <= moveSpeed; i++)
         {
-            MapTile nextTile = MapManager.Instance.EnemyCheckOpenTileInFront(currentTile); // CHANGE TO HELPER FUNCTION
+            MapTile nextTile = CheckOpenTileInFront(currentTile); 
             if (nextTile == null) break; // Stop if no open tile
 
             MoveToTile(nextTile);
@@ -143,10 +163,24 @@ public class EnemyUnit : TileActor
         {
             return;
         }
-
         SetCurrentTile(newTile);
         transform.position = new Vector3(newTile.GetTileCenter().x, 0.35f, newTile.GetTileCenter().z);
-        Debug.Log($"Enemy moved to {newTile.GetRingNumber()}, {newTile.GetLaneNumber()}");
+    }
+
+    public MapTile CheckOpenTileInFront(MapTile currentMapTile)
+    {
+        int currentRingNumber = currentMapTile.GetRingNumber();
+        if (currentRingNumber == 0) { Debug.Log("Enemy is in front of Base"); return null; } // if enemy is in front of base
+
+        int currentQuadrant = (int)currentMapTile.GetQuadrant();
+        int currentLaneNumber = currentMapTile.GetLaneNumber();
+
+        MapTile frontTile = MapManager.Instance.GetTile(currentRingNumber - 1, currentLaneNumber);
+        if (frontTile.GetCurrentTileActor() == null)
+        {
+            return frontTile;
+        }
+        return null;
     }
 
     private MapTile CheckSideAvailability(int currentQuadrant, int currentRingNumber, int currentLaneNumber)
@@ -155,7 +189,7 @@ public class EnemyUnit : TileActor
 
         for (int i = 0; i < laneCount; i++)
         {
-            MapTile tile = MapManager.Instance.GetTile(currentQuadrant, currentRingNumber - 1, currentQuadrant * laneCount + i);
+            MapTile tile = MapManager.Instance.GetTile(currentRingNumber - 1, currentQuadrant * laneCount + i);
 
             if (MapManager.Instance.DoesTileContainTileActor(tile) == null)
             {

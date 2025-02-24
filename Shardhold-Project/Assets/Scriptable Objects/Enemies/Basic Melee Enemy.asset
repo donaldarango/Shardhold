@@ -17,5 +17,5 @@ MonoBehaviour:
   maxHealth: 2
   attackRange: 1
   damage: 1
-  actorPrefab: {fileID: 0}
+  actorPrefab: {fileID: 9028454918137198027, guid: 741a4d89f5d8c1548932293583ecac33, type: 3}
   moveSpeed: 1
