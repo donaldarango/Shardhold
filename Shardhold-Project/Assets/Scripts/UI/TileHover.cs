@@ -9,7 +9,7 @@ public class TileHover : MonoBehaviour
 
     private void OnDisable()
     {
-        
+        MapGenerator.HoverTile -= OnHover;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -24,7 +24,7 @@ public class TileHover : MonoBehaviour
         
     }
 
-    void OnHover (TileActor ta)
+    void OnHover(TileActor ta)
     {
         if (ta != null)
         {
