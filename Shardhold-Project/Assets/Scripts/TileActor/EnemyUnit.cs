@@ -2,24 +2,16 @@ using UnityEngine;
 
 public class EnemyUnit : TileActor
 {
+    public delegate void DamageBaseHandler(int damage);
+    public static event DamageBaseHandler DamageBase;
+
     public int turnSpawned = -1; // default for not spawned
-    //public int movementRange = 1; //Movement is in the enemystats SO
     public int terrainType = 0;
 
     public BasicEnemyStats enemyStats;
 
     [SerializeField]private int moveSpeed;
-    // [SerializeField]private int currentHealth;
-    // void Awake()
-    // {
-    //     if (tileActorStats == null)
-    //     {
-    //         Debug.LogError("Enemy missing base TileActorStats!");
-    //         return;
-    //     }
-    //     enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
-    //     SetActorData();  
-    // }
+
     void Start()
     {
 
@@ -36,7 +28,7 @@ public class EnemyUnit : TileActor
 
     private void Update()
     {
-        // Check game state, if enemy turn then run Move()? Should be handled by GameManager or whatever, so should I make Move public/static?
+        
     }
 
     public override void SetActorData()
@@ -47,9 +39,8 @@ public class EnemyUnit : TileActor
             return;
         }
         base.SetActorData();
-        /// SET DATA make it virtual in tileactor and add movement speed in here
+        
         moveSpeed = enemyStats.moveSpeed; // Store move speed
-        Debug.Log("Enemy move speed: " + moveSpeed);
     }
 
     public int GetMoveSpeed()
@@ -81,10 +72,6 @@ public class EnemyUnit : TileActor
             Debug.LogError("EnemyStats is not set!");
             return;
         }
-        else
-        {
-            //Debug.Log(enemyStats.name + " has movement range of: " + GetMoveSpeed());
-        }
 
         int moveSpeed = enemyStats.moveSpeed;
         if (currentTile == null)
@@ -100,7 +87,8 @@ public class EnemyUnit : TileActor
 
         if (currentRing == 0)
         {
-            Debug.Log("Enemy is at the base and cannot move further.");
+            Debug.Log("Enemy is attacks base and does not move forwards.");
+            AttackBase();
             return;
         }
 
@@ -124,20 +112,8 @@ public class EnemyUnit : TileActor
                     Attack((StructureUnit)actor);
                     return; // Stop moving if attacking
                 }
-                else if (actor.GetTileActorType() == TileActorType.EnemyUnit)
-                {
-                    Debug.Log("Enemy stops because another enemy is in front.");
-                    MapTile sideTile = CheckSideAvailability(currentQuadrant, currentRing, currentLane);
-                    MoveToTile(sideTile);
-                    return; // Find availability on the side.
-
-                    // TEST!! Might not work. If enemy is 2 tiles away and has attack range 2, then enemy will move to side
-                }
             }
         }
-        // HELPER FUNCTION END
-
-        // Call helper function for each movespeed the enemy has, checking each tile in front before they move
 
         // Move forward up to moveSpeed tiles if no obstruction - WHAT TO DO IF MOVESPEED > 1, CAN THEY ATTACK AND MOVE
         for (int i = 1; i <= moveSpeed; i++)
@@ -147,6 +123,11 @@ public class EnemyUnit : TileActor
 
             MoveToTile(nextTile);
         }
+    }
+
+    public void AttackBase()
+    {
+        DamageBase?.Invoke(damage);
     }
     public override void ShowStats() {
         base.ShowStats();
@@ -173,11 +154,20 @@ public class EnemyUnit : TileActor
         int currentLaneNumber = currentMapTile.GetLaneNumber();
 
         MapTile frontTile = MapManager.Instance.GetTile(currentRingNumber - 1, currentLaneNumber);
-        if (frontTile.GetCurrentTileActor() == null)
+        TileActor frontTileActor = frontTile.GetCurrentTileActor();
+        if (frontTileActor == null)
         {
             return frontTile;
         }
-        return null;
+        else if (frontTileActor.GetTileActorType() == TileActorType.EnemyUnit)
+        {
+            MapTile sideTile = CheckSideAvailability(currentQuadrant, currentRingNumber, currentLaneNumber);
+            return sideTile;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private MapTile CheckSideAvailability(int currentQuadrant, int currentRingNumber, int currentLaneNumber)
@@ -195,8 +185,4 @@ public class EnemyUnit : TileActor
         }
         return null;
     }
-
-    // public int GetCurrentHealth(){
-    //     return currentHealth;
-    // }
 }

@@ -18,4 +18,4 @@ MonoBehaviour:
   attackRange: 2
   damage: 2
   actorPrefab: {fileID: 9028454918137198027, guid: 12b102072b35e794c8be544b7cb52a03, type: 3}
-  moveSpeed: 1
+  moveSpeed: 2
