@@ -10,8 +10,7 @@ public class AllyUnit : Card
     {
         foreach (var tile in coordSet)
         {
-            int quad = (int)(tile.Item2 / 3);
-            MapTile target = MapManager.Instance.GetTile(quad, tile.Item1, tile.Item2);
+            MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
             if (actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit) //attack enemy. recieve damage. return to hand

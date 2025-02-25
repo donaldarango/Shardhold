@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,33 +17,32 @@ public abstract class TileActor : MonoBehaviour
 
     [Header("Scriptable Object Data")]
     public TileActorStats tileActorStats;
-    public int currentHealth; // Keep track of this separately?
-    [SerializeField] protected MapTile currentTile;
+    [SerializeField]protected int currentHealth; // Keep track of this separately?
+    [SerializeField]protected MapTile currentTile = null;
 
-    private string actorName;
-    private TileActorType actorType;
-    private int maxHealth;
-    private int attackRange;
-    private int damage;
-    private PrefabAssetType actorPrefab;
+    [SerializeField]protected string actorName;
+    [SerializeField]protected TileActorType actorType;
+    [SerializeField]protected int maxHealth;
+    [SerializeField]protected int attackRange;
+    [SerializeField]protected int damage;
+    [SerializeReference]protected PrefabAssetType actorPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SetActorData(tileActorStats);
+        SetActorData();
 
         if (tileActorStats != null)
         {
-            Debug.Log("Stats for " + tileActorStats.unitName + ":");
+            //Debug.Log("Stats for " + tileActorStats.unitName + ":");
 
-            Debug.Log("Tile Actor Type: " + tileActorStats.actorType.ToString());
+            //Debug.Log("Tile Actor Type: " + tileActorStats.actorType.ToString());
 
-            Debug.Log("Attack Range: " + tileActorStats.attackRange);
-            Debug.Log("Damage: " + tileActorStats.damage);
-            Debug.Log("Max Health: " + tileActorStats.maxHealth);
+            //Debug.Log("Attack Range: " + tileActorStats.attackRange);
+            //Debug.Log("Damage: " + tileActorStats.damage);
+            //Debug.Log("Max Health: " + tileActorStats.maxHealth);
 
-            currentHealth = tileActorStats.maxHealth;
-            Debug.Log("Current Health: " + currentHealth);
+            //Debug.Log("Current Health: " + currentHealth);
         }
         
     }
@@ -53,13 +53,14 @@ public abstract class TileActor : MonoBehaviour
         
     }
 
-    public void SetActorData(TileActorStats actorData)
+    public virtual void SetActorData()
     {
-        actorName = actorData.name;
-        actorType = actorData.actorType;
-        maxHealth = actorData.maxHealth;
-        attackRange = actorData.attackRange;
-        damage = actorData.damage;
+        actorName = tileActorStats.unitName;
+        actorType = tileActorStats.actorType;
+        maxHealth = tileActorStats.maxHealth;
+        currentHealth = tileActorStats.maxHealth;
+        attackRange = tileActorStats.attackRange;
+        damage = tileActorStats.damage;
     }
 
     // VIRTUAL CLASS. Structures and EnemyUnits attack similarly, Traps will need to override.
@@ -77,19 +78,36 @@ public abstract class TileActor : MonoBehaviour
         }
     }
 
+    public override string ToString()
+    {
+        return actorName;
+    }
+
     public TileActorType GetTileActorType()
     {
         return tileActorStats.actorType;
     }
 
-    public void SetCurrentTile(MapTile currentTile)
+    public void SetCurrentTile(MapTile newTile)
     {
-        this.currentTile = currentTile;
+        currentTile.SetCurrentTileActor(null);
+        currentTile = newTile;
+        newTile.SetCurrentTileActor(this);
     }
 
     public MapTile GetCurrentTile()
     {
         return currentTile;
+    }
+
+    public void SetCurrentHealth(int health)
+    {
+        currentHealth = health;
+    }
+
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
     }
 
     public void TakeDamage(int damageAmount)
@@ -104,9 +122,15 @@ public abstract class TileActor : MonoBehaviour
         }
     }
 
-    public void Die()
+    public virtual void ShowStats()
+    {
+        Debug.Log($"Name: {actorName}\nActor Type: {actorType}\nCurrentHP: {currentHealth}\nMaxHP: {maxHealth}\nAtkRange: {attackRange}\nDamage: {damage}");
+    }
+
+    public virtual void Die()
     {
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
     }
+
 }

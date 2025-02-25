@@ -6,8 +6,11 @@ using static Card;
 
 public class MapGenerator : MonoBehaviour
 {
-    public event EventHandler<SelectTileEventArgs> SelectTile;
-    public event EventHandler<SelectTileSetEventArgs> SelectTileSet;
+    public delegate void HoverEventHandler(TileActor ta);
+    public static event HoverEventHandler HoverTile;
+    public static event EventHandler<SelectTileEventArgs> SelectTile;
+    public static event EventHandler<SelectTileSetEventArgs> SelectTileSet;
+
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
     public float maxRadius = 6f;
@@ -73,6 +76,7 @@ public class MapGenerator : MonoBehaviour
         MapManager.Instance.SetLaneCount(laneCount);
         MapManager.Instance.SetRingCount(ringCount);
         MapManager.Instance.InitializeQuadrants();
+        MapManager.Instance.InitializeSpawnTiles();
 
         GenerateTiles();
         DrawCircles();
@@ -144,9 +148,6 @@ public class MapGenerator : MonoBehaviour
 
                 MapTile mapTile = new MapTile((Quadrant)q, r, l, tileCenter, terrain);
                 MapManager.Instance.AddTileToQuadrant(q, mapTile);
-
-                // Add enemy to every tile to test tile centers
-                MapManager.Instance.AddEnemyToTile(q, r, l, 0);
             }
         }
     }
@@ -256,10 +257,14 @@ public class MapGenerator : MonoBehaviour
                 hoveredTile = (r, l);
                 tileMeshes[(r, l)].material.color = hoverColor;
 
+                // Quadrant check and also debugging messages to check for tileactor
+                MapTile tile = MapManager.Instance.GetTile(r, l);
+                HoverTile?.Invoke(tile.GetCurrentTileActor());
+
+
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    
                     if (clickedTile.HasValue) // There is a selected tile
                     {
                         if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it
@@ -544,7 +549,6 @@ public class SelectTileEventArgs
     public SelectTileEventArgs((int, int)? coords)
     {
         this.coords = coords;
-
     }
 
 }
