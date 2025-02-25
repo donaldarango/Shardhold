@@ -32,14 +32,6 @@
                     {
                         "EnemyUnit": "Basic Melee Enemy",
                         "LaneNumber": 0
-                    },
-                    {
-                        "EnemyUnit": "Basic Tank Enemy",
-                        "LaneNumber": 1
-                    },
-                    {
-                        "EnemyUnit": "Basic Tank Enemy",
-                        "LaneNumber": 2
                     }
                 ]
             },
