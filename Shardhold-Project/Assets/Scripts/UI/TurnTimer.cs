@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Specialized;
 using System.Threading;
 using NUnit.Framework.Internal.Commands;
+using Unity.VisualScripting;
 public class TurnTimer : MonoBehaviour
 {
     [SerializeField]
@@ -19,6 +20,20 @@ public class TurnTimer : MonoBehaviour
     public bool playerTurn = false;
     //Consider an audio clip that plays in the last few seconds like a league of legends champ select countdown
     //Consider a lock in/turn switch sound when time hits 0
+
+    public delegate void EnemyTurnHandler();
+    public static event EnemyTurnHandler EnemyTurnStart;
+
+    //OnEnable is to /disable is listening for an event so tileactormanager NextRoudn would need to subscribe in here
+    private void OnEnable()
+    {
+        TileActorManager.PlayerTurnStart += StartPlayerTurn;
+    }
+
+    private void OnDisable()
+    {
+        TileActorManager.PlayerTurnStart -= StartPlayerTurn;
+    }
 
     void Start()
     {
@@ -48,6 +63,7 @@ public class TurnTimer : MonoBehaviour
         Debug.Log("Player turn ended");
         playerTurn = false;
         timeText.text = "";
+        EnemyTurnStart?.Invoke();
     }
     public void StartPlayerTurn()
     {
