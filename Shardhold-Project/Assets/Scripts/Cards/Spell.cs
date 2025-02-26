@@ -20,8 +20,7 @@ class Spell : Card
     {
         foreach(var tile in coordSet)
         {
-            int quad = (int)(tile.Item2 / 3);
-            MapTile target = MapManager.Instance.GetTile(quad, tile.Item1, tile.Item2);
+            MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
             if(actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.Structure || friendlyFire))
@@ -35,13 +34,12 @@ class Spell : Card
     {
         foreach (var tile in coordSet)
         {
-            int quad = (int)(tile.Item2 / 3);
-            MapTile target = MapManager.Instance.GetTile(quad, tile.Item1, tile.Item2);
+            MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
             if (actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.EnemyUnit || friendlyFire))
             {
-                actor.currentHealth = Math.Min(actor.tileActorStats.maxHealth, actor.currentHealth + heal); //no overheal. heal enemy units if friendly fire is enabled 
+                actor.SetCurrentHealth(Math.Min(actor.tileActorStats.maxHealth, actor.GetCurrentHealth() + heal)); //no overheal. heal enemy units if friendly fire is enabled 
             }
         }
     }
