@@ -14,6 +14,12 @@ public class MapManager : MonoBehaviour
 
     public static MapManager Instance { get { return _instance; } }
 
+    public delegate void AddEnemyToSpawnTileHandler(int laneNumber);
+    public static event AddEnemyToSpawnTileHandler AddEnemyToSpawnTileEvent;
+
+    public delegate void RemoveEnemyFromSpawnTileHandler(int laneNumber);
+    public static event RemoveEnemyFromSpawnTileHandler RemoveEnemyFromSpawnTileEvent;
+
     private static MapManager _instance;
     private int ringCount; // rings around the map
     private int laneCount; // lanes per quadrant
@@ -109,6 +115,7 @@ public class MapManager : MonoBehaviour
         EnemySpawnTile spawnTile = spawnTiles[laneNumber];
         spawnTile.enemyStats = enemyStats;
         spawnTiles[laneNumber] = spawnTile;
+        AddEnemyToSpawnTileEvent?.Invoke(laneNumber);
     }
 
     public void MoveSpawnUnitsToMap()
@@ -121,6 +128,7 @@ public class MapManager : MonoBehaviour
                 AddEnemyToMapTile(ringCount - 1, i, spawnTile.enemyStats.unitName);
                 spawnTile.enemyStats = null;
                 spawnTiles[i] = spawnTile;
+                RemoveEnemyFromSpawnTileEvent?.Invoke(i);
             }
         }
     }
