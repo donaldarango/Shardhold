@@ -5,6 +5,10 @@ public class CustomDebug : MonoBehaviour
     public static CustomDebug instance;
     public bool debugging = true;
 
+    #region Assertion-based Testing
+    public bool runAssertionTesting = false;
+    #endregion
+
     //FOR INTIAL SETTING ONLY; USE GET METHODS
     //per-class debugging bool controls (the respective class will check this, rather than holding its own debugging variable):
     public bool deckDebugging = true;

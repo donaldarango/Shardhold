@@ -7,12 +7,12 @@ using UnityEngine;
 public class Deck : MonoBehaviour
 {
     //this will be used for converting int into a Card
-    List<Card> cardLookup = new List<Card>();
+    public List<Card> cardLookup = new List<Card>();
 
     //stores what has been unlocked for the player; is not the actual deck necessarily
     //each card is an index value; the value at that index is the number of copies of that card unlocked
     //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
-    List<int> cardsUnlocked = new List<int>();
+    public List<int> cardsUnlocked = new List<int>();
 
     //stores the cards in the current draw pile/deck
     //>>>>>>>>>>NO LONGER TRUE: the index position in this list determines order of draw(? - undecided)
@@ -64,22 +64,28 @@ public class Deck : MonoBehaviour
         //remove from hand
         hand.Remove(card);
 
-        //TODO
-        if (CustomDebug.DeckDebugging())
-        {
-            CustomDebug.RanUnimplementedCode("Card not destroyed in DiscardCard()");
-        }
+        DeleteCard(card);
     }
      
 
     #endregion
 
-    private void CreateCard(int cardInt)
+    private Card CreateCard(int cardInt, int handPosition)
     {
         //TODO
         if (CustomDebug.DeckDebugging())
         {
             CustomDebug.RanUnimplementedCode("CreateCard()");
+        }
+        return null;
+    }
+
+    private void DeleteCard(Card card)
+    {
+        //TODO
+        if (CustomDebug.DeckDebugging())
+        {
+            CustomDebug.RanUnimplementedCode("DeleteCard()");
         }
     }
 
@@ -105,8 +111,10 @@ public class Deck : MonoBehaviour
         int choice = CustomMath.RandomInt(0, drawPile.Count);
 
         //add it to hand
-        hand.Add(cardLookup[drawPile[choice]]);
-        CreateCard(drawPile[choice]);
+        int cardAsInt = drawPile[choice];
+        Card newCard = CreateCard(drawPile[choice], hand.Count);
+        hand.Add(newCard);
+        
 
         //remove from draw pile
         drawPile.RemoveAt(choice);
@@ -178,7 +186,7 @@ public class Deck : MonoBehaviour
     /// Return a list of card objects that are in the player's hand
     /// </summary>
     /// <returns></returns>
-    public List<Card> GetCardsInHand()
+    /*public List<Card> GetCardsInHand()
     {
         List <Card> cards = new List<Card>();
         for (int i = 0; i < CountCardsInHand(); i++)
@@ -186,6 +194,11 @@ public class Deck : MonoBehaviour
             cards.Add(cardLookup[i]);
         }
         return cards;
+    }*/
+
+    public List<Card> GetHand()
+    {
+        return hand;
     }
 
     /// <summary>
