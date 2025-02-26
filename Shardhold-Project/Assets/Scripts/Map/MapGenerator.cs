@@ -64,6 +64,7 @@ public class MapGenerator : MonoBehaviour
 
 		targetedTiles = new HashSet<(int, int)>();
         clickedTiles = new HashSet<(int, int)>();
+        TileActorManager.PlayerTurnStart += OnRoundResetSelection;
 
         // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
