@@ -1,7 +1,15 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class TileHover : MonoBehaviour
 {
+    [SerializeField]TMP_Text nameDisplay;
+    [SerializeField]TMP_Text currentHealthDisplay;
+    [SerializeField]TMP_Text attackDisplay;
+    [SerializeField]TMP_Text attackRange;
+    public GameObject tileDisplayUI;
+
     private void OnEnable()
     {
         MapGenerator.HoverTile += OnHover;
@@ -15,7 +23,7 @@ public class TileHover : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        tileDisplayUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -28,12 +36,19 @@ public class TileHover : MonoBehaviour
     {
         if (ta != null)
         {
-            PrintStats(ta);
+            tileDisplayUI.SetActive(true);
+            ShowStats(ta);
+        }
+        else {
+            tileDisplayUI.SetActive(false);
         }
     }
 
-    void PrintStats(TileActor ta)
+    void ShowStats(TileActor ta)
     {
-        ta.ShowStats();
+        nameDisplay.text = ta.GetActorName();
+        currentHealthDisplay.text = "HP    : " +ta.GetCurrentHealth().ToString() + " / " + ta.GetMaxHealth().ToString();
+        attackDisplay.text = "ATK   : " + ta.GetAttackDamage().ToString();
+        attackRange.text = "RANGE : " +ta.GetAttackRange().ToString();
     }
 }
