@@ -21,6 +21,8 @@ public class MapGenerator : MonoBehaviour
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
     public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
 
+    public TileActorManager manager = null; // emergency fix for demo
+
     public enum TargetType
     {
         Tile,
@@ -51,6 +53,17 @@ public class MapGenerator : MonoBehaviour
     private static HashSet<(int, int)> targetedTiles = null;
     private static HashSet<(int, int)> clickedTiles = null;
 
+    private void OnEnable()
+    {
+        TileActorManager.PlayerTurnStart += OnRoundResetSelection;
+    }
+
+    private void OnDisable()
+    {
+        TileActorManager.PlayerTurnStart -= OnRoundResetSelection;
+
+    }
+
     void Start()
     {
         // Always set map at 0,0,0
@@ -62,6 +75,7 @@ public class MapGenerator : MonoBehaviour
 
 		targetedTiles = new HashSet<(int, int)>();
         clickedTiles = new HashSet<(int, int)>();
+        
 
         // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
@@ -80,6 +94,8 @@ public class MapGenerator : MonoBehaviour
 
         GenerateTiles();
         DrawCircles();
+
+        if (manager) { manager.enabled = true; }
     }
 
     void Update()
