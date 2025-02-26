@@ -21,6 +21,8 @@ public class MapGenerator : MonoBehaviour
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
     public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
 
+    public TileActorManager manager = null; // emergency fix for demo
+
     public enum TargetType
     {
         Tile,
@@ -80,6 +82,8 @@ public class MapGenerator : MonoBehaviour
 
         GenerateTiles();
         DrawCircles();
+
+        manager.enabled = true;
     }
 
     void Update()
