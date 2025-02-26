@@ -83,7 +83,7 @@ public class MapGenerator : MonoBehaviour
         GenerateTiles();
         DrawCircles();
 
-        manager.enabled = true;
+        if (manager) { manager.enabled = true; }
     }
 
     void Update()
