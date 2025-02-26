@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class AllyUnit : Card
+abstract public class AllyUnit : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public int health;
-    public int damage;
+    public abstract int health { get; set; }
+    public abstract int damage { get; }
+
 
     public override void Play()
     {
