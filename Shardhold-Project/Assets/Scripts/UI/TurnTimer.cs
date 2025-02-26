@@ -64,6 +64,7 @@ public class TurnTimer : MonoBehaviour
         playerTurn = false;
         timeText.text = "";
         EnemyTurnStart?.Invoke();
+
     }
     public void StartPlayerTurn()
     {

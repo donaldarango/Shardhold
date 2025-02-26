@@ -39,7 +39,8 @@ public class MapGenerator : MonoBehaviour
     public Card oldCard = null;
     public delegate void PlayCardHandler(HashSet<(int, int)> tiles);
     public static event PlayCardHandler PlayCard;
-
+    public delegate void ResetSelectionHandler();
+    public static event ResetSelectionHandler clearTileSelection;
     // ADD MAP CONFIG (TERRAIN INFO)
 
     private int totalLaneCount;
@@ -65,8 +66,6 @@ public class MapGenerator : MonoBehaviour
 
         targetedTiles = new HashSet<(int, int)>();
         clickedTiles = new HashSet<(int, int)>();
-        TileActorManager.NextRound += OnRoundResetSelection;
-
         // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
         Assert.IsTrue(laneCount > 0);
@@ -561,7 +560,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void OnRoundResetSelection()
+    public void OnRoundResetSelection()
     {
         clickedTile = null;
         clickedTiles.Clear();
