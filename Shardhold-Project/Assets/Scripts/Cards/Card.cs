@@ -4,24 +4,14 @@ using UnityEngine;
 using static MapGenerator;
 
 [Serializable]
-abstract public class Card : MonoBehaviour
+abstract public class Card : ScriptableObject
 {
     public int id; //the int representation of the card
-    public enum TargetType
-    {
-        Tile,
-        Lane,
-        Row,
-        Quadrant,
-        Ring,
-        Board,
-        Invalid
-    }
 
-    public TargetType type = TargetType.Tile;
-    public int range = 4;
-    
-    public string cardName = "";
+    public abstract TargetType type { get; }
+    public abstract int range { get; }
+    public abstract string cardName { get; }
+
     protected HashSet<(int, int)> coordSet;
 
 
