@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-abstract class Placer : Card
+class Placer : Card
 {
-    public abstract TileActor actor { get; }
+    TileActor actor;
 
     public override void Play()
     {
