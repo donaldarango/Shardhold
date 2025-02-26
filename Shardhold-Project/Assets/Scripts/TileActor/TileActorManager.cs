@@ -61,6 +61,7 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Tile Actor Manager Begin");
         InitializeSpawnData();
     }
 

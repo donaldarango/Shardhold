@@ -2580,7 +2580,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553120044}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85298cca5272bc045b70d1004a5feaa1, type: 3}
   m_Name: 
@@ -10424,6 +10424,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6958555791199978406, guid: 4b51724a9c8c651438841c5dd5f142ca, type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 553120045}
     - target: {fileID: 7976029444842892598, guid: 4b51724a9c8c651438841c5dd5f142ca, type: 3}
       propertyPath: m_Name
       value: MapManager
