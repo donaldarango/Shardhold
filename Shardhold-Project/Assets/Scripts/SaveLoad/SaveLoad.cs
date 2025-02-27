@@ -342,7 +342,9 @@ public class SaveLoad : MonoBehaviour
     //get the number of directions on the map
     private int getLaneCount()
     {
-        if (mapGenerator == null)
+        return MapManager.Instance.GetLaneCount();
+
+        /*if (mapGenerator == null)
         {
             if (debugging)
             {
@@ -353,13 +355,15 @@ public class SaveLoad : MonoBehaviour
         else
         {
             return mapGenerator.laneCount;
-        }
+        }*/
     }
 
     //set the number of directions on the map
     private void setLaneCount(int amt)
     {
-        if (mapGenerator == null)
+        MapManager.Instance.SetLaneCount(amt);
+
+        /*if (mapGenerator == null)
         {
             if (debugging) {
                 Debug.LogError("No MapGenerator assigned to SaveLoad.");
@@ -368,30 +372,34 @@ public class SaveLoad : MonoBehaviour
         else
         {
             mapGenerator.laneCount = amt;
-        }
+        }*/
     }
 
     //get the number of rings around the base; does not include the base but does include invisible spawning rings (currently assumes 1 spawning ring, see load and save functions)
     private int getRingCount()
     {
-        if (mapGenerator == null)
+        return MapManager.Instance.GetRingCount();
+
+        /*if (mapgenerator == null)
         {
             if (debugging)
             {
-                Debug.LogError("No MapGenerator assigned to SaveLoad.");
+                debug.logerror("no mapgenerator assigned to saveload.");
             }
             return -1;
         }
         else
         {
-            return mapGenerator.ringCount;
-        }
+            return mapgenerator.ringcount;
+        }*/
     }
 
     //set the number of rings around the base
     private void setRingCount(int amt)
     {
-        if (mapGenerator == null)
+        MapManager.Instance.SetRingCount(amt);
+
+        /*if (mapGenerator == null)
         {
             if (debugging)
             {
@@ -401,7 +409,7 @@ public class SaveLoad : MonoBehaviour
         else
         {
             mapGenerator.ringCount = amt;
-        }
+        }*/
     }
 
     //get the current turn counter
@@ -466,7 +474,14 @@ public class SaveLoad : MonoBehaviour
     {
         //first ready the player data
         PlayerStats playerStats = new PlayerStats();
+
+        //------------------playerStats.cardsUnlocked = Deck
+
         //TODO: get the player stats
+        if (CustomDebug.SaveLoadDebugging())
+        {
+            CustomDebug.RanUnimplementedCode("SaveStats() is not complete.");
+        }
 
         //now convert player data into a json
         string jsonStats = ToJson(playerStats, true);
@@ -486,6 +501,10 @@ public class SaveLoad : MonoBehaviour
 
         //finally, use the player statistics as needed
         //TODO
+        if (CustomDebug.SaveLoadDebugging())
+        {
+            CustomDebug.RanUnimplementedCode("LoadStats() is not complete.");
+        }
     }
 
     #endregion
@@ -572,11 +591,11 @@ class PlayerStats
     //1 = player has played tutorial, so next they will play level 1
     //2 = player has played level 1, so next level is level 2
     //unlocked levels should generally be <= nextLevel
-    int nextLevel;
+    public int nextLevel;
 
     //each card is an index value; the value at that index is the number of copies of that card unlocked
     //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
-    List<int> cardsUnlocked = new List<int>();
+    public List<int> cardsUnlocked = new List<int>();
 
 #pragma warning restore 0649
 }

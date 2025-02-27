@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+    public static Deck Instance { get; private set; }
+
     //this will be used for converting int into a Card
     public List<Card> cardLookup = new List<Card>();
 
@@ -221,6 +223,20 @@ public class Deck : MonoBehaviour
     public int CountCardsInHand()
     {
         return hand.Count;
+    }
+
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        TileActorManager.PlayerTurnStart += NextTurn;
+    }
+
+    private void OnDisable()
+    {
+        TileActorManager.PlayerTurnStart -= NextTurn;
     }
 
     #endregion
