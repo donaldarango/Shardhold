@@ -29,7 +29,20 @@ public class Deck : MonoBehaviour
     //uses same rules as drawPile
     List<Card> hand = new List<Card>();
 
-
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            if (CustomDebug.DeckDebugging())
+            {
+                Debug.Log("Multiple deck instances detected.");
+            }
+        }
+    }
 
     #region Public Methods (not including Gets and Sets)
 
@@ -223,6 +236,15 @@ public class Deck : MonoBehaviour
     public int CountCardsInHand()
     {
         return hand.Count;
+    }
+
+    /// <summary>
+    /// returns the number of cards in the draw pile
+    /// </summary>
+    /// <returns></returns>
+    public int CountCardsInDrawPile()
+    {
+        return drawPile.Count;
     }
 
     #endregion

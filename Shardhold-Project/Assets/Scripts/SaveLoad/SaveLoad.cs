@@ -475,12 +475,13 @@ public class SaveLoad : MonoBehaviour
         //first ready the player data
         PlayerStats playerStats = new PlayerStats();
 
-        //------------------playerStats.cardsUnlocked = Deck
+        //get the player stats
+        playerStats.cardsUnlocked = Deck.Instance.cardsUnlocked;
 
-        //TODO: get the player stats
+        //TODO: save next level variable
         if (CustomDebug.SaveLoadDebugging())
         {
-            CustomDebug.RanUnimplementedCode("SaveStats() is not complete.");
+            CustomDebug.RanUnimplementedCode("SaveStats() only saves unlocked cards.");
         }
 
         //now convert player data into a json
@@ -500,7 +501,9 @@ public class SaveLoad : MonoBehaviour
         PlayerStats playerStats = FromJson<PlayerStats>(jsonStats);
 
         //finally, use the player statistics as needed
-        //TODO
+        Deck.Instance.cardsUnlocked = playerStats.cardsUnlocked;
+
+        //TODO: load next level variable
         if (CustomDebug.SaveLoadDebugging())
         {
             CustomDebug.RanUnimplementedCode("LoadStats() is not complete.");
