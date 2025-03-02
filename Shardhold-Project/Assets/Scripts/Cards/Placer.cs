@@ -9,7 +9,8 @@ abstract class Placer : Card
 {
     public abstract TileActor actor { get; }
 
-    public override void Play()
+    public override CardType cardType => CardType.Placer;
+    public override void Play(HashSet<(int, int)> tiles)
     {
         foreach(var tile in coordSet)
         {

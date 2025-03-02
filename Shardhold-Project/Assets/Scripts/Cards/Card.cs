@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using static MapGenerator;
 
-[Serializable]
+[CreateAssetMenu(fileName = "Card", menuName = "Scriptable Objects/Card")]
 abstract public class Card : ScriptableObject
 {
     public int id; //the int representation of the card
 
-    public abstract TargetType type { get; }
-    public abstract int range { get; }
-    public abstract string cardName { get; }
+    [Header("Basic Card Information")]
+    public string cardName;
+    public TargetType targetType;
+    public int range;
+
+    public enum CardType
+    {
+        Spell,
+        Placer,
+        Unit,
+        Default
+    }
+    public abstract CardType cardType { get; }
 
     protected HashSet<(int, int)> coordSet;
 
@@ -24,7 +34,7 @@ abstract public class Card : ScriptableObject
         return id;
     }
     #endregion
-    abstract public void Play();
+    abstract public void Play(HashSet<(int, int)> tiles);
 }
 
 

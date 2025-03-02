@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 abstract public class AllyUnit : Card
@@ -6,8 +7,9 @@ abstract public class AllyUnit : Card
     public abstract int health { get; set; }
     public abstract int damage { get; }
 
+    public override CardType cardType => CardType.Unit;
 
-    public override void Play()
+    public override void Play(HashSet<(int, int)> tiles)
     {
         foreach (var tile in coordSet)
         {
