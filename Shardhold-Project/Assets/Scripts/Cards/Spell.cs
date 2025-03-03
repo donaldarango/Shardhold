@@ -3,38 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
-using static MapGenerator;
 
-abstract class Spell : Card
+class Spell : Card
 {
-    public abstract int damage { get; }
-    public abstract int heal { get; }
-    public abstract bool friendlyFire { get; }
-
-    private void OnEnable()
-    {
-        MapGenerator.PlayCard += OnPlayCard;
-    }
-
-    private void OnDisable()
-    {
-        MapGenerator.PlayCard -= OnPlayCard;
-    }
-
-    private void OnPlayCard(HashSet<(int, int)> tiles)
-    {
-        base.coordSet = tiles;
-        Play();
-    }
-
+    public int damage;
+    public int heal;
+    public bool friendlyFire = false;
 
     public override void Play()
     {
-        if (coordSet == null) { return; }
-        if (damage > 0) { damageArea(); }
-        if (heal > 0) { healArea(); }
-
+        if(damage > 0){ damageArea(); }
+        if(heal > 0) { healArea(); }
     }
 
     public void damageArea()
@@ -44,7 +23,7 @@ abstract class Spell : Card
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
-            if(actor && actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.Structure || friendlyFire))
+            if(actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.Structure || friendlyFire))
             {
                 actor.TakeDamage(damage); //hurt ally units if friendly fire is enabled.
             }
@@ -58,7 +37,7 @@ abstract class Spell : Card
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
-            if (actor && actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.EnemyUnit || friendlyFire))
+            if (actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.EnemyUnit || friendlyFire))
             {
                 actor.SetCurrentHealth(Math.Min(actor.tileActorStats.maxHealth, actor.GetCurrentHealth() + heal)); //no overheal. heal enemy units if friendly fire is enabled 
             }

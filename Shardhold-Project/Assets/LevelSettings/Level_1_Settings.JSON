@@ -31,11 +31,7 @@
                 "RoundSpawnList": [
                     {
                         "EnemyUnit": "Basic Melee Enemy",
-                        "LaneNumber": 2
-                    },
-                    {
-                        "EnemyUnit": "Basic Ranged Enemy",
-                        "LaneNumber": 5
+                        "LaneNumber": 0
                     }
                 ]
             },
@@ -43,29 +39,8 @@
                 "RoundNumber": 1,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Tank Enemy",
-                        "LaneNumber": 8
-                    },
-                    {
-                        "EnemyUnit": "Basic Melee Enemy",
-                        "LaneNumber": 3
-                    },
-                    {
                         "EnemyUnit": "Basic Ranged Enemy",
-                        "LaneNumber": 11
-                    }
-                ]
-            },
-            {
-                "RoundNumber": 3,
-                "RoundSpawnList": [
-                    {
-                        "EnemyUnit": "Basic Melee Enemy",
-                        "LaneNumber": 4
-                    },
-                    {
-                        "EnemyUnit": "Basic Tank Enemy",
-                        "LaneNumber": 10
+                        "LaneNumber": 0
                     }
                 ]
             },
@@ -73,45 +48,8 @@
                 "RoundNumber": 4,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
-                        "LaneNumber": 1
-                    },
-                    {
                         "EnemyUnit": "Basic Melee Enemy",
-                        "LaneNumber": 7
-                    },
-                    {
-                        "EnemyUnit": "Basic Ranged Enemy",
-                        "LaneNumber": 9
-                    }
-                ]
-            },
-            {
-                "RoundNumber": 5,
-                "RoundSpawnList": [
-                    {
-                        "EnemyUnit": "Basic Melee Enemy",
-                        "LaneNumber": 0
-                    },
-                    {
-                        "EnemyUnit": "Basic Ranged Enemy",
-                        "LaneNumber": 3
-                    },
-                    {
-                        "EnemyUnit": "Basic Tank Enemy",
                         "LaneNumber": 6
-                    },
-                    {
-                        "EnemyUnit": "Basic Melee Enemy",
-                        "LaneNumber": 8
-                    },
-                    {
-                        "EnemyUnit": "Basic Ranged Enemy",
-                        "LaneNumber": 10
-                    },
-                    {
-                        "EnemyUnit": "Basic Tank Enemy",
-                        "LaneNumber": 11
                     }
                 ]
             }

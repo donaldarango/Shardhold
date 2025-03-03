@@ -20,31 +20,21 @@ public class TileActorManager : MonoBehaviour
         public List<EnemySpawnInfo> roundSpawnList;
     }
 
-    // public delegate void NextRoundHandler();
-    // public static event NextRoundHandler NextRound;
+    public delegate void NextRoundHandler();
+    public static event NextRoundHandler NextRound;
 
     private static TileActorManager _instance;
-
     [SerializeField] private TextAsset levelSettingsJSON;
     [SerializeField] private List<BasicEnemyStats> enemyTileActorsStats = new List<BasicEnemyStats>();
     [SerializeField] private List<BasicStructureStats> structureTileActorStats = new List<BasicStructureStats>();
     [SerializeField] private List<EnemyUnit> currentEnemyUnits = new List<EnemyUnit>();
     [SerializeField] private List<RoundSpawnInfo> gameSpawnList = new List<RoundSpawnInfo>();
 
-    public delegate void PlayerTurnHandler();
-    public static event PlayerTurnHandler PlayerTurnStart;
     public int currentRound = 0;
 
 
     public static TileActorManager Instance { get { return _instance; } }
-    void OnEnable()
-    {
-        TurnTimer.EnemyTurnStart += OnNextRound;
-    }
-    void OnDisable()
-    {
-        TurnTimer.EnemyTurnStart -= OnNextRound;
-    }
+    
 
     private void Awake()
     {
@@ -61,7 +51,6 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Tile Actor Manager Begin");
         InitializeSpawnData();
     }
 
@@ -130,9 +119,10 @@ public class TileActorManager : MonoBehaviour
         }
     }
 
-    public void OnNextRound()
+    public void OnNextTurn()
     {
         currentRound = currentRound + 1;
+        NextRound?.Invoke();
 
         foreach (EnemyUnit enemyUnit in currentEnemyUnits)
         {
@@ -141,7 +131,6 @@ public class TileActorManager : MonoBehaviour
 
         MapManager.Instance.MoveSpawnUnitsToMap();
         AddUnitsToSpawnTiles(currentRound);
-        PlayerTurnStart?.Invoke();
     }
 
     public BasicEnemyStats GetEnemyTileActorByName(string unitName)

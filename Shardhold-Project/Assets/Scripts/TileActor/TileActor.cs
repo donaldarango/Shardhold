@@ -109,18 +109,6 @@ public abstract class TileActor : MonoBehaviour
     {
         return currentHealth;
     }
-    public string GetActorName() {
-        return actorName;
-    }
-    public int GetMaxHealth() {
-        return maxHealth;
-    }
-    public int GetAttackDamage() {
-        return damage;
-    }
-    public int GetAttackRange() {
-        return attackRange;
-    }
 
     public void TakeDamage(int damageAmount)
     {

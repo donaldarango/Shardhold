@@ -50,13 +50,11 @@ public class MapManager : MonoBehaviour
 
     public void InitializeSpawnTiles()
     {
-        Debug.Log("Creating Spawn tiles");
         for (int i = 0; i < laneCount * 4; i++)
         {
             EnemySpawnTile spawnTile = new EnemySpawnTile();
             spawnTile.enemyStats = null;
             spawnTile.name = "Lane " + i.ToString();
-            //Debug.Log("new spawnTile lane " + i);
             spawnTiles.Add(spawnTile);
         }
     }
@@ -114,7 +112,6 @@ public class MapManager : MonoBehaviour
 
     public void AddEnemyToSpawnTile(int laneNumber, BasicEnemyStats enemyStats)
     {
-        Debug.Log("lane ; " + laneNumber);
         EnemySpawnTile spawnTile = spawnTiles[laneNumber];
         spawnTile.enemyStats = enemyStats;
         spawnTiles[laneNumber] = spawnTile;
