@@ -120,14 +120,42 @@ public class SaveLoad : MonoBehaviour
 
         #region TileActors
 
-        //TODO iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
-        List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
-        List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
-        List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
-        List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
+
+        //TODO not-yet-spawned enemies
+        if (CustomDebug.SaveLoadDebugging())
+        {
+            RanUnimplementedCode("currently no saving of not-yet-spawned enemies");
+        }
+
+        //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
+
+        List<TileActor> actors = MapManager.Instance.GetTileActorList();
         List<int> ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
         List<int> ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
+        List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
+        List<String> ta_name = new List<String>();
+        List<TileActor.TileActorType> ta_type = new List<TileActor.TileActorType>();
         List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
+        List<int> ta_attackRange = new List<int>();     //the standard attack range of this TileActor
+
+        for (int i = 0; i < actors.Count; i++)
+        {
+            ta_maxHealth.Add(actors[i].GetMaxHealth());
+            ta_curHealth.Add(actors[i].GetCurrentHealth());
+            MapTile mapTile = actors[i].GetCurrentTile();
+            ta_pos.Add(new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber()));
+            ta_name.Add(actors[i].GetActorName());
+            ta_type.Add(actors[i].GetTileActorType());
+            ta_damage.Add(actors[i].GetAttackDamage());
+            ta_attackRange.Add(actors[i].GetAttackRange());
+        }
+
+        //TODO
+        //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
+        //List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
+        
+        //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
+        
 
         //special abilities: TODO
         #endregion
@@ -562,7 +590,7 @@ class GameStateData
     #endregion
 
     #region TileActors
-    List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
+    //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
     List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
     List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
     List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
