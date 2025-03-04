@@ -95,7 +95,7 @@ public class MapManager : MonoBehaviour
         GameObject structureUnitPrefab = Instantiate(structure.actorPrefab, tilePosition, Quaternion.identity);
         structureUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
-        structureUnit.SetCurrentTile(tile);
+        structureUnit.Spawn(tile);
         tile.SetCurrentTileActor(structureUnit);
     }
 
@@ -107,14 +107,13 @@ public class MapManager : MonoBehaviour
         GameObject enemyUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         enemyUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         EnemyUnit enemyUnit = enemyUnitPrefab.GetComponent<EnemyUnit>();
-        enemyUnit.SetCurrentTile(tile);
+        enemyUnit.Spawn(tile);
         tile.SetCurrentTileActor(enemyUnit);
         TileActorManager.Instance.AddEnemyToCurrentEnemyList(enemyUnit);
     }
 
     public void AddEnemyToSpawnTile(int laneNumber, BasicEnemyStats enemyStats)
     {
-        Debug.Log("lane ; " + laneNumber);
         EnemySpawnTile spawnTile = spawnTiles[laneNumber];
         spawnTile.enemyStats = enemyStats;
         spawnTiles[laneNumber] = spawnTile;
