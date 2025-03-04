@@ -6,31 +6,38 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static MapGenerator;
 
-abstract class Spell : Card
+[CreateAssetMenu(fileName = "Spell", menuName = "Scriptable Objects/Spell")]
+class Spell : Card
 {
-    public abstract int damage { get; }
-    public abstract int heal { get; }
-    public abstract bool friendlyFire { get; }
+    [Header("Spell Stats")]
+    public int damage;
+    public int heal;
+    public bool friendlyFire;
+
+    public override CardType cardType => CardType.Spell;
 
     private void OnEnable()
     {
-        MapGenerator.PlayCard += OnPlayCard;
+        //MapGenerator.PlayCard += OnPlayCard;
+        Debug.Log("Test");
     }
 
     private void OnDisable()
     {
-        MapGenerator.PlayCard -= OnPlayCard;
+        //MapGenerator.PlayCard -= OnPlayCard;
     }
 
-    private void OnPlayCard(HashSet<(int, int)> tiles)
-    {
-        base.coordSet = tiles;
-        Play();
-    }
+    //public void BeginPlay(HashSet<(int, int)> tiles)
+    //{
+    //    base.coordSet = tiles;
+    //    Play();
+    //}
 
 
-    public override void Play()
+    public override void Play(HashSet<(int, int)> tiles)
     {
+        coordSet = tiles;
+        Debug.Log("play called:");
         if (coordSet == null) { return; }
         if (damage > 0) { damageArea(); }
         if (heal > 0) { healArea(); }
@@ -39,13 +46,15 @@ abstract class Spell : Card
 
     public void damageArea()
     {
+        Debug.Log("coordset : " + coordSet.Count);
         foreach(var tile in coordSet)
         {
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
-
+            Debug.Log("tile - " + target.name + " | " + tile.Item1 + " | " + tile.Item2);
             if(actor && actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.Structure || friendlyFire))
             {
+                Debug.Log("attacking - " + actor.name + " | " + damage);
                 actor.TakeDamage(damage); //hurt ally units if friendly fire is enabled.
             }
         }
