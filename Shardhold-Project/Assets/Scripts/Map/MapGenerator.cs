@@ -455,10 +455,7 @@ public class MapGenerator : MonoBehaviour
                             Debug.Log("play card via new target");
                             if (selectedCard)
                             {
-                                if(selectedCard.cardType == CardType.Spell)
-                                {
-                                    selectedCard.Play(clickedTiles);
-                                }
+                                selectedCard.Play(clickedTiles);
                             }
                             //PlayCard?.Invoke(clickedTiles);
                             //selectedCard = null;
@@ -476,7 +473,7 @@ public class MapGenerator : MonoBehaviour
                         targetedTiles.Clear();
                         Debug.Log("play card via first target");
 
-                        if (selectedCard.cardType == CardType.Spell)
+                        if (selectedCard)
                         {
                             selectedCard.Play(clickedTiles);
                         }
