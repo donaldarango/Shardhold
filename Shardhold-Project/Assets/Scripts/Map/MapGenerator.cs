@@ -363,7 +363,7 @@ public class MapGenerator : MonoBehaviour
                 }
 
                 int offset = Mathf.FloorToInt(l / 3) * 3; // Cull targeting into either 0, 3, 6, or 9 so quadrants are respected
-                switch (card.type)
+                switch (card.targetType)
                 {
                     case TargetType.Tile: // Single tile, like the prior implementation
 
@@ -433,7 +433,8 @@ public class MapGenerator : MonoBehaviour
                             }
                             //clickedTiles.Clear();
                             targetedTiles.Clear();
-                            PlayCard?.Invoke(null);
+                            //PlayCard?.Invoke(null);
+                            //selectedCard = null;
                         }
                         else //...remove the old red highlight and make a new one since we made a new selection.
                         {
@@ -451,7 +452,13 @@ public class MapGenerator : MonoBehaviour
                                 tileMeshes[tile].material.color = clickColor;
                             }
                             targetedTiles.Clear();
-                            PlayCard?.Invoke(clickedTiles);
+                            Debug.Log("play card via new target");
+                            if (selectedCard)
+                            {
+                                selectedCard.Play(clickedTiles);
+                            }
+                            //PlayCard?.Invoke(clickedTiles);
+                            //selectedCard = null;
 
                         }
                     }
@@ -464,7 +471,14 @@ public class MapGenerator : MonoBehaviour
                             clickedTiles.Add(tile);
                         }
                         targetedTiles.Clear();
-                        PlayCard?.Invoke(clickedTiles);
+                        Debug.Log("play card via first target");
+
+                        if (selectedCard)
+                        {
+                            selectedCard.Play(clickedTiles);
+                        }
+                        //PlayCard?.Invoke(clickedTiles);
+                        //selectedCard = null;
                     }
                 }
             }
@@ -543,21 +557,20 @@ public class MapGenerator : MonoBehaviour
 
     public void UpdateCard(string newCard)
     {
-        Destroy(selectedCard);
         selectedCard = null;
 
-        switch (newCard)
-        {
-            case "Fireball":
-                selectedCard = ScriptableObject.CreateInstance<Fireball>();
-                break;
-            case "Bolt":
-                selectedCard = ScriptableObject.CreateInstance<LightningBolt>();
-                break;
-            default:
-                selectedCard = null;
-                break;
-        }
+        //switch (newCard)
+        //{
+        //    case "Fireball":
+        //        selectedCard = ScriptableObject.CreateInstance<Fireball>();
+        //        break;
+        //    case "Bolt":
+        //        selectedCard = ScriptableObject.CreateInstance<LightningBolt>();
+        //        break;
+        //    default:
+        //        selectedCard = null;
+        //        break;
+        //}
 
         clickedTile = null;
         clickedTiles.Clear();
@@ -570,6 +583,23 @@ public class MapGenerator : MonoBehaviour
             ResetTileColor(tile.Key);
         }
     }
+
+    public void SelectCard(Card newCard)
+    {
+        selectedCard = newCard;
+
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        HandleTargeting(selectedCard);
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+    }
+
 
     private void OnRoundResetSelection()
     {
