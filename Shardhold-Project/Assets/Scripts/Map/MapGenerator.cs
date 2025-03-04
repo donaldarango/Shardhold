@@ -482,6 +482,21 @@ public class MapGenerator : MonoBehaviour
                     }
                 }
             }
+            else if (tileName.Contains("Base"))
+            {
+                if (Input.GetMouseButtonDown(0)) // Left click
+                {
+                    if (card.targetType == TargetType.Tile && card.cardType == CardType.Spell)
+                    {
+                        if (selectedCard)
+                        {
+                            HashSet<(int, int)> set = new HashSet<(int, int)>();
+                            set.Add((-1, -1));
+                            selectedCard.Play(set);
+                        }
+                    }
+                }
+            }
         }
         else
         {
@@ -554,39 +569,16 @@ public class MapGenerator : MonoBehaviour
         meshRenderer.material.mainTextureScale = new Vector2(1, 1);
     }
 
-
-    public void UpdateCard(string newCard)
-    {
-        selectedCard = null;
-
-        //switch (newCard)
-        //{
-        //    case "Fireball":
-        //        selectedCard = ScriptableObject.CreateInstance<Fireball>();
-        //        break;
-        //    case "Bolt":
-        //        selectedCard = ScriptableObject.CreateInstance<LightningBolt>();
-        //        break;
-        //    default:
-        //        selectedCard = null;
-        //        break;
-        //}
-
-        clickedTile = null;
-        clickedTiles.Clear();
-        targetedTiles.Clear();
-
-        HandleTargeting(selectedCard);
-
-        foreach (var tile in tileMeshes)
-        {
-            ResetTileColor(tile.Key);
-        }
-    }
-
     public void SelectCard(Card newCard)
     {
-        selectedCard = newCard;
+        if (newCard)
+        {
+            selectedCard = newCard;
+        }
+        else
+        {
+            selectedCard = null;
+        }
 
         clickedTile = null;
         clickedTiles.Clear();
