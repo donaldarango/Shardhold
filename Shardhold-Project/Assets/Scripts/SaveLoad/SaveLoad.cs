@@ -130,24 +130,24 @@ public class SaveLoad : MonoBehaviour
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
 
         List<TileActor> actors = MapManager.Instance.GetTileActorList();
-        List<int> ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
-        List<int> ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
-        List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
-        List<String> ta_name = new List<String>();
-        List<TileActor.TileActorType> ta_type = new List<TileActor.TileActorType>();
-        List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
-        List<int> ta_attackRange = new List<int>();     //the standard attack range of this TileActor
+        data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
+        data.ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
+        data.ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
+        data.ta_name = new List<String>();
+        data.ta_type = new List<TileActor.TileActorType>();
+        data.ta_damage = new List<int>();          //the standard attack damage of this TileActor
+        data.ta_attackRange = new List<int>();     //the standard attack range of this TileActor
 
         for (int i = 0; i < actors.Count; i++)
         {
-            ta_maxHealth.Add(actors[i].GetMaxHealth());
-            ta_curHealth.Add(actors[i].GetCurrentHealth());
+            data.ta_maxHealth.Add(actors[i].GetMaxHealth());
+            data.ta_curHealth.Add(actors[i].GetCurrentHealth());
             MapTile mapTile = actors[i].GetCurrentTile();
-            ta_pos.Add(new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber()));
-            ta_name.Add(actors[i].GetActorName());
-            ta_type.Add(actors[i].GetTileActorType());
-            ta_damage.Add(actors[i].GetAttackDamage());
-            ta_attackRange.Add(actors[i].GetAttackRange());
+            data.ta_pos.Add(new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber()));
+            data.ta_name.Add(actors[i].GetActorName());
+            data.ta_type.Add(actors[i].GetTileActorType());
+            data.ta_damage.Add(actors[i].GetAttackDamage());
+            data.ta_attackRange.Add(actors[i].GetAttackRange());
         }
 
         //TODO
@@ -570,6 +570,7 @@ class GameStateData
 #pragma warning disable 0649
 
     public bool initialized = false;    //set to true to indicate that all of the following variables were given the correct information that is wanted for saving/loading
+    public String saveVersion = "1.00"; //an indicator of what iteration of save system is in use; probably won't ever be used, but it is better to have it and never need it than need it and not have it
 
     //we will assume that the game is only ever saved on the player's turn
     #region Map Info
@@ -591,12 +592,23 @@ class GameStateData
 
     #region TileActors
     //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
-    List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
+    /*List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
     List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
     List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
     List<int> ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
     List<int> ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
     List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
+    */
+
+    //public List<TileActor> actors;
+    public List<String> ta_name;
+    public List<int> ta_maxHealth;       //the max possible health for this TileActor; generally the health that the TileActor spawns with
+    public List<int> ta_curHealth;       //the current health of the TileActor; generally maxHealth - damageTaken
+    public List<Vector2Int> ta_pos;     //position of tileActors stored as (direction, range)
+    public List<TileActor.TileActorType> ta_type;
+    public List<int> ta_damage;          //the standard attack damage of this TileActor
+    public List<int> ta_attackRange;     //the standard attack range of this TileActor
+
 
     //special abilities: TODO
     #endregion
