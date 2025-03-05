@@ -7,6 +7,7 @@ using System.IO;
 using static UnityEngine.JsonUtility;
 using Unity.VisualScripting;
 using System.Data;
+using JetBrains.Annotations;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -43,7 +44,10 @@ public class SaveLoad : MonoBehaviour
 
     public static void RanUnimplementedCode(string descriptor = "<no description>")
     {
-        CustomDebug.RanUnimplementedCode(descriptor);
+        if (CustomDebug.SaveLoadDebugging())
+        {
+            CustomDebug.RanUnimplementedCode(descriptor);
+        }
     }
 
     #region Text File I/O
@@ -128,8 +132,10 @@ public class SaveLoad : MonoBehaviour
         }
 
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
-
+        data.spawnedTileActors = new List<SpawnedTileActor>();
         List<TileActor> actors = MapManager.Instance.GetTileActorList();
+        
+        /*
         data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
         data.ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
         data.ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
@@ -137,9 +143,20 @@ public class SaveLoad : MonoBehaviour
         data.ta_type = new List<TileActor.TileActorType>();
         data.ta_damage = new List<int>();          //the standard attack damage of this TileActor
         data.ta_attackRange = new List<int>();     //the standard attack range of this TileActor
+        */
 
         for (int i = 0; i < actors.Count; i++)
         {
+            data.spawnedTileActors.Add(new SpawnedTileActor());
+            SpawnedTileActor sta = data.spawnedTileActors[i];
+            sta.name = actors[i].GetActorName();
+            sta.maxHealth = actors[i].GetMaxHealth();
+            sta.curHealth = actors[i].GetCurrentHealth();
+            MapTile mapTile = actors[i].GetCurrentTile();
+            
+
+
+            /*
             data.ta_maxHealth.Add(actors[i].GetMaxHealth());
             data.ta_curHealth.Add(actors[i].GetCurrentHealth());
             MapTile mapTile = actors[i].GetCurrentTile();
@@ -148,14 +165,18 @@ public class SaveLoad : MonoBehaviour
             data.ta_type.Add(actors[i].GetTileActorType());
             data.ta_damage.Add(actors[i].GetAttackDamage());
             data.ta_attackRange.Add(actors[i].GetAttackRange());
+            */
         }
 
         //TODO
         //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
         //List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
-        
+
         //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
-        
+
+        //TODO:
+        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably).");
+        RanUnimplementedCode("Not-yet-spawned enemies are not saved.");
 
         //special abilities: TODO
         #endregion
@@ -289,7 +310,37 @@ public class SaveLoad : MonoBehaviour
 
             #region TileActors
 
-            //TODO iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
+            //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
+            for (int i = 0;i < data.ta_name.Count; i++)
+            {
+                
+                switch (data.ta_type[i])
+                {
+                    case TileActor.TileActorType.EnemyUnit:
+                        //BasicEnemyStats basicEnemyStats = TileActorManager.Instance.GetEnemyTileActorByName(data.ta_name[i]);
+                        MapManager.Instance.AddEnemyToMapTile(data.ta_pos[i].x, data.ta_pos[i].y, data.ta_name[i]);
+                        break;
+                    case TileActor.TileActorType.Structure:
+                        BasicStructureStats basicStructureStats = TileActorManager.Instance.GetStructureTileActorByName(data.ta_name[i]);
+                        MapManager.Instance.AddStructureToMapTile(data.ta_pos[i].x, data.ta_pos[i].y, basicStructureStats);
+                        break;
+                    case TileActor.TileActorType.Trap:
+                        if (CustomDebug.SaveLoadDebugging())
+                        {
+                            RanUnimplementedCode("Loading of traps not implemented.");
+                        }
+                        break;
+
+                }
+
+
+            }
+
+            //TODO
+            RanUnimplementedCode("Enemies on spawn tiles not loaded.");
+            RanUnimplementedCode("Enemies to be spawned not yet loaded.");
+            
+            
 
             //special abilities: TODO
             #endregion
@@ -600,7 +651,11 @@ class GameStateData
     List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
     */
 
+    public List<SpawnedTileActor> spawnedTileActors;
+
+
     //public List<TileActor> actors;
+    /*
     public List<String> ta_name;
     public List<int> ta_maxHealth;       //the max possible health for this TileActor; generally the health that the TileActor spawns with
     public List<int> ta_curHealth;       //the current health of the TileActor; generally maxHealth - damageTaken
@@ -608,6 +663,7 @@ class GameStateData
     public List<TileActor.TileActorType> ta_type;
     public List<int> ta_damage;          //the standard attack damage of this TileActor
     public List<int> ta_attackRange;     //the standard attack range of this TileActor
+    */
 
 
     //special abilities: TODO
@@ -619,6 +675,22 @@ class GameStateData
     public List<Card> hand = new List<Card>();
     #endregion
 
+
+#pragma warning restore 0649
+}
+
+[Serializable]
+class SpawnedTileActor
+{
+#pragma warning disable 0649
+
+    public string name;
+    public int maxHealth;
+    public int curHealth;
+    public Vector2Int pos;
+    public TileActor.TileActorType type;
+    public int damage;
+    public int attackRange;
 
 #pragma warning restore 0649
 }
