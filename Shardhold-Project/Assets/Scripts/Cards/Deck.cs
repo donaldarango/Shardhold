@@ -247,6 +247,15 @@ public class Deck : MonoBehaviour
         return drawPile.Count;
     }
 
+    /// <summary>
+    /// returns the number of cards in the discard pile
+    /// </summary>
+    /// <returns></returns>
+    public int CountCardsInDiscardPile()
+    {
+        return discardPile.Count;
+    }
+
     #endregion
 
     #region Events

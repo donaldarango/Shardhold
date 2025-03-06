@@ -150,7 +150,7 @@ public class SaveLoad : MonoBehaviour
             data.spawnedTileActors.Add(new SpawnedTileActor());
             SpawnedTileActor sta = data.spawnedTileActors[i];
             sta.name = actors[i].GetActorName();
-            sta.maxHealth = actors[i].GetMaxHealth();
+            //sta.maxHealth = actors[i].GetMaxHealth();
             sta.curHealth = actors[i].GetCurrentHealth();
             MapTile mapTile = actors[i].GetCurrentTile();
             
@@ -311,18 +311,19 @@ public class SaveLoad : MonoBehaviour
             #region TileActors
 
             //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
-            for (int i = 0;i < data.ta_name.Count; i++)
+            for (int i = 0;i < data.spawnedTileActors.Count; i++)
             {
-                
-                switch (data.ta_type[i])
+                SpawnedTileActor sta = data.spawnedTileActors[i];
+                TileActor newTA = null;
+                switch (sta.type)
                 {
                     case TileActor.TileActorType.EnemyUnit:
                         //BasicEnemyStats basicEnemyStats = TileActorManager.Instance.GetEnemyTileActorByName(data.ta_name[i]);
-                        MapManager.Instance.AddEnemyToMapTile(data.ta_pos[i].x, data.ta_pos[i].y, data.ta_name[i]);
+                        newTA = MapManager.Instance.AddEnemyToMapTile(sta.pos.x, sta.pos.y, sta.name);
                         break;
                     case TileActor.TileActorType.Structure:
-                        BasicStructureStats basicStructureStats = TileActorManager.Instance.GetStructureTileActorByName(data.ta_name[i]);
-                        MapManager.Instance.AddStructureToMapTile(data.ta_pos[i].x, data.ta_pos[i].y, basicStructureStats);
+                        BasicStructureStats basicStructureStats = TileActorManager.Instance.GetStructureTileActorByName(sta.name);
+                        newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, basicStructureStats);
                         break;
                     case TileActor.TileActorType.Trap:
                         if (CustomDebug.SaveLoadDebugging())
@@ -330,8 +331,19 @@ public class SaveLoad : MonoBehaviour
                             RanUnimplementedCode("Loading of traps not implemented.");
                         }
                         break;
+                    default:
+                        if (CustomDebug.SaveLoadDebugging())
+                        {
+                            RanUnimplementedCode("Cannot load this unknown tileactor type: " + sta.type.ToString());
+                        }
+                        break;
 
                 }
+
+                //put in all the other variables for this tileactor
+                newTA.SetCurrentHealth(sta.curHealth);
+                //NOTE: we aren't actually setting the max health
+                
 
 
             }
@@ -685,7 +697,7 @@ class SpawnedTileActor
 #pragma warning disable 0649
 
     public string name;
-    public int maxHealth;
+    //public int maxHealth;
     public int curHealth;
     public Vector2Int pos;
     public TileActor.TileActorType type;
