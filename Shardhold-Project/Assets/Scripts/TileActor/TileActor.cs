@@ -68,13 +68,9 @@ public abstract class TileActor : MonoBehaviour
     {
         if (target == null) return; // Invalid target
 
-        // Structures & Enemies will target other TileActors, which should be the opposite ActorType excluding traps (unless unique enemy, ie Engineer)
-        if((GetTileActorType() == TileActorType.EnemyUnit && target.GetTileActorType() == TileActorType.Structure ||
-            GetTileActorType() == TileActorType.Structure && target.GetTileActorType() == TileActorType.EnemyUnit))
-        {
-            Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
-            target.TakeDamage(tileActorStats.damage);
-        }
+        // Simply call take damage using the damage from the TileActor
+        Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
+        target.TakeDamage(damage);
     }
 
     public TileActorType GetTileActorType()
