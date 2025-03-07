@@ -6,8 +6,11 @@ using static Card;
 
 public class MapGenerator : MonoBehaviour
 {
-    public event EventHandler<SelectTileEventArgs> SelectTile;
-    public event EventHandler<SelectTileSetEventArgs> SelectTileSet;
+    public delegate void HoverEventHandler(TileActor ta);
+    public static event HoverEventHandler HoverTile;
+    public static event EventHandler<SelectTileEventArgs> SelectTile;
+    public static event EventHandler<SelectTileSetEventArgs> SelectTileSet;
+
     public int ringCount = 4; // Number of rings from the center base circle
     public int laneCount = 3; // Number of lanes per quadrant
     public float maxRadius = 6f;
@@ -16,8 +19,9 @@ public class MapGenerator : MonoBehaviour
     public Color hoverColor = new Color(1f, 1f, 0.5f, 0.6f); // Yellowish hover effect
     public Color clickColor = new Color(0.8f, 0.3f, 0.3f, 0.6f); // Red when clicked
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
-    public Card selectedCard = null;
     public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
+
+    public TileActorManager manager = null; // emergency fix for demo
 
     public enum TargetType
     {
@@ -29,10 +33,11 @@ public class MapGenerator : MonoBehaviour
         Board,
         Invalid
     }
-    public TargetType type = TargetType.Invalid; //made public for testing purposes 
-    private TargetType oldType = TargetType.Invalid;
-    public int range = 4; //same as above - would be accessed via selectedCard or similar
-    private int oldRange = 4;
+
+    public Card selectedCard = null;
+    public Card oldCard = null;
+    public delegate void PlayCardHandler(HashSet<(int, int)> tiles);
+    public static event PlayCardHandler PlayCard;
 
     // ADD MAP CONFIG (TERRAIN INFO)
 
@@ -48,6 +53,17 @@ public class MapGenerator : MonoBehaviour
     private static HashSet<(int, int)> targetedTiles = null;
     private static HashSet<(int, int)> clickedTiles = null;
 
+    private void OnEnable()
+    {
+        TileActorManager.PlayerTurnStart += OnRoundResetSelection;
+    }
+
+    private void OnDisable()
+    {
+        TileActorManager.PlayerTurnStart -= OnRoundResetSelection;
+
+    }
+
     void Start()
     {
         // Always set map at 0,0,0
@@ -59,6 +75,7 @@ public class MapGenerator : MonoBehaviour
 
 		targetedTiles = new HashSet<(int, int)>();
         clickedTiles = new HashSet<(int, int)>();
+        
 
         // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
@@ -73,9 +90,12 @@ public class MapGenerator : MonoBehaviour
         MapManager.Instance.SetLaneCount(laneCount);
         MapManager.Instance.SetRingCount(ringCount);
         MapManager.Instance.InitializeQuadrants();
+        MapManager.Instance.InitializeSpawnTiles();
 
         GenerateTiles();
         DrawCircles();
+
+        if (manager) { manager.enabled = true; }
     }
 
     void Update()
@@ -84,9 +104,9 @@ public class MapGenerator : MonoBehaviour
         //{
         //    HandleTargeting(selectedCard.type);
         //}
-        if (type != TargetType.Invalid)
+        if (selectedCard != null)
         {
-            HandleTargeting(type);
+            HandleTargeting(selectedCard);
         }
         else
         {
@@ -144,9 +164,6 @@ public class MapGenerator : MonoBehaviour
 
                 MapTile mapTile = new MapTile((Quadrant)q, r, l, tileCenter, terrain);
                 MapManager.Instance.AddTileToQuadrant(q, mapTile);
-
-                // Add enemy to every tile to test tile centers
-                MapManager.Instance.AddEnemyToTile(q, r, l, 0);
             }
         }
     }
@@ -256,10 +273,14 @@ public class MapGenerator : MonoBehaviour
                 hoveredTile = (r, l);
                 tileMeshes[(r, l)].material.color = hoverColor;
 
+                // Quadrant check and also debugging messages to check for tileactor
+                MapTile tile = MapManager.Instance.GetTile(r, l);
+                HoverTile?.Invoke(tile.GetCurrentTileActor());
+
+
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    
                     if (clickedTile.HasValue) // There is a selected tile
                     {
                         if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it
@@ -300,39 +321,18 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void HandleTargeting(TargetType type)
+    void HandleTargeting(Card card)
     {
-        if(type != oldType) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
+        if (card != oldCard) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
         {
             clickedTile = null;
             clickedTiles.Clear();
             targetedTiles.Clear();
-            oldType = type;
+            oldCard = card;
 
             foreach(var tile in tileMeshes)
             {
                 ResetTileColor(tile.Key);// tile.Value.material.color = defaultColor;
-            }
-        }
-
-        if (range != oldRange) // If the range of the card changes, remove the selection too. Truly, this would happen on card swap in general - but this'll do for now.
-        {
-            for (int i = Math.Min(range - 1, 4); i < 4; ++i)
-            {
-                for (int j = 0; j < 12; ++j)
-                {
-                    ResetTileColor((i, j));
-                }
-            }
-            oldRange = range;
-
-            clickedTile = null;
-            clickedTiles.Clear();
-            targetedTiles.Clear();
-
-            foreach (var tile in tileMeshes)
-            {
-                ResetTileColor(tile.Key);
             }
         }
 
@@ -342,6 +342,7 @@ public class MapGenerator : MonoBehaviour
             string tileName = hit.collider.gameObject.name;
             if (tileName.StartsWith("Tile_R"))
             {
+                int range = card.range;
                 string[] parts = tileName.Split('_');
                 int r = int.Parse(parts[1].Substring(1));
                 int l = int.Parse(parts[2].Substring(1));
@@ -362,7 +363,7 @@ public class MapGenerator : MonoBehaviour
                 }
 
                 int offset = Mathf.FloorToInt(l / 3) * 3; // Cull targeting into either 0, 3, 6, or 9 so quadrants are respected
-                switch (type)
+                switch (card.targetType)
                 {
                     case TargetType.Tile: // Single tile, like the prior implementation
 
@@ -432,7 +433,8 @@ public class MapGenerator : MonoBehaviour
                             }
                             //clickedTiles.Clear();
                             targetedTiles.Clear();
-                            SelectTileSet?.Invoke(this, new SelectTileSetEventArgs(null));
+                            //PlayCard?.Invoke(null);
+                            //selectedCard = null;
                         }
                         else //...remove the old red highlight and make a new one since we made a new selection.
                         {
@@ -450,7 +452,14 @@ public class MapGenerator : MonoBehaviour
                                 tileMeshes[tile].material.color = clickColor;
                             }
                             targetedTiles.Clear();
-                            SelectTileSet?.Invoke(this, new SelectTileSetEventArgs(targetedTiles));
+                            Debug.Log("play card via new target");
+                            if (selectedCard)
+                            {
+                                selectedCard.Play(clickedTiles);
+                            }
+                            //PlayCard?.Invoke(clickedTiles);
+                            //selectedCard = null;
+
                         }
                     }
                     else // If there isn't a red highlight, this is the first selection.
@@ -462,7 +471,14 @@ public class MapGenerator : MonoBehaviour
                             clickedTiles.Add(tile);
                         }
                         targetedTiles.Clear();
-                        SelectTileSet?.Invoke(this, new SelectTileSetEventArgs(targetedTiles));
+                        Debug.Log("play card via first target");
+
+                        if (selectedCard)
+                        {
+                            selectedCard.Play(clickedTiles);
+                        }
+                        //PlayCard?.Invoke(clickedTiles);
+                        //selectedCard = null;
                     }
                 }
             }
@@ -496,7 +512,7 @@ public class MapGenerator : MonoBehaviour
             // Keep clicked tile color as clickColor
             tileMeshes[tile].material.color = clickColor;
         }
-        else if(tile.Item1 >= range)
+        else if (selectedCard && tile.Item1 >= selectedCard.range)
         {   
             // Tile is out of range of current card, set it to farColor
             tileMeshes[tile].material.color = farColor;
@@ -506,6 +522,7 @@ public class MapGenerator : MonoBehaviour
             // Reset other tile to default color
             tileMeshes[tile].material.color = defaultColor;
         }
+    
     }
 
     public Terrain CreateTerrain(TerrainType terrainType)
@@ -536,6 +553,67 @@ public class MapGenerator : MonoBehaviour
         meshRenderer.material.color = defaultColor;
         meshRenderer.material.mainTextureScale = new Vector2(1, 1);
     }
+
+
+    public void UpdateCard(string newCard)
+    {
+        selectedCard = null;
+
+        //switch (newCard)
+        //{
+        //    case "Fireball":
+        //        selectedCard = ScriptableObject.CreateInstance<Fireball>();
+        //        break;
+        //    case "Bolt":
+        //        selectedCard = ScriptableObject.CreateInstance<LightningBolt>();
+        //        break;
+        //    default:
+        //        selectedCard = null;
+        //        break;
+        //}
+
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        HandleTargeting(selectedCard);
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+    }
+
+    public void SelectCard(Card newCard)
+    {
+        selectedCard = newCard;
+
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        HandleTargeting(selectedCard);
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+    }
+
+
+    private void OnRoundResetSelection()
+    {
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+    }
+
+
 }
 
 public class SelectTileEventArgs
@@ -544,7 +622,6 @@ public class SelectTileEventArgs
     public SelectTileEventArgs((int, int)? coords)
     {
         this.coords = coords;
-
     }
 
 }

@@ -35,37 +35,15 @@ public class SaveLoad : MonoBehaviour
     public void Awake()
     {
         saveFolder = Application.persistentDataPath;
-        if (debugging)
-        {
-            string testFileName = "text_io_test.txt";
-            WriteFile(testFileName, "Test line 1\nTest line 2");
-            Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
-            Debug.Log("Attempting to read that test file...");
-            Debug.Log("Successful read, contents are as follows:\n" + ReadFile(testFileName));
-            if(saveLoad != null)
-            {
-                if (saveLoad == this)
-                {
-                    Debug.Log("NOTE: SaveLoad.Awake() is running mutliple times.");
-                }
-                else
-                {
-                    Debug.Log("Multiple SaveLoad objects detected; be careful.");
-                }
-            }
-        }
         if(saveLoad == null)
         {
             saveLoad = this;
         }
     }
 
-    public void RanUnimplementedCode(string descriptor = "<no description>")
+    public static void RanUnimplementedCode(string descriptor = "<no description>")
     {
-        if (debugging)
-        {
-            Debug.Log("WARNING: A section of code has just been executed that was not completely impelement: " + descriptor + "\nIf this section was completed, please locate the section and remove the RanUnimplementedCode() function call.");
-        }
+        CustomDebug.RanUnimplementedCode(descriptor);
     }
 
     #region Text File I/O
@@ -349,7 +327,7 @@ public class SaveLoad : MonoBehaviour
 	private void Unload()
 	{
 
-        //TODO
+        //TODO?
         //for (all tile objects) { destroy them safely to make room for a new load }
     }
 
@@ -511,6 +489,29 @@ public class SaveLoad : MonoBehaviour
     }
 
     #endregion
+
+    /// <summary>
+    /// A function that writes a basic text file and then tries to read from it
+    /// </summary>
+    public void ReadWriteTest()
+    {
+        string testFileName = "text_io_test.txt";
+        WriteFile(testFileName, "Test line 1\nTest line 2");
+        Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
+        Debug.Log("Attempting to read that test file...");
+        Debug.Log("Successful read, contents are as follows:\n" + ReadFile(testFileName));
+        if (saveLoad != null)
+        {
+            if (saveLoad == this)
+            {
+                Debug.Log("NOTE: SaveLoad.Awake() is running mutliple times.");
+            }
+            else
+            {
+                Debug.Log("Multiple SaveLoad objects detected; be careful.");
+            }
+        }
+    }
 }
 
 [Serializable]
@@ -548,6 +549,12 @@ class GameStateData
     List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
 
     //special abilities: TODO
+    #endregion
+
+    #region Cards
+    public List<int> drawPile = new List<int>();
+    public List<int> discardPile = new List<int>();
+    public List<Card> hand = new List<Card>();
     #endregion
 
 

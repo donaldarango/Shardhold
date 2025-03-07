@@ -2,20 +2,14 @@ using UnityEngine;
 
 public class StructureUnit: TileActor
 {
+    public int turnSpawned = -1;
+
+    public BasicStructureStats structureStats;
     void Start()
     {
-<<<<<<< Updated upstream
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-=======
         if (tileActorStats == null)
         {
-            Debug.LogError("Structure missing base TileActorStats!");
+            Debug.LogError("Enemy missing base TileActorStats!");
             return;
         }
 
@@ -27,6 +21,5 @@ public class StructureUnit: TileActor
     public BasicStructureStats GetStructureStats()
     {
         return structureStats;
->>>>>>> Stashed changes
     }
 }
