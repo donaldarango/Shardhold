@@ -47,12 +47,6 @@ public abstract class TileActor : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public virtual void SetActorData()
     {
         actorName = tileActorStats.unitName;
