@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TrapUnity : TileActor
+public class TrapUnit : TileActor
 {
     public int turnSpawned = -1;
     public BasicTrapStats trapStats;
