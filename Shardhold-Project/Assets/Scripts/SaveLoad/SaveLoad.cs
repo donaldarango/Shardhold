@@ -150,10 +150,13 @@ public class SaveLoad : MonoBehaviour
             data.spawnedTileActors.Add(new SpawnedTileActor());
             SpawnedTileActor sta = data.spawnedTileActors[i];
             sta.name = actors[i].GetActorName();
+            sta.type = actors[i].GetTileActorType();
             //sta.maxHealth = actors[i].GetMaxHealth();
             sta.curHealth = actors[i].GetCurrentHealth();
             MapTile mapTile = actors[i].GetCurrentTile();
-            
+            sta.pos = new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber());
+            sta.attackRange = actors[i].GetAttackRange();
+            sta.damage = actors[i].GetAttackDamage();
 
 
             /*
@@ -175,7 +178,7 @@ public class SaveLoad : MonoBehaviour
         //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
 
         //TODO:
-        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably).");
+        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably; may need to filter tileactors based on if they are on a spawn tile?).");
         RanUnimplementedCode("Not-yet-spawned enemies are not saved.");
 
         //special abilities: TODO
