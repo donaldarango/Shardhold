@@ -21,6 +21,7 @@ public class EnemyUnit : TileActor
 
         SetEnemyData(enemyStats);
     }
+<<<<<<< Updated upstream
 
     private void Update()
     {
@@ -28,6 +29,9 @@ public class EnemyUnit : TileActor
     }
 
     public void SetEnemyData(BasicEnemyStats enemyData)
+=======
+    public override void SetActorData()
+>>>>>>> Stashed changes
     {
         if(enemyData == null)
         {
