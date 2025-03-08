@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+    public GameObject cardPrefab;
+    public Transform handUI;
     //this will be used for converting int into a Card
-    List<Card> cardLookup = new List<Card>();
+    public List<Card> cardLookup = new List<Card>();
 
     //stores what has been unlocked for the player; is not the actual deck necessarily
     //each card is an index value; the value at that index is the number of copies of that card unlocked
@@ -17,7 +19,7 @@ public class Deck : MonoBehaviour
     //stores the cards in the current draw pile/deck
     //>>>>>>>>>>NO LONGER TRUE: the index position in this list determines order of draw(? - undecided)
     //STILL TRUE: the values indicate the card, which correlates to the index in cardsUnlocked
-    List<int> drawPile = new List<int>();
+    public List<int> drawPile = new List<int>();
 
     //uses same rules as drawPile
     List<int> discardPile = new List<int>();
@@ -25,7 +27,7 @@ public class Deck : MonoBehaviour
     public int handCapacity = 3;
 
     //uses same rules as drawPile
-    List<Card> hand = new List<Card>();
+    public List<Card> hand = new List<Card>();
 
     /// <summary>
     /// To be used at the beginning of the player's turn to fill their hand
@@ -46,11 +48,11 @@ public class Deck : MonoBehaviour
     public void DrawCard()
     {
         //choose a card from the draw pile
-        int choice = CustomMath.RandomInt(0, drawPile.Count);
+        int choice = CustomMath.RandomInt(0, drawPile.Count-1);
 
         //add it to hand
         hand.Add(cardLookup[drawPile[choice]]);
-
+        Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName + " Cards left in drawpile: " + drawPile.Count);
         //remove from draw pile
         drawPile.RemoveAt(choice);
 
@@ -83,6 +85,14 @@ public class Deck : MonoBehaviour
         discardPile = temp;
     }
 
+    public void CreateCardUI(Card card) {
+        GameObject cardObject = Instantiate(cardPrefab, handUI);
+        CardUI cardUI = cardObject.GetComponent<CardUI>();
+        if (cardUI != null)
+        {
+            cardUI.initializeCardUI(card);
+        }
+    }
     #region Pile to Unlocked Cards Comparisons
     
     /// <summary>
@@ -94,7 +104,7 @@ public class Deck : MonoBehaviour
     public int InstancesOfCardRemaining(int card)
     {
         int numInPile = 0;
-        for (int i = 0; i < drawPile.Count; i++)
+        for (int i = 0; i < drawPile.Count-1; i++)
         {
             if (drawPile[i] == card)
             {
@@ -114,7 +124,7 @@ public class Deck : MonoBehaviour
     {
         //slow version; does a lot of looping that could be avoided
         //TODO make a more efficient version if necessary
-        for (int i = 0;i < drawPile.Count; i++)
+        for (int i = 0;i < drawPile.Count-1; i++)
         {
             if (InstancesOfCardRemaining(drawPile[i]) < 0)
             {
