@@ -23,7 +23,15 @@ public class StructureUnit: TileActor
     {
 
     }
-    
+
+    public override void Spawn(MapTile tile)
+    {
+        currentTile = tile;
+
+        spriteHandler = GetComponent<TileActorSpriteHandler>();
+        spriteHandler.setSpriteOrientation(tile.GetQuadrant());
+    }
+
     public BasicStructureStats GetStructureStats()
     {
         return structureStats;
