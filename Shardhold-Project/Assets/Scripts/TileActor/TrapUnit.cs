@@ -25,6 +25,7 @@ public class TrapUnit : TileActor
 
     public override void Attack(TileActor target)
     {
+        Debug.Log($"{gameObject.name} triggered by {target.gameObject.name}!");
         base.Attack(target);
 
         TakeDamage(1);

@@ -22,4 +22,13 @@ public class StructureUnit: TileActor
     {
         return structureStats;
     }
+
+    public void AttackCheck()
+    {
+        TileActor target = DetectEnemyInFront(attackRange); // Check for first enemy in range.
+        if(target != null)
+        {
+            Attack(target); // Attack it.
+        }
+    }
 }
