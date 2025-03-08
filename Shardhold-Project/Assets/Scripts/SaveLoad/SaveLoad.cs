@@ -418,10 +418,17 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-	private void Unload()
+	public void Unload()
 	{
+        //TODO remove any map effects or similar; don't worry about adjusting base HP or weapon, as these will be set when loading anyways
 
-        //TODO?
+        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+
+        for (int i = 0; i < actors.Count; i++)
+        {
+            actors[i].Die();
+        }
+
         //for (all tile objects) { destroy them safely to make room for a new load }
     }
 
@@ -536,6 +543,13 @@ public class SaveLoad : MonoBehaviour
         RanUnimplementedCode("setBaseHP()");
     }
 
+    private int getBaseHPMax()
+    {
+        //TODO
+        RanUnimplementedCode("getBaseHPMax()");
+        return 100;
+    }
+
     //get the current damage value of the base weapon
     private int getBaseWeapon()
     {
@@ -549,6 +563,13 @@ public class SaveLoad : MonoBehaviour
     {
         //TODO
         RanUnimplementedCode("setBaseWeapon()");
+    }
+
+    private int getBaseWeaponMax()
+    {
+        //TODO
+        RanUnimplementedCode("getBaseWeaponMax()");
+        return 100;
     }
 
 
