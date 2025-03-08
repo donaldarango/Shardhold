@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
 using UnityEngine;
+using static CustomDebug;
 
 public class Deck : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class Deck : MonoBehaviour
         }
         else
         {
-            if (CustomDebug.DeckDebugging())
+            if (DeckDebugging(DebuggingType.Warnings))
             {
                 Debug.Log("Multiple deck instances detected.");
             }
@@ -88,9 +89,9 @@ public class Deck : MonoBehaviour
     private Card CreateCard(int cardInt, int handPosition)
     {
         //TODO
-        if (CustomDebug.DeckDebugging())
+        if (DeckDebugging(DebuggingType.ErrorOnly))
         {
-            CustomDebug.RanUnimplementedCode("CreateCard()");
+            RanUnimplementedCode("CreateCard()");
         }
         return null;
     }
@@ -98,9 +99,9 @@ public class Deck : MonoBehaviour
     private void DeleteCard(Card card)
     {
         //TODO
-        if (CustomDebug.DeckDebugging())
+        if (DeckDebugging(DebuggingType.ErrorOnly))
         {
-            CustomDebug.RanUnimplementedCode("DeleteCard()");
+            RanUnimplementedCode("DeleteCard()");
         }
     }
 

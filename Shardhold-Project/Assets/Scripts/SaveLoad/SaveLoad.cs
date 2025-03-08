@@ -11,11 +11,7 @@ using JetBrains.Annotations;
 
 public class SaveLoad : MonoBehaviour
 {
-    #region Debug Stuff
-    //TODO set to false before final submission
-    public bool debugging = true;
 
-    #endregion
 
     public static SaveLoad saveLoad;
     public MapGenerator mapGenerator;
@@ -44,7 +40,7 @@ public class SaveLoad : MonoBehaviour
 
     public static void RanUnimplementedCode(string descriptor = "<no description>")
     {
-        if (CustomDebug.SaveLoadDebugging())
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
         {
             CustomDebug.RanUnimplementedCode(descriptor);
         }
@@ -73,7 +69,7 @@ public class SaveLoad : MonoBehaviour
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
     public void SaveToDefault(){
         SaveType saveType = SaveType.chooseDefault;
-        if (debugging){
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
         Save(fileToUse, saveType);
@@ -81,14 +77,15 @@ public class SaveLoad : MonoBehaviour
 
     public void LoadFromDefault(){
         SaveType saveType = SaveType.chooseDefault;
-        if (debugging){
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
         Load(fileToUse, saveType);
     }
 
     public bool Save(string filename, SaveType saveType = SaveType.chooseDefault){
-        if(debugging){
+        if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+        {
             Debug.Log("Saving game to specified file \"" + fileToUse + "\"");
         }
 
@@ -126,7 +123,7 @@ public class SaveLoad : MonoBehaviour
 
 
         //TODO not-yet-spawned enemies
-        if (CustomDebug.SaveLoadDebugging())
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
         {
             RanUnimplementedCode("currently no saving of not-yet-spawned enemies");
         }
@@ -199,7 +196,7 @@ public class SaveLoad : MonoBehaviour
             case SaveType.json:
                 return JsonSave(filename, data);
             default:
-                if(debugging){
+                if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                     Debug.LogError("Unidentified save type!");
                 }
                 return false;
@@ -215,12 +212,12 @@ public class SaveLoad : MonoBehaviour
             bf.Serialize(file, data);
             file.Close();
 
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
                 Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder);
             }
             return true;
         }catch(Exception e){
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                 Debug.LogError("ERROR WHEN SAVING BINARY: " + e.Message);
             }
             return false;
@@ -238,7 +235,7 @@ public class SaveLoad : MonoBehaviour
             WriteFile(filename, jsonData);
 
             //success, presumably
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
             {
                 Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder);
             }
@@ -246,7 +243,7 @@ public class SaveLoad : MonoBehaviour
         }
         catch (Exception e)
         {
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
             {
                 Debug.LogError("ERROR WHEN SAVING JSON: " + e.Message);
             }
@@ -255,7 +252,7 @@ public class SaveLoad : MonoBehaviour
     }
 
     public bool Load(string filename, SaveType saveType = SaveType.chooseDefault){
-        if(debugging){
+        if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
 
@@ -273,7 +270,7 @@ public class SaveLoad : MonoBehaviour
                 noProblemLoading = JsonLoad(filename, out data);
                 break;
             default:
-                if(debugging){
+                if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                     Debug.LogError("Unidentified save type!");
                 }
                 noProblemLoading = false;
@@ -329,13 +326,13 @@ public class SaveLoad : MonoBehaviour
                         newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, basicStructureStats);
                         break;
                     case TileActor.TileActorType.Trap:
-                        if (CustomDebug.SaveLoadDebugging())
+                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
                         {
                             RanUnimplementedCode("Loading of traps not implemented.");
                         }
                         break;
                     default:
-                        if (CustomDebug.SaveLoadDebugging())
+                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
                         {
                             RanUnimplementedCode("Cannot load this unknown tileactor type: " + sta.type.ToString());
                         }
@@ -377,12 +374,12 @@ public class SaveLoad : MonoBehaviour
             file.Close();
 
 
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
                 Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
             }
             return true;
         }else{
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                 Debug.LogError("Error with file; failed to load.");
             }
             data = null;
@@ -401,7 +398,7 @@ public class SaveLoad : MonoBehaviour
             data = FromJson<GameStateData>(jsonData);
 
             //presumably the operation was successful
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
             {
                 Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
             }
@@ -409,7 +406,7 @@ public class SaveLoad : MonoBehaviour
         }
         catch (Exception e)
         {
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
             {
                 Debug.LogError("ERROR WHEN LOADING JSON: " + e.Message);
             }
@@ -588,7 +585,7 @@ public class SaveLoad : MonoBehaviour
         playerStats.cardsUnlocked = Deck.Instance.cardsUnlocked;
 
         //TODO: save next level variable
-        if (CustomDebug.SaveLoadDebugging())
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
         {
             CustomDebug.RanUnimplementedCode("SaveStats() only saves unlocked cards.");
         }
@@ -613,7 +610,7 @@ public class SaveLoad : MonoBehaviour
         Deck.Instance.cardsUnlocked = playerStats.cardsUnlocked;
 
         //TODO: load next level variable
-        if (CustomDebug.SaveLoadDebugging())
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
         {
             CustomDebug.RanUnimplementedCode("LoadStats() is not complete.");
         }
@@ -652,6 +649,7 @@ class GameStateData
 
     public bool initialized = false;    //set to true to indicate that all of the following variables were given the correct information that is wanted for saving/loading
     public String saveVersion = "1.00"; //an indicator of what iteration of save system is in use; probably won't ever be used, but it is better to have it and never need it than need it and not have it
+    public int level = -1;
 
     //we will assume that the game is only ever saved on the player's turn
     #region Map Info
