@@ -528,16 +528,13 @@ public class SaveLoad : MonoBehaviour
     //get the health of the base
     private int getBaseHP()
     {
-        //TODO
-        RanUnimplementedCode("getBaseHP()");
-        return -1;
+        return Base.Instance.GetBaseHealth();
     }
 
     //set the base HP
     private void setBaseHP(int hp)
     {
-        //TODO
-        RanUnimplementedCode("setBaseHP()");
+        Base.Instance.SetBaseHealth(hp);
     }
 
     private int getBaseHPMax()
