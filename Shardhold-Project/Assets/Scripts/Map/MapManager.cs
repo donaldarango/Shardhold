@@ -14,6 +14,12 @@ public class MapManager : MonoBehaviour
 
     public static MapManager Instance { get { return _instance; } }
 
+    public delegate void AddEnemyToSpawnTileHandler(int laneNumber);
+    public static event AddEnemyToSpawnTileHandler AddEnemyToSpawnTileEvent;
+
+    public delegate void RemoveEnemyFromSpawnTileHandler(int laneNumber);
+    public static event RemoveEnemyFromSpawnTileHandler RemoveEnemyFromSpawnTileEvent;
+
     private static MapManager _instance;
     private int ringCount; // rings around the map
     private int laneCount; // lanes per quadrant
@@ -89,7 +95,7 @@ public class MapManager : MonoBehaviour
         GameObject structureUnitPrefab = Instantiate(structure.actorPrefab, tilePosition, Quaternion.identity);
         structureUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
-        structureUnit.SetCurrentTile(tile);
+        structureUnit.Spawn(tile);
         tile.SetCurrentTileActor(structureUnit);
     }
 
@@ -101,17 +107,17 @@ public class MapManager : MonoBehaviour
         GameObject enemyUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         enemyUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         EnemyUnit enemyUnit = enemyUnitPrefab.GetComponent<EnemyUnit>();
-        enemyUnit.SetCurrentTile(tile);
+        enemyUnit.Spawn(tile);
         tile.SetCurrentTileActor(enemyUnit);
         TileActorManager.Instance.AddEnemyToCurrentEnemyList(enemyUnit);
     }
 
     public void AddEnemyToSpawnTile(int laneNumber, BasicEnemyStats enemyStats)
     {
-        Debug.Log("lane ; " + laneNumber);
         EnemySpawnTile spawnTile = spawnTiles[laneNumber];
         spawnTile.enemyStats = enemyStats;
         spawnTiles[laneNumber] = spawnTile;
+        AddEnemyToSpawnTileEvent?.Invoke(laneNumber);
     }
 
     public void MoveSpawnUnitsToMap()
@@ -124,6 +130,7 @@ public class MapManager : MonoBehaviour
                 AddEnemyToMapTile(ringCount - 1, i, spawnTile.enemyStats.unitName);
                 spawnTile.enemyStats = null;
                 spawnTiles[i] = spawnTile;
+                RemoveEnemyFromSpawnTileEvent?.Invoke(i);
             }
         }
     }
