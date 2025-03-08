@@ -11,9 +11,9 @@ public class CustomDebug : MonoBehaviour
 
     //FOR INTIAL SETTING ONLY; USE GET METHODS
     //per-class debugging bool controls (the respective class will check this, rather than holding its own debugging variable):
-    public bool deckDebugging = true;
-    public bool saveLoadDebugging = true;
-    public bool cusmtomMathDebugging = true;
+    public bool deckDebugging = false;
+    public bool saveLoadDebugging = false;
+    public bool cusmtomMathDebugging = false;
 
     public static void RanUnimplementedCode(string descriptor = "<no descriptor>")
     {
