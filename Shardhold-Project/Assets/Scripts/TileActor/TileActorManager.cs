@@ -176,4 +176,14 @@ public class TileActorManager : MonoBehaviour
         currentEnemyUnits.Sort((u1, u2) => { return u1.GetCurrentTile().GetRingNumber().CompareTo(u2.GetCurrentTile().GetRingNumber()); });
     }
 
+    public List<RoundSpawnInfo> GetSpawnList()
+    {
+        return gameSpawnList;
+    }
+
+    public void SetSpawnList(List<RoundSpawnInfo> list)
+    {
+        gameSpawnList = list;
+    }
+
 }
