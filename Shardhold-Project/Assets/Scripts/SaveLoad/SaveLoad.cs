@@ -516,16 +516,13 @@ public class SaveLoad : MonoBehaviour
     //get the current turn counter
     private int getCurTurn()
     {
-        //TODO
-        RanUnimplementedCode("getCurTurn()");
-        return -1;
+        return TileActorManager.Instance.currentRound;
     }
 
     //set the turn counter
     private void setCurTurn(int curTurn)
     {
-        //TODO
-        RanUnimplementedCode("setCurTurn");
+        TileActorManager.Instance.currentRound = curTurn;
     }
 
     //get the health of the base
