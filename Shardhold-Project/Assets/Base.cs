@@ -2,9 +2,26 @@ using UnityEngine;
 
 public class Base : MonoBehaviour
 {
+    public static Base Instance { get { return _instance; } }
+    private static Base _instance;
+
     public int maxHealth = 20;
     [SerializeField] private int currentHealth;
     public GameObject gameOverScreen;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            throw new System.Exception("An instance of this singleton already exists.");
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     private void OnEnable()
     {
         EnemyUnit.DamageBase += OnTakeDamage;

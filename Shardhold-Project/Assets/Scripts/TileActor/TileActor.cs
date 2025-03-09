@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -27,23 +28,11 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField]protected int damage;
     [SerializeReference]protected PrefabAssetType actorPrefab;
 
+    [SerializeField] protected TileActorSpriteHandler spriteHandler;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SetActorData();
-
-        if (tileActorStats != null)
-        {
-            //Debug.Log("Stats for " + tileActorStats.unitName + ":");
-
-            //Debug.Log("Tile Actor Type: " + tileActorStats.actorType.ToString());
-
-            //Debug.Log("Attack Range: " + tileActorStats.attackRange);
-            //Debug.Log("Damage: " + tileActorStats.damage);
-            //Debug.Log("Max Health: " + tileActorStats.maxHealth);
-
-            //Debug.Log("Current Health: " + currentHealth);
-        }
         
     }
 
@@ -52,6 +41,8 @@ public abstract class TileActor : MonoBehaviour
     {
         
     }
+
+    public abstract void Spawn(MapTile tile);
 
     public virtual void SetActorData()
     {
@@ -126,6 +117,8 @@ public abstract class TileActor : MonoBehaviour
     {
         // Damage amount is a variable, special cases like Traps will pass in a low number like 1 to reduce usage number.
         currentHealth -= damageAmount;
+        spriteHandler.SpriteDamageAnimation();
+
         Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining HP: {currentHealth}");
 
         if (currentHealth <= 0)
