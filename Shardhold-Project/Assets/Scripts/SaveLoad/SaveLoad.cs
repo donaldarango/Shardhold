@@ -38,9 +38,9 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    public static void RanUnimplementedCode(string descriptor = "<no description>")
+    public static void RanUnimplementedCode(string descriptor = "<no description>", CustomDebug.DebuggingType level = CustomDebug.DebuggingType.ErrorOnly)
     {
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+        if (CustomDebug.SaveLoadDebugging(level))
         {
             CustomDebug.RanUnimplementedCode(descriptor);
         }
@@ -128,6 +128,8 @@ public class SaveLoad : MonoBehaviour
             RanUnimplementedCode("currently no saving of not-yet-spawned enemies");
         }
 
+        #region Spawned TileActors
+
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
         data.spawnedTileActors = new List<SpawnedTileActor>();
         List<TileActor> actors = MapManager.Instance.GetTileActorList();
@@ -173,18 +175,29 @@ public class SaveLoad : MonoBehaviour
         //List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
 
         //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
+        //special abilities: TODO
+        #endregion
+
+        #region Not-Yet-Spawned Enemies
+
+        data.spawnList = TileActorManager.Instance.GetSpawnList();
+
+
+
+        #endregion
 
         //TODO:
-        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably; may need to filter tileactors based on if they are on a spawn tile?).");
-        RanUnimplementedCode("Not-yet-spawned enemies are not saved.");
+        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably; may need to filter tileactors based on if they are on a spawn tile?).", CustomDebug.DebuggingType.Warnings);
+        RanUnimplementedCode("Not-yet-spawned enemies are not saved.", CustomDebug.DebuggingType.Warnings);
 
-        //special abilities: TODO
+        
         #endregion
 
         data.initialized = true;
 
         #endregion
 
+        #region Writing to File
 
         if (saveType == SaveType.chooseDefault){
             saveType = defaultSaveType;
@@ -192,7 +205,6 @@ public class SaveLoad : MonoBehaviour
         switch(saveType){
             case SaveType.binary:
                 return BinarySave(filename, data);
-            //break;
             case SaveType.json:
                 return JsonSave(filename, data);
             default:
@@ -201,6 +213,8 @@ public class SaveLoad : MonoBehaviour
                 }
                 return false;
         }
+
+        #endregion
     }
 
     //this has been replaced with json file save system
@@ -256,6 +270,8 @@ public class SaveLoad : MonoBehaviour
             Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
 
+        #region Reading File
+
         GameStateData data = new GameStateData();
         bool noProblemLoading = true;   //set to false if there are any issues with the loading process
 
@@ -276,6 +292,8 @@ public class SaveLoad : MonoBehaviour
                 noProblemLoading = false;
                 break;
         }
+
+        #endregion
 
         noProblemLoading = noProblemLoading && data != null;
         if (noProblemLoading)
@@ -309,6 +327,8 @@ public class SaveLoad : MonoBehaviour
             #endregion
 
             #region TileActors
+
+            #region Spawned TileActors
 
             //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
             for (int i = 0;i < data.spawnedTileActors.Count; i++)
@@ -347,6 +367,14 @@ public class SaveLoad : MonoBehaviour
 
 
             }
+
+            #endregion
+
+            #region Not-Yet-Spawned Enemies
+
+            TileActorManager.Instance.SetSpawnList(data.spawnList);
+
+            #endregion
 
             //TODO
             RanUnimplementedCode("Enemies on spawn tiles not loaded.");
@@ -419,12 +447,16 @@ public class SaveLoad : MonoBehaviour
 	{
         //TODO remove any map effects or similar; don't worry about adjusting base HP or weapon, as these will be set when loading anyways
 
+
+
         List<TileActor> actors = MapManager.Instance.GetTileActorList();
 
         for (int i = 0; i < actors.Count; i++)
         {
             actors[i].Die();
         }
+
+        TileActorManager.Instance.SetSpawnList(new List<TileActorManager.RoundSpawnInfo>());    //empty list
 
         //for (all tile objects) { destroy them safely to make room for a new load }
     }
@@ -680,6 +712,7 @@ class GameStateData
     */
 
     public List<SpawnedTileActor> spawnedTileActors;
+    public List<TileActorManager.RoundSpawnInfo> spawnList;
 
 
     //public List<TileActor> actors;

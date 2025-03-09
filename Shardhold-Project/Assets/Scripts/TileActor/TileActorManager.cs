@@ -10,7 +10,8 @@ public class TileActorManager : MonoBehaviour
     public struct EnemySpawnInfo
     {
         public int laneNumber;
-        public BasicEnemyStats enemyUnit;
+        //public BasicEnemyStats enemyUnit;
+        public String enemyUnit;
     }
 
     [Serializable]
@@ -99,7 +100,7 @@ public class TileActorManager : MonoBehaviour
                 else
                 {
                     EnemySpawnInfo enemySpawnInfo = new EnemySpawnInfo();
-                    enemySpawnInfo.enemyUnit = enemyStats;
+                    enemySpawnInfo.enemyUnit = enemyStats.unitName;
                     enemySpawnInfo.laneNumber = laneNumber;
 
                     roundSpawnInfo.roundSpawnList.Add(enemySpawnInfo);
@@ -117,12 +118,13 @@ public class TileActorManager : MonoBehaviour
     {
         for (int i = 0; i < gameSpawnList.Count; i++)
         {
-            if (gameSpawnList[i].roundNumber == roundNumber)
+            if (gameSpawnList[i].roundNumber+1 == roundNumber)
             {
                 for (int j = 0; j < gameSpawnList[i].roundSpawnList.Count; j++)
                 {
                     EnemySpawnInfo enemySpawnInfo = gameSpawnList[i].roundSpawnList[j];
-                    MapManager.Instance.AddEnemyToSpawnTile(enemySpawnInfo.laneNumber, enemySpawnInfo.enemyUnit);
+                    //MapManager.Instance.AddEnemyToSpawnTile(enemySpawnInfo.laneNumber, enemySpawnInfo.enemyUnit);
+                    MapManager.Instance.AddEnemyToMapTile(MapManager.Instance.GetRingCount() - 1, enemySpawnInfo.laneNumber, enemySpawnInfo.enemyUnit);
                 }
                 gameSpawnList.RemoveAt(i);
                 return;
