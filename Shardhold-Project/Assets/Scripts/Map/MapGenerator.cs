@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -456,6 +457,8 @@ public class MapGenerator : MonoBehaviour
                             if (selectedCard)
                             {
                                 selectedCard.Play(clickedTiles);
+                                selectedCard = null;
+                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
                             //PlayCard?.Invoke(clickedTiles);
                             //selectedCard = null;
@@ -476,9 +479,10 @@ public class MapGenerator : MonoBehaviour
                         if (selectedCard)
                         {
                             selectedCard.Play(clickedTiles);
+                            selectedCard = null;
+                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }
                         //PlayCard?.Invoke(clickedTiles);
-                        //selectedCard = null;
                     }
                 }
             }
@@ -493,6 +497,8 @@ public class MapGenerator : MonoBehaviour
                             HashSet<(int, int)> set = new HashSet<(int, int)>();
                             set.Add((-1, -1));
                             selectedCard.Play(set);
+                            selectedCard = null;
+                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }
                     }
                 }
@@ -511,6 +517,19 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    IEnumerator RemoveHighlightDelayed(HashSet<(int, int)> set)
+    {
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);// tile.Value.material.color = defaultColor;
+        }
+        yield return new WaitForSeconds(.5f);
+        clickedTiles.Clear();
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);// tile.Value.material.color = defaultColor;
+        }
+    }
 
     void AppendTile((int, int) tile)
     {
