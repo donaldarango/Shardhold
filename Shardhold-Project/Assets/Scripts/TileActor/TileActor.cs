@@ -54,19 +54,38 @@ public abstract class TileActor : MonoBehaviour
         damage = tileActorStats.damage;
     }
 
+    public virtual TileActor DetectEnemyInFront(int tileRange)
+    {
+        int currentRing = currentTile.GetRingNumber();
+        int currentLane = currentTile.GetLaneNumber();
+
+        for(int i = 1; i <= attackRange; i++)
+        {
+            int targetRing = currentRing + i;
+            if (targetRing >= MapManager.Instance.GetRingCount()) break;
+
+            MapTile frontTile = MapManager.Instance.GetTile(targetRing, currentLane);
+            if (frontTile == null) continue;
+
+            TileActor actor = frontTile.GetCurrentTileActor();
+            if(actor != null && actor.GetTileActorType() == TileActorType.EnemyUnit)
+            {
+                return actor; // First enemy in range.
+            }
+        }
+
+        return null; // No enemies in range.
+    }
+
     // VIRTUAL CLASS. Structures and EnemyUnits attack similarly, Traps will need to override.
     // Any special units we make will probably override this as well.
     public virtual void Attack(TileActor target)
     {
         if (target == null) return; // Invalid target
 
-        // Structures & Enemies will target other TileActors, which should be the opposite ActorType excluding traps (unless unique enemy, ie Engineer)
-        if((GetTileActorType() == TileActorType.EnemyUnit && target.GetTileActorType() == TileActorType.Structure ||
-            GetTileActorType() == TileActorType.Structure && target.GetTileActorType() == TileActorType.EnemyUnit))
-        {
-            Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
-            target.TakeDamage(tileActorStats.damage);
-        }
+        // Simply call take damage using the damage from the TileActor
+        Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
+        target.TakeDamage(damage);
     }
 
     public override string ToString()
