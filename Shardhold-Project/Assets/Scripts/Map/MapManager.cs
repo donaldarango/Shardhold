@@ -24,7 +24,6 @@ public class MapManager : MonoBehaviour
     private int ringCount; // rings around the map
     private int laneCount; // lanes per quadrant
     [SerializeField] private List<MapQuadrant> quadrantData = new List<MapQuadrant>();
-    [SerializeField] private List<EnemySpawnTile> spawnTiles = new List<EnemySpawnTile>();
 
     private void Awake()
     {
@@ -46,19 +45,6 @@ public class MapManager : MonoBehaviour
         quadrantData.Add(new MapQuadrant(Quadrant.NW));
         quadrantData.Add(new MapQuadrant(Quadrant.SW));
         quadrantData.Add(new MapQuadrant(Quadrant.SE));
-    }
-
-    public void InitializeSpawnTiles()
-    {
-        Debug.Log("Creating Spawn tiles");
-        for (int i = 0; i < laneCount * 4; i++)
-        {
-            EnemySpawnTile spawnTile = new EnemySpawnTile();
-            spawnTile.enemyStats = null;
-            spawnTile.name = "Lane " + i.ToString();
-            //Debug.Log("new spawnTile lane " + i);
-            spawnTiles.Add(spawnTile);
-        }
     }
 
     public int GetRingCount()
@@ -112,29 +98,6 @@ public class MapManager : MonoBehaviour
         tile.SetCurrentTileActor(enemyUnit);
         TileActorManager.Instance.AddEnemyToCurrentEnemyList(enemyUnit);
         return enemyUnit;
-    }
-
-    public void AddEnemyToSpawnTile(int laneNumber, BasicEnemyStats enemyStats)
-    {
-        EnemySpawnTile spawnTile = spawnTiles[laneNumber];
-        spawnTile.enemyStats = enemyStats;
-        spawnTiles[laneNumber] = spawnTile;
-        AddEnemyToSpawnTileEvent?.Invoke(laneNumber);
-    }
-
-    public void MoveSpawnUnitsToMap()
-    {   
-        for (int i = 0; i < spawnTiles.Count; i++)
-        {
-            EnemySpawnTile spawnTile = spawnTiles[i];
-            if (spawnTile.enemyStats != null)
-            {
-                AddEnemyToMapTile(ringCount - 1, i, spawnTile.enemyStats.unitName);
-                spawnTile.enemyStats = null;
-                spawnTiles[i] = spawnTile;
-                RemoveEnemyFromSpawnTileEvent?.Invoke(i);
-            }
-        }
     }
 
     // Quadrant Index is same as enum values (Ex. NE = 0, NW = 1, etc.)
