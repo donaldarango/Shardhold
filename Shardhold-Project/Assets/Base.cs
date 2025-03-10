@@ -52,4 +52,14 @@ public class Base : MonoBehaviour
         Debug.Log("Game Over! The base was destroyed.");
         Destroy(gameObject);
     }
+
+    public void SetBaseHealth(int health)
+    {
+        currentHealth = health;
+    }
+
+    public int GetBaseHealth()
+    {
+        return currentHealth;
+    }
 }

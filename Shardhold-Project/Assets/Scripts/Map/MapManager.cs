@@ -88,7 +88,7 @@ public class MapManager : MonoBehaviour
         return quadrantData[quadrant].GetTileFromQuadrant(ringNumber, laneNumber);
     }
 
-    public void AddStructureToMapTile(int ringNumber, int laneNumber, BasicStructureStats structure)
+    public StructureUnit AddStructureToMapTile(int ringNumber, int laneNumber, BasicStructureStats structure)
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
         Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
@@ -97,9 +97,10 @@ public class MapManager : MonoBehaviour
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
         structureUnit.Spawn(tile);
         tile.SetCurrentTileActor(structureUnit);
+        return structureUnit;
     }
 
-    public void AddEnemyToMapTile(int ringNumber, int laneNumber, string unitName)
+    public EnemyUnit AddEnemyToMapTile(int ringNumber, int laneNumber, string unitName)
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
         BasicEnemyStats ta = TileActorManager.Instance.GetEnemyTileActorByName(unitName);
@@ -110,6 +111,7 @@ public class MapManager : MonoBehaviour
         enemyUnit.Spawn(tile);
         tile.SetCurrentTileActor(enemyUnit);
         TileActorManager.Instance.AddEnemyToCurrentEnemyList(enemyUnit);
+        return enemyUnit;
     }
 
     public void AddEnemyToSpawnTile(int laneNumber, BasicEnemyStats enemyStats)

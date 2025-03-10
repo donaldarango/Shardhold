@@ -7,14 +7,11 @@ using System.IO;
 using static UnityEngine.JsonUtility;
 using Unity.VisualScripting;
 using System.Data;
+using JetBrains.Annotations;
 
 public class SaveLoad : MonoBehaviour
 {
-    #region Debug Stuff
-    //TODO set to false before final submission
-    public bool debugging = true;
 
-    #endregion
 
     public static SaveLoad saveLoad;
     public MapGenerator mapGenerator;
@@ -41,9 +38,12 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    public static void RanUnimplementedCode(string descriptor = "<no description>")
+    public static void RanUnimplementedCode(string descriptor = "<no description>", CustomDebug.DebuggingType level = CustomDebug.DebuggingType.ErrorOnly)
     {
-        CustomDebug.RanUnimplementedCode(descriptor);
+        if (CustomDebug.SaveLoadDebugging(level))
+        {
+            CustomDebug.RanUnimplementedCode(descriptor);
+        }
     }
 
     #region Text File I/O
@@ -69,7 +69,7 @@ public class SaveLoad : MonoBehaviour
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
     public void SaveToDefault(){
         SaveType saveType = SaveType.chooseDefault;
-        if (debugging){
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
         Save(fileToUse, saveType);
@@ -77,14 +77,15 @@ public class SaveLoad : MonoBehaviour
 
     public void LoadFromDefault(){
         SaveType saveType = SaveType.chooseDefault;
-        if (debugging){
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
         Load(fileToUse, saveType);
     }
 
     public bool Save(string filename, SaveType saveType = SaveType.chooseDefault){
-        if(debugging){
+        if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+        {
             Debug.Log("Saving game to specified file \"" + fileToUse + "\"");
         }
 
@@ -120,22 +121,83 @@ public class SaveLoad : MonoBehaviour
 
         #region TileActors
 
-        //TODO iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
-        List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
-        List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
-        List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
-        List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
-        List<int> ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
-        List<int> ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
-        List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
 
+        //TODO not-yet-spawned enemies
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+        {
+            RanUnimplementedCode("currently no saving of not-yet-spawned enemies");
+        }
+
+        #region Spawned TileActors
+
+        //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
+        data.spawnedTileActors = new List<SpawnedTileActor>();
+        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+        
+        /*
+        data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
+        data.ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
+        data.ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
+        data.ta_name = new List<String>();
+        data.ta_type = new List<TileActor.TileActorType>();
+        data.ta_damage = new List<int>();          //the standard attack damage of this TileActor
+        data.ta_attackRange = new List<int>();     //the standard attack range of this TileActor
+        */
+
+        for (int i = 0; i < actors.Count; i++)
+        {
+            data.spawnedTileActors.Add(new SpawnedTileActor());
+            SpawnedTileActor sta = data.spawnedTileActors[i];
+            sta.name = actors[i].GetActorName();
+            sta.type = actors[i].GetTileActorType();
+            //sta.maxHealth = actors[i].GetMaxHealth();
+            sta.curHealth = actors[i].GetCurrentHealth();
+            MapTile mapTile = actors[i].GetCurrentTile();
+            sta.pos = new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber());
+            sta.attackRange = actors[i].GetAttackRange();
+            sta.damage = actors[i].GetAttackDamage();
+
+
+            /*
+            data.ta_maxHealth.Add(actors[i].GetMaxHealth());
+            data.ta_curHealth.Add(actors[i].GetCurrentHealth());
+            MapTile mapTile = actors[i].GetCurrentTile();
+            data.ta_pos.Add(new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber()));
+            data.ta_name.Add(actors[i].GetActorName());
+            data.ta_type.Add(actors[i].GetTileActorType());
+            data.ta_damage.Add(actors[i].GetAttackDamage());
+            data.ta_attackRange.Add(actors[i].GetAttackRange());
+            */
+        }
+
+        //TODO
+        //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
+        //List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
+
+        //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
         //special abilities: TODO
+        #endregion
+
+        #region Not-Yet-Spawned Enemies
+
+        data.spawnList = TileActorManager.Instance.GetSpawnList();
+
+
+
+        #endregion
+
+        //TODO:
+        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably; may need to filter tileactors based on if they are on a spawn tile?).", CustomDebug.DebuggingType.Warnings);
+        RanUnimplementedCode("Not-yet-spawned enemies are not saved.", CustomDebug.DebuggingType.Warnings);
+
+        
         #endregion
 
         data.initialized = true;
 
         #endregion
 
+        #region Writing to File
 
         if (saveType == SaveType.chooseDefault){
             saveType = defaultSaveType;
@@ -143,15 +205,16 @@ public class SaveLoad : MonoBehaviour
         switch(saveType){
             case SaveType.binary:
                 return BinarySave(filename, data);
-            //break;
             case SaveType.json:
                 return JsonSave(filename, data);
             default:
-                if(debugging){
+                if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                     Debug.LogError("Unidentified save type!");
                 }
                 return false;
         }
+
+        #endregion
     }
 
     //this has been replaced with json file save system
@@ -163,12 +226,12 @@ public class SaveLoad : MonoBehaviour
             bf.Serialize(file, data);
             file.Close();
 
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
                 Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder);
             }
             return true;
         }catch(Exception e){
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                 Debug.LogError("ERROR WHEN SAVING BINARY: " + e.Message);
             }
             return false;
@@ -186,7 +249,7 @@ public class SaveLoad : MonoBehaviour
             WriteFile(filename, jsonData);
 
             //success, presumably
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
             {
                 Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder);
             }
@@ -194,7 +257,7 @@ public class SaveLoad : MonoBehaviour
         }
         catch (Exception e)
         {
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
             {
                 Debug.LogError("ERROR WHEN SAVING JSON: " + e.Message);
             }
@@ -203,9 +266,11 @@ public class SaveLoad : MonoBehaviour
     }
 
     public bool Load(string filename, SaveType saveType = SaveType.chooseDefault){
-        if(debugging){
+        if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
+
+        #region Reading File
 
         GameStateData data = new GameStateData();
         bool noProblemLoading = true;   //set to false if there are any issues with the loading process
@@ -221,12 +286,14 @@ public class SaveLoad : MonoBehaviour
                 noProblemLoading = JsonLoad(filename, out data);
                 break;
             default:
-                if(debugging){
+                if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                     Debug.LogError("Unidentified save type!");
                 }
                 noProblemLoading = false;
                 break;
         }
+
+        #endregion
 
         noProblemLoading = noProblemLoading && data != null;
         if (noProblemLoading)
@@ -261,7 +328,59 @@ public class SaveLoad : MonoBehaviour
 
             #region TileActors
 
-            //TODO iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
+            #region Spawned TileActors
+
+            //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
+            for (int i = 0;i < data.spawnedTileActors.Count; i++)
+            {
+                SpawnedTileActor sta = data.spawnedTileActors[i];
+                TileActor newTA = null;
+                switch (sta.type)
+                {
+                    case TileActor.TileActorType.EnemyUnit:
+                        //BasicEnemyStats basicEnemyStats = TileActorManager.Instance.GetEnemyTileActorByName(data.ta_name[i]);
+                        newTA = MapManager.Instance.AddEnemyToMapTile(sta.pos.x, sta.pos.y, sta.name);
+                        break;
+                    case TileActor.TileActorType.Structure:
+                        BasicStructureStats basicStructureStats = TileActorManager.Instance.GetStructureTileActorByName(sta.name);
+                        newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, basicStructureStats);
+                        break;
+                    case TileActor.TileActorType.Trap:
+                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+                        {
+                            RanUnimplementedCode("Loading of traps not implemented.");
+                        }
+                        break;
+                    default:
+                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+                        {
+                            RanUnimplementedCode("Cannot load this unknown tileactor type: " + sta.type.ToString());
+                        }
+                        break;
+
+                }
+
+                //put in all the other variables for this tileactor
+                newTA.SetCurrentHealth(sta.curHealth);
+                //NOTE: we aren't actually setting the max health
+                
+
+
+            }
+
+            #endregion
+
+            #region Not-Yet-Spawned Enemies
+
+            TileActorManager.Instance.SetSpawnList(data.spawnList);
+
+            #endregion
+
+            //TODO
+            RanUnimplementedCode("Enemies on spawn tiles not loaded.");
+            RanUnimplementedCode("Enemies to be spawned not yet loaded.");
+            
+            
 
             //special abilities: TODO
             #endregion
@@ -283,12 +402,12 @@ public class SaveLoad : MonoBehaviour
             file.Close();
 
 
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
                 Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
             }
             return true;
         }else{
-            if(debugging){
+            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                 Debug.LogError("Error with file; failed to load.");
             }
             data = null;
@@ -307,7 +426,7 @@ public class SaveLoad : MonoBehaviour
             data = FromJson<GameStateData>(jsonData);
 
             //presumably the operation was successful
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
             {
                 Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
             }
@@ -315,7 +434,7 @@ public class SaveLoad : MonoBehaviour
         }
         catch (Exception e)
         {
-            if (debugging)
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
             {
                 Debug.LogError("ERROR WHEN LOADING JSON: " + e.Message);
             }
@@ -324,10 +443,21 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-	private void Unload()
+	public void Unload()
 	{
+        //TODO remove any map effects or similar; don't worry about adjusting base HP or weapon, as these will be set when loading anyways
 
-        //TODO?
+
+
+        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+
+        for (int i = 0; i < actors.Count; i++)
+        {
+            actors[i].Die();
+        }
+
+        TileActorManager.Instance.SetSpawnList(new List<TileActorManager.RoundSpawnInfo>());    //empty list
+
         //for (all tile objects) { destroy them safely to make room for a new load }
     }
 
@@ -342,7 +472,9 @@ public class SaveLoad : MonoBehaviour
     //get the number of directions on the map
     private int getLaneCount()
     {
-        if (mapGenerator == null)
+        return MapManager.Instance.GetLaneCount();
+
+        /*if (mapGenerator == null)
         {
             if (debugging)
             {
@@ -353,13 +485,15 @@ public class SaveLoad : MonoBehaviour
         else
         {
             return mapGenerator.laneCount;
-        }
+        }*/
     }
 
     //set the number of directions on the map
     private void setLaneCount(int amt)
     {
-        if (mapGenerator == null)
+        MapManager.Instance.SetLaneCount(amt);
+
+        /*if (mapGenerator == null)
         {
             if (debugging) {
                 Debug.LogError("No MapGenerator assigned to SaveLoad.");
@@ -368,30 +502,34 @@ public class SaveLoad : MonoBehaviour
         else
         {
             mapGenerator.laneCount = amt;
-        }
+        }*/
     }
 
     //get the number of rings around the base; does not include the base but does include invisible spawning rings (currently assumes 1 spawning ring, see load and save functions)
     private int getRingCount()
     {
-        if (mapGenerator == null)
+        return MapManager.Instance.GetRingCount();
+
+        /*if (mapgenerator == null)
         {
             if (debugging)
             {
-                Debug.LogError("No MapGenerator assigned to SaveLoad.");
+                debug.logerror("no mapgenerator assigned to saveload.");
             }
             return -1;
         }
         else
         {
-            return mapGenerator.ringCount;
-        }
+            return mapgenerator.ringcount;
+        }*/
     }
 
     //set the number of rings around the base
     private void setRingCount(int amt)
     {
-        if (mapGenerator == null)
+        MapManager.Instance.SetRingCount(amt);
+
+        /*if (mapGenerator == null)
         {
             if (debugging)
             {
@@ -401,37 +539,38 @@ public class SaveLoad : MonoBehaviour
         else
         {
             mapGenerator.ringCount = amt;
-        }
+        }*/
     }
 
     //get the current turn counter
     private int getCurTurn()
     {
-        //TODO
-        RanUnimplementedCode("getCurTurn()");
-        return -1;
+        return TileActorManager.Instance.currentRound;
     }
 
     //set the turn counter
     private void setCurTurn(int curTurn)
     {
-        //TODO
-        RanUnimplementedCode("setCurTurn");
+        TileActorManager.Instance.currentRound = curTurn;
     }
 
     //get the health of the base
     private int getBaseHP()
     {
-        //TODO
-        RanUnimplementedCode("getBaseHP()");
-        return -1;
+        return Base.Instance.GetBaseHealth();
     }
 
     //set the base HP
     private void setBaseHP(int hp)
     {
+        Base.Instance.SetBaseHealth(hp);
+    }
+
+    private int getBaseHPMax()
+    {
         //TODO
-        RanUnimplementedCode("setBaseHP()");
+        RanUnimplementedCode("getBaseHPMax()");
+        return 100;
     }
 
     //get the current damage value of the base weapon
@@ -447,6 +586,13 @@ public class SaveLoad : MonoBehaviour
     {
         //TODO
         RanUnimplementedCode("setBaseWeapon()");
+    }
+
+    private int getBaseWeaponMax()
+    {
+        //TODO
+        RanUnimplementedCode("getBaseWeaponMax()");
+        return 100;
     }
 
 
@@ -466,7 +612,15 @@ public class SaveLoad : MonoBehaviour
     {
         //first ready the player data
         PlayerStats playerStats = new PlayerStats();
-        //TODO: get the player stats
+
+        //get the player stats
+        playerStats.cardsUnlocked = Deck.Instance.cardsUnlocked;
+
+        //TODO: save next level variable
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+        {
+            CustomDebug.RanUnimplementedCode("SaveStats() only saves unlocked cards.");
+        }
 
         //now convert player data into a json
         string jsonStats = ToJson(playerStats, true);
@@ -485,7 +639,13 @@ public class SaveLoad : MonoBehaviour
         PlayerStats playerStats = FromJson<PlayerStats>(jsonStats);
 
         //finally, use the player statistics as needed
-        //TODO
+        Deck.Instance.cardsUnlocked = playerStats.cardsUnlocked;
+
+        //TODO: load next level variable
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+        {
+            CustomDebug.RanUnimplementedCode("LoadStats() is not complete.");
+        }
     }
 
     #endregion
@@ -520,6 +680,8 @@ class GameStateData
 #pragma warning disable 0649
 
     public bool initialized = false;    //set to true to indicate that all of the following variables were given the correct information that is wanted for saving/loading
+    public String saveVersion = "1.00"; //an indicator of what iteration of save system is in use; probably won't ever be used, but it is better to have it and never need it than need it and not have it
+    public int level = -1;
 
     //we will assume that the game is only ever saved on the player's turn
     #region Map Info
@@ -540,13 +702,30 @@ class GameStateData
     #endregion
 
     #region TileActors
-    List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
-    List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
+    //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
+    /*List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
     List<Vector2Int> ta_pos = new List<Vector2Int>();     //position of tileActors stored as (direction, range)
     List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
     List<int> ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
     List<int> ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
     List<int> ta_damage = new List<int>();          //the standard attack damage of this TileActor
+    */
+
+    public List<SpawnedTileActor> spawnedTileActors;
+    public List<TileActorManager.RoundSpawnInfo> spawnList;
+
+
+    //public List<TileActor> actors;
+    /*
+    public List<String> ta_name;
+    public List<int> ta_maxHealth;       //the max possible health for this TileActor; generally the health that the TileActor spawns with
+    public List<int> ta_curHealth;       //the current health of the TileActor; generally maxHealth - damageTaken
+    public List<Vector2Int> ta_pos;     //position of tileActors stored as (direction, range)
+    public List<TileActor.TileActorType> ta_type;
+    public List<int> ta_damage;          //the standard attack damage of this TileActor
+    public List<int> ta_attackRange;     //the standard attack range of this TileActor
+    */
+
 
     //special abilities: TODO
     #endregion
@@ -557,6 +736,22 @@ class GameStateData
     public List<Card> hand = new List<Card>();
     #endregion
 
+
+#pragma warning restore 0649
+}
+
+[Serializable]
+class SpawnedTileActor
+{
+#pragma warning disable 0649
+
+    public string name;
+    //public int maxHealth;
+    public int curHealth;
+    public Vector2Int pos;
+    public TileActor.TileActorType type;
+    public int damage;
+    public int attackRange;
 
 #pragma warning restore 0649
 }
@@ -572,11 +767,11 @@ class PlayerStats
     //1 = player has played tutorial, so next they will play level 1
     //2 = player has played level 1, so next level is level 2
     //unlocked levels should generally be <= nextLevel
-    int nextLevel;
+    public int nextLevel;
 
     //each card is an index value; the value at that index is the number of copies of that card unlocked
     //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
-    List<int> cardsUnlocked = new List<int>();
+    public List<int> cardsUnlocked = new List<int>();
 
 #pragma warning restore 0649
 }

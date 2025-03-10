@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using static CustomDebug;
 
 public class CustomMath : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class CustomMath : MonoBehaviour
 
     public static int RandomInt(int min, int max)
     {
-        if(min>max && CustomDebug.CustomMathDebugging())
+        if(min>max && CustomMathDebugging(DebuggingType.Warnings))
         {
             Debug.LogError("WARNING: RandomInt(" + min + ", " + max + ") called with min > max. Expect anomalous output.");
         }
@@ -35,7 +36,7 @@ public class CustomMath : MonoBehaviour
         }
         if (result > max)    //in the extremely unlikely event that we got max+1 200 times, just return the max
         {
-            if (CustomDebug.CustomMathDebugging())
+            if (CustomDebug.CustomMathDebugging(DebuggingType.ErrorOnly))
             {
                 if (result == max + 1)
                 {
@@ -50,13 +51,13 @@ public class CustomMath : MonoBehaviour
         }
         if (result < min)
         {
-            if (CustomDebug.CustomMathDebugging())
+            if (CustomDebug.CustomMathDebugging(DebuggingType.Warnings))
             {
                 Debug.LogError("Somehow, RandomInt(" + min + ", " + max + ") gave the random value of " + result + ". This should not be possible. " + min + " will be returned.");
             }
             result = min;
         }
-        if (min > max && CustomDebug.CustomMathDebugging())
+        if (min > max && CustomDebug.CustomMathDebugging(DebuggingType.ErrorOnly))
         {
             Debug.Log("Output from min > max: " + result);
         }
