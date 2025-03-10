@@ -10,7 +10,8 @@ public class CardUI : MonoBehaviour
     [SerializeField]private TMP_Text cardDescription;
     [SerializeField]private TMP_Text hp;
     [SerializeField]private TMP_Text range;
-    [SerializeField] private TMP_Text damage;
+    [SerializeField]private TMP_Text damage;
+    [SerializeField]Card card;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void initializeCardUI (Card card) {
         cardImage.sprite = card.cardImage;

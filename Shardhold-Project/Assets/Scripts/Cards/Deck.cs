@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
     public GameObject cardPrefab;
-    public Transform handUI;
+    public List<Transform> cardPositions;
+
+    public TMP_Text drawPileNum;
     //this will be used for converting int into a Card
     public List<Card> cardLookup = new List<Card>();
 
@@ -22,10 +25,14 @@ public class Deck : MonoBehaviour
     public List<int> drawPile = new List<int>();
 
     //uses same rules as drawPile
-    List<int> discardPile = new List<int>();
-
+    public List<int> discardPile = new List<int>();
+    public bool[] occupiedSlots;
     public int handCapacity = 3;
 
+    void Update()
+    {
+        drawPileNum.text = drawPile.Count().ToString(); 
+    }
     //uses same rules as drawPile
     public List<Card> hand = new List<Card>();
 
@@ -52,14 +59,31 @@ public class Deck : MonoBehaviour
 
         //add it to hand
         hand.Add(cardLookup[drawPile[choice]]);
-        Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName + " Cards left in drawpile: " + drawPile.Count);
+        Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName);
+        int openSlot = FindFirstOpenUISlot();
+        Debug.Log("Open slot: " + openSlot);
+        Transform cardUISlot = cardPositions[openSlot];
+        occupiedSlots[openSlot] = true;
+        CreateCardUI(cardLookup[drawPile[choice]], cardUISlot);
         //remove from draw pile
         drawPile.RemoveAt(choice);
-
+        Debug.Log(" Cards left in drawpile: " + drawPile.Count);
         if(drawPile.Count <= 0)
         {
             SwapDrawAndDiscard();
         }
+    }
+    
+    //finding an open slot/pos in card UI 
+    public int FindFirstOpenUISlot(){
+        int openSlot = -1;
+        for (int i = 0; i < occupiedSlots.Length; i++) {
+            if (occupiedSlots[i] == false) {
+                openSlot = i;
+                return openSlot;
+            }
+        }
+        return openSlot;
     }
 
     /// <summary>
@@ -70,7 +94,9 @@ public class Deck : MonoBehaviour
     {
         //send to discard pile
         discardPile.Add(hand[handPosition].GetId());
-
+        Debug.Log("Card discarded: " + hand[handPosition].cardName);
+        //free up occupied slot
+        occupiedSlots[handPosition] = false;
         //remove from hand
         hand.RemoveAt(handPosition);
     }
@@ -85,12 +111,24 @@ public class Deck : MonoBehaviour
         discardPile = temp;
     }
 
-    public void CreateCardUI(Card card) {
-        GameObject cardObject = Instantiate(cardPrefab, handUI);
+    public void CreateCardUI(Card card, Transform position) {
+        GameObject cardObject = Instantiate(cardPrefab, position);
         CardUI cardUI = cardObject.GetComponent<CardUI>();
         if (cardUI != null)
         {
             cardUI.initializeCardUI(card);
+        }
+    }
+
+    public void ClearHand()
+    {
+        foreach (Card card in hand)
+        {
+            Destroy(card);
+        }
+        hand.Clear();
+        for (int i = 0; i < occupiedSlots.Length; i++) {
+            occupiedSlots[i] = false;
         }
     }
     #region Pile to Unlocked Cards Comparisons

@@ -131,7 +131,10 @@ public abstract class TileActor : MonoBehaviour
     {
         Debug.Log($"Name: {actorName}\nActor Type: {actorType}\nCurrentHP: {currentHealth}\nMaxHP: {maxHealth}\nAtkRange: {attackRange}\nDamage: {damage}");
     }
-
+    
+    public Sprite GetSprite() {
+        return spriteHandler.GetComponent<SpriteRenderer>().sprite;
+    }
     public virtual void Die()
     {
         // Remove Enemy from grid if necessary.

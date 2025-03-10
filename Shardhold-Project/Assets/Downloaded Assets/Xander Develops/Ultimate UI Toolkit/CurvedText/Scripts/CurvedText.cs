@@ -19,7 +19,7 @@ namespace XanderDevelops.UI
         [Tooltip("Radius of the curve (higher values = less curve)")]
         private float curve = 30;
 
-        [SerializeField, Range(20f, 100f)]
+        [SerializeField, Range(10f, 100f)]
         [Tooltip("Fixed arc length per character (spacing between characters along the curve)")]
         private float spacing = 30f;
 
