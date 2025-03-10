@@ -25,10 +25,6 @@ public class EnemyUnit : TileActor
         SetActorData();
     }
 
-    private void Update()
-    {
-        
-    }
 
     public override void Spawn(MapTile tile)
     {
@@ -118,6 +114,14 @@ public class EnemyUnit : TileActor
                     Debug.Log("Enemy attacks structure!");
                     Attack((StructureUnit)actor);
                     return; // Stop moving if attacking
+                }
+                else if(actor.GetTileActorType() == TileActorType.Trap)
+                {
+                    MoveToTile(frontTile); // Move onto trap & trigger it
+                    Debug.Log("Enemy triggers a trap!");
+                    TrapUnit trap = (TrapUnit)actor;
+                    trap.Attack(this);
+                    return; // Stop moving once trap triggers.
                 }
             }
         }
