@@ -29,12 +29,15 @@ public class Deck : MonoBehaviour
     public bool[] occupiedSlots;
     public int handCapacity = 3;
 
+    //uses same rules as drawPile
+    public Card[] hand;
+    public GameObject[] UIHand;
+    private int cardsInHand = 0;
+
     void Update()
     {
         drawPileNum.text = drawPile.Count().ToString(); 
     }
-    //uses same rules as drawPile
-    public List<Card> hand = new List<Card>();
 
     /// <summary>
     /// To be used at the beginning of the player's turn to fill their hand
@@ -54,20 +57,64 @@ public class Deck : MonoBehaviour
     /// </summary>
     public void DrawCard()
     {
+        //check that draw pile is not empty
+        if (drawPile.Count() <= 0)
+        {
+            if (discardPile.Count() > 0)
+            {
+                SwapDrawAndDiscard();
+                if (CustomDebug.DeckDebugging())
+                {
+                    Debug.Log("Draw pile was empty, which should not happen. Thankfully, the discard pile was not empty, so draw pile has been filled and a card can be drawn.");
+                }
+            }
+            else
+            {
+                if (CustomDebug.DeckDebugging())
+                {
+                    Debug.LogError("Attempting to draw card when both the draw and discard pile are empty.");
+                }
+                return;
+            }
+        }
+
+        //check that hand is not full
+        if (CountCardsInHand() >= hand.Length)
+        {
+            if (CustomDebug.DeckDebugging())
+            {
+                Debug.LogError("Attemping to draw a card while the hand is already full with " + CountCardsInHand() + " cards. Cancelling Draw operation.");
+            }
+            return;
+        }
+
         //choose a card from the draw pile
         int choice = CustomMath.RandomInt(0, drawPile.Count-1);
 
-        //add it to hand
-        hand.Add(cardLookup[drawPile[choice]]);
-        Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName);
+        //find an open slot
         int openSlot = FindFirstOpenUISlot();
+
+        //add it to hand (non-UI)
+        hand[openSlot] = cardLookup[drawPile[choice]];
+        cardsInHand++;
+        Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName);
+        if (CustomDebug.DeckDebugging())
+        {
+            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
+        }
+
+        //add it to hand (UI)
+        
         Debug.Log("Open slot: " + openSlot);
-        Transform cardUISlot = cardPositions[openSlot];
-        occupiedSlots[openSlot] = true;
-        CreateCardUI(cardLookup[drawPile[choice]], cardUISlot);
+        Transform cardUISlot = cardPositions[openSlot];         //get the open slot's transform component
+        occupiedSlots[openSlot] = true;                         //mark slot as occupied
+        UIHand[openSlot] = CreateCardUI(cardLookup[drawPile[choice]], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
+
         //remove from draw pile
         drawPile.RemoveAt(choice);
         Debug.Log(" Cards left in drawpile: " + drawPile.Count);
+
+        //ensure non-empty draw pile
         if(drawPile.Count <= 0)
         {
             SwapDrawAndDiscard();
@@ -86,19 +133,82 @@ public class Deck : MonoBehaviour
         return openSlot;
     }
 
+    //finding an occupied slot/pos in card UI 
+    public int FindFirstOccupiedUISlot()
+    {
+        for (int i = 0; i < occupiedSlots.Length; i++)
+        {
+            if (occupiedSlots[i] == true)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void DiscardTopmostCard()
+    {
+        DiscardCard(FindFirstOccupiedUISlot());
+    }
+
     /// <summary>
     /// remove a card from the hand based on its position in the hand list and send it to the discard pile
     /// </summary>
     /// <param name="handPosition">Which card to discard; refers to position in hand, *NOT* the card as an int representation</param>
     public void DiscardCard(int handPosition)
     {
+        //check that the hand is not empty and that the handPosition is valid
+        if (CountCardsInHand() <=0)
+        {
+            if (CustomDebug.DeckDebugging())
+            {
+                Debug.LogError("Hand is empty; cannot discard.");
+            }
+            return;
+        }
+        if (handPosition >= hand.Length)
+        {
+            if (CustomDebug.DeckDebugging())
+            {
+                Debug.LogError("Attempting to discard above the hand's maximum index of " + (hand.Length - 1) + " with handPosition of " + handPosition);
+            }
+            return;
+        }
+        if (handPosition < 0)
+        {
+            if (CustomDebug.DeckDebugging())
+            {
+                Debug.LogError("Attempting to discard with a negative handPosition: " + handPosition);
+            }
+            return;
+        }
+        if (occupiedSlots[handPosition] == false)
+        {
+            if (CustomDebug.DeckDebugging())
+            {
+                Debug.LogError("Attempting to discard from an unoccupied slot: " + handPosition);
+            }
+            return;
+        }
+
         //send to discard pile
         discardPile.Add(hand[handPosition].GetId());
         Debug.Log("Card discarded: " + hand[handPosition].cardName);
+
         //free up occupied slot
         occupiedSlots[handPosition] = false;
-        //remove from hand
-        hand.RemoveAt(handPosition);
+
+        //remove from hand (UI)
+        Destroy(UIHand[handPosition]);  //delete the UI card
+        UIHand[handPosition] = null;  //remove from the list
+
+        //remove from hand (non-UI)
+        hand[handPosition] = null;    //since hand references the cards, we DO NOT delete the cards with the current implementation, just remove the reference to it by deleting the entry in the hand list
+        cardsInHand--;
+        if (CustomDebug.DeckDebugging())
+        {
+            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after discarding one.");
+        }
     }
 
     /// <summary>
@@ -111,24 +221,24 @@ public class Deck : MonoBehaviour
         discardPile = temp;
     }
 
-    public void CreateCardUI(Card card, Transform position) {
+    public GameObject CreateCardUI(Card card, Transform position) {
         GameObject cardObject = Instantiate(cardPrefab, position);
         CardUI cardUI = cardObject.GetComponent<CardUI>();
         if (cardUI != null)
         {
             cardUI.initializeCardUI(card);
         }
+        return cardObject;
     }
 
     public void ClearHand()
     {
-        foreach (Card card in hand)
+        for (int i = 0; i < hand.Length; i++)
         {
-            Destroy(card);
-        }
-        hand.Clear();
-        for (int i = 0; i < occupiedSlots.Length; i++) {
-            occupiedSlots[i] = false;
+            if (occupiedSlots[i])
+            {
+                DiscardCard(i);
+            }
         }
     }
     #region Pile to Unlocked Cards Comparisons
@@ -209,7 +319,7 @@ public class Deck : MonoBehaviour
     /// <returns></returns>
     public int CountCardsInHand()
     {
-        return hand.Count;
+        return cardsInHand;
     }
 
     #endregion
