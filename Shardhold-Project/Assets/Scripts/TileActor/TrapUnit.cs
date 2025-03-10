@@ -24,7 +24,8 @@ public class TrapUnit : TileActor
         currentTile = tile;
 
         spriteHandler = GetComponent<TileActorSpriteHandler>();
-        spriteHandler.setSpriteOrientation(tile.GetQuadrant());
+        spriteHandler.SetSpriteOrientation(tile.GetQuadrant());
+        spriteHandler.SpawnAnimation();
     }
 
     public BasicTrapStats GetTrapStats()
