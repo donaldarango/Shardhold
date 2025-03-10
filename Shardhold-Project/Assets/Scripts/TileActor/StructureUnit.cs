@@ -15,7 +15,8 @@ public class StructureUnit: TileActor
 
         structureStats = tileActorStats as BasicStructureStats; // Convert to StructureStats to access move speed.
 
-        SetActorData();
+        SetActorData(); // If structure gets a unique stat like Armor, then we can call its own unique stat.
+        // Maybe add Armor to structures so they take like -1 damage if they have 1 armor? Add some diversity and unique traits to Structures.
     }
 
     // Update is called once per frame
@@ -23,9 +24,26 @@ public class StructureUnit: TileActor
     {
 
     }
+
+    public override void Spawn(MapTile tile)
+    {
+        currentTile = tile;
+
+        spriteHandler = GetComponent<TileActorSpriteHandler>();
+        spriteHandler.setSpriteOrientation(tile.GetQuadrant());
+    }
     
     public BasicStructureStats GetStructureStats()
     {
         return structureStats;
+    }
+
+    public void AttackCheck()
+    {
+        TileActor target = DetectEnemyInFront(attackRange); // Check for first enemy in range.
+        if(target != null)
+        {
+            Attack(target); // Attack it.
+        }
     }
 }

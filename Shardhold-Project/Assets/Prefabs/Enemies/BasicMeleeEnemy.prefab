@@ -56,12 +56,12 @@ MonoBehaviour:
     terrain:
       rid: 7230171311504098155
     currentTileActor: {fileID: 2386779281966005913}
-  printStats: 0
   actorName: 
   actorType: 0
   maxHealth: 0
   attackRange: 0
   damage: 0
+  actorPrefab: 0
   turnSpawned: -1
   terrainType: 0
   enemyStats: {fileID: 0}
@@ -133,7 +133,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1941158673, guid: ac20a41f9af720b4dbcf5c4adb50821f, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

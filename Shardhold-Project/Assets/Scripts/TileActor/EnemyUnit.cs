@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class EnemyUnit : TileActor
@@ -14,7 +15,6 @@ public class EnemyUnit : TileActor
 
     void Start()
     {
-
         if (tileActorStats == null)
         {
             Debug.LogError("Enemy missing base TileActorStats!");
@@ -22,13 +22,16 @@ public class EnemyUnit : TileActor
         }
 
         enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
-        
         SetActorData();
     }
 
-    private void Update()
+
+    public override void Spawn(MapTile tile)
     {
-        
+        currentTile = tile;
+
+        spriteHandler = GetComponent<TileActorSpriteHandler>();
+        spriteHandler.setSpriteOrientation(tile.GetQuadrant());
     }
 
     public override void SetActorData()
@@ -112,6 +115,14 @@ public class EnemyUnit : TileActor
                     Attack((StructureUnit)actor);
                     return; // Stop moving if attacking
                 }
+                else if(actor.GetTileActorType() == TileActorType.Trap)
+                {
+                    MoveToTile(frontTile); // Move onto trap & trigger it
+                    Debug.Log("Enemy triggers a trap!");
+                    TrapUnit trap = (TrapUnit)actor;
+                    trap.Attack(this);
+                    return; // Stop moving once trap triggers.
+                }
             }
         }
 
@@ -142,7 +153,9 @@ public class EnemyUnit : TileActor
             return;
         }
         SetCurrentTile(newTile);
-        transform.position = new Vector3(newTile.GetTileCenter().x, 0.35f, newTile.GetTileCenter().z);
+        Vector3 target = new Vector3(newTile.GetTileCenter().x, 0.35f, newTile.GetTileCenter().z);
+        float duration = 1.0f;
+        transform.DOMove(target, duration);
     }
 
     public MapTile CheckOpenTileInFront(MapTile currentMapTile)
