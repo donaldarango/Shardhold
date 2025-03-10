@@ -2614,6 +2614,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3bf19a004edbf0d4aa9c2693f4e957e3, type: 2}
   structureTileActorStats:
   - {fileID: 11400000, guid: 25fc881dc5819a448bfd315a8d4cedc3, type: 2}
+  trapTileActorStats: []
   currentEnemyUnits: []
   gameSpawnList: []
   currentRound: 0

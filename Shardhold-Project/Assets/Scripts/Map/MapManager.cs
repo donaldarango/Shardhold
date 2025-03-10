@@ -14,12 +14,6 @@ public class MapManager : MonoBehaviour
 
     public static MapManager Instance { get { return _instance; } }
 
-    public delegate void AddEnemyToSpawnTileHandler(int laneNumber);
-    public static event AddEnemyToSpawnTileHandler AddEnemyToSpawnTileEvent;
-
-    public delegate void RemoveEnemyFromSpawnTileHandler(int laneNumber);
-    public static event RemoveEnemyFromSpawnTileHandler RemoveEnemyFromSpawnTileEvent;
-
     private static MapManager _instance;
     private int ringCount; // rings around the map
     private int laneCount; // lanes per quadrant
@@ -74,11 +68,25 @@ public class MapManager : MonoBehaviour
         return quadrantData[quadrant].GetTileFromQuadrant(ringNumber, laneNumber);
     }
 
-    public StructureUnit AddStructureToMapTile(int ringNumber, int laneNumber, BasicStructureStats structure)
+    public TrapUnit AddTrapToMapTile(int ringNumber, int laneNumber, string unitName)
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
+        BasicTrapStats ta = TileActorManager.Instance.GetTrapTileActorByName(unitName);
+        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0, tile.GetTileCenter().z);
+        GameObject trapUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
+        trapUnitPrefab.transform.parent = TileActorManager.Instance.transform;
+        TrapUnit trapUnit = trapUnitPrefab.GetComponent<TrapUnit>();
+        trapUnit.Spawn(tile);
+        tile.SetCurrentTileActor(trapUnit);
+        return trapUnit;
+    }
+
+    public StructureUnit AddStructureToMapTile(int ringNumber, int laneNumber, string unitName)
+    {
+        MapTile tile = GetTile(ringNumber, laneNumber);
+        BasicStructureStats ta = TileActorManager.Instance.GetStructureTileActorByName(unitName);
         Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
-        GameObject structureUnitPrefab = Instantiate(structure.actorPrefab, tilePosition, Quaternion.identity);
+        GameObject structureUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         structureUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
         structureUnit.Spawn(tile);

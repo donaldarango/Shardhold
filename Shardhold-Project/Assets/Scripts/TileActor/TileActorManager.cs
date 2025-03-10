@@ -29,6 +29,7 @@ public class TileActorManager : MonoBehaviour
     [SerializeField] private TextAsset levelSettingsJSON;
     [SerializeField] private List<BasicEnemyStats> enemyTileActorsStats = new List<BasicEnemyStats>();
     [SerializeField] private List<BasicStructureStats> structureTileActorStats = new List<BasicStructureStats>();
+    [SerializeField] private List<BasicTrapStats> trapTileActorStats = new List<BasicTrapStats>();
     [SerializeField] private List<EnemyUnit> currentEnemyUnits = new List<EnemyUnit>();
     [SerializeField] private List<RoundSpawnInfo> gameSpawnList = new List<RoundSpawnInfo>();
 
@@ -157,6 +158,16 @@ public class TileActorManager : MonoBehaviour
                 return structureTileActorStats[i];
         }
         throw new System.Exception($"Structure unit with name: {unitName} not found");
+    }
+
+    public BasicTrapStats GetTrapTileActorByName(string unitName)
+    {
+        for (int i = 0; i < trapTileActorStats.Count; i++)
+        {
+            if (unitName == trapTileActorStats[i].unitName)
+                return trapTileActorStats[i];
+        }
+        throw new System.Exception($"Trap unit with name: {unitName} not found");
     }
 
     public void AddEnemyToCurrentEnemyList(EnemyUnit unit)
