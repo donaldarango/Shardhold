@@ -25,6 +25,21 @@ public class CustomDebug : MonoBehaviour
     public DebuggingType saveLoadDebugging = DebuggingType.Warnings;
     public DebuggingType cusmtomMathDebugging = DebuggingType.Warnings;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            if (Debugging(DebuggingType.Warnings))
+            {
+                Debug.Log("Multiple CustomDebug instances detected! First is " + instance.gameObject.name + ", and this is " + gameObject.name);
+            }
+        }
+    }
+
     public static void RanUnimplementedCode(string descriptor = "<no descriptor>", DebuggingType level=DebuggingType.ErrorOnly)
     {
         if (Debugging(level))
