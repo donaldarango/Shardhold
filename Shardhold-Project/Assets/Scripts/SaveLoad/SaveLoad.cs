@@ -182,14 +182,7 @@ public class SaveLoad : MonoBehaviour
 
         data.spawnList = TileActorManager.Instance.GetSpawnList();
 
-
-
         #endregion
-
-        //TODO:
-        RanUnimplementedCode("Enemies on spawn tiles not yet saved (probably; may need to filter tileactors based on if they are on a spawn tile?).", CustomDebug.DebuggingType.Warnings);
-        RanUnimplementedCode("Not-yet-spawned enemies are not saved.", CustomDebug.DebuggingType.Warnings);
-
         
         #endregion
 
@@ -375,10 +368,6 @@ public class SaveLoad : MonoBehaviour
             TileActorManager.Instance.SetSpawnList(data.spawnList);
 
             #endregion
-
-            //TODO
-            RanUnimplementedCode("Enemies on spawn tiles not loaded.");
-            RanUnimplementedCode("Enemies to be spawned not yet loaded.");
             
             
 
