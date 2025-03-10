@@ -21,8 +21,13 @@ class Placer : Card
             //if (!target.GetCurrentTileActor())
             //{
             Debug.Log("placer called, placing " + stats.unitName);
+
+            var actor = target.GetCurrentTileActor();
+            if (!actor)
+            {
                 MapManager.Instance.AddStructureToMapTile(tile.Item1, tile.Item2, stats);
-            //}
+            }
+
         }
     }
 }

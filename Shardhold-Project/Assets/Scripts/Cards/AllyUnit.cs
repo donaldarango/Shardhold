@@ -11,6 +11,7 @@ abstract public class AllyUnit : Card
 
     public override void Play(HashSet<(int, int)> tiles)
     {
+        coordSet = tiles;
         foreach (var tile in coordSet)
         {
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -456,6 +457,8 @@ public class MapGenerator : MonoBehaviour
                             if (selectedCard)
                             {
                                 selectedCard.Play(clickedTiles);
+                                selectedCard = null;
+                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
                             //PlayCard?.Invoke(clickedTiles);
                             //selectedCard = null;
@@ -476,9 +479,27 @@ public class MapGenerator : MonoBehaviour
                         if (selectedCard)
                         {
                             selectedCard.Play(clickedTiles);
+                            selectedCard = null;
+                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }
                         //PlayCard?.Invoke(clickedTiles);
-                        //selectedCard = null;
+                    }
+                }
+            }
+            else if (tileName.Contains("Base"))
+            {
+                if (Input.GetMouseButtonDown(0)) // Left click
+                {
+                    if (card.targetType == TargetType.Tile && card.cardType == CardType.Spell)
+                    {
+                        if (selectedCard)
+                        {
+                            HashSet<(int, int)> set = new HashSet<(int, int)>();
+                            set.Add((-1, -1));
+                            selectedCard.Play(set);
+                            selectedCard = null;
+                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                        }
                     }
                 }
             }
@@ -496,6 +517,19 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    IEnumerator RemoveHighlightDelayed(HashSet<(int, int)> set)
+    {
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);// tile.Value.material.color = defaultColor;
+        }
+        yield return new WaitForSeconds(.5f);
+        clickedTiles.Clear();
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);// tile.Value.material.color = defaultColor;
+        }
+    }
 
     void AppendTile((int, int) tile)
     {
@@ -554,39 +588,16 @@ public class MapGenerator : MonoBehaviour
         meshRenderer.material.mainTextureScale = new Vector2(1, 1);
     }
 
-
-    public void UpdateCard(string newCard)
-    {
-        selectedCard = null;
-
-        //switch (newCard)
-        //{
-        //    case "Fireball":
-        //        selectedCard = ScriptableObject.CreateInstance<Fireball>();
-        //        break;
-        //    case "Bolt":
-        //        selectedCard = ScriptableObject.CreateInstance<LightningBolt>();
-        //        break;
-        //    default:
-        //        selectedCard = null;
-        //        break;
-        //}
-
-        clickedTile = null;
-        clickedTiles.Clear();
-        targetedTiles.Clear();
-
-        HandleTargeting(selectedCard);
-
-        foreach (var tile in tileMeshes)
-        {
-            ResetTileColor(tile.Key);
-        }
-    }
-
     public void SelectCard(Card newCard)
     {
-        selectedCard = newCard;
+        if (newCard)
+        {
+            selectedCard = newCard;
+        }
+        else
+        {
+            selectedCard = null;
+        }
 
         clickedTile = null;
         clickedTiles.Clear();

@@ -18,6 +18,15 @@ public class TrapUnit : TileActor
 
         SetActorData(); // Just call the parent, traps don't have any unique stats currently. When they do, we make a special setter.
     }
+
+    public override void Spawn(MapTile tile)
+    {
+        currentTile = tile;
+
+        spriteHandler = GetComponent<TileActorSpriteHandler>();
+        spriteHandler.setSpriteOrientation(tile.GetQuadrant());
+    }
+
     public BasicTrapStats GetTrapStats()
     {
         return trapStats;
