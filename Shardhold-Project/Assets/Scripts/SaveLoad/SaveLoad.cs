@@ -338,12 +338,10 @@ public class SaveLoad : MonoBehaviour
                 switch (sta.type)
                 {
                     case TileActor.TileActorType.EnemyUnit:
-                        //BasicEnemyStats basicEnemyStats = TileActorManager.Instance.GetEnemyTileActorByName(data.ta_name[i]);
                         newTA = MapManager.Instance.AddEnemyToMapTile(sta.pos.x, sta.pos.y, sta.name);
                         break;
                     case TileActor.TileActorType.Structure:
-                        BasicStructureStats basicStructureStats = TileActorManager.Instance.GetStructureTileActorByName(sta.name);
-                        newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, basicStructureStats);
+                        newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, sta.name);
                         break;
                     case TileActor.TileActorType.Trap:
                         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))

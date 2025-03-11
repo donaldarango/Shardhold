@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using static MapGenerator;
 
@@ -9,9 +10,13 @@ abstract public class Card : ScriptableObject
     public int id; //the int representation of the card
 
     [Header("Basic Card Information")]
+    public Sprite cardImage;
     public string cardName;
     public TargetType targetType;
     public int range;
+    public string description;
+    public int damage;
+    public int hp;
 
     public enum CardType
     {

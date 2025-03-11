@@ -10,7 +10,6 @@ using static MapGenerator;
 class Spell : Card
 {
     [Header("Spell Stats")]
-    public int damage;
     public int heal;
     public bool friendlyFire;
 

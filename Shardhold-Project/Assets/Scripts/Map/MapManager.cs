@@ -14,17 +14,10 @@ public class MapManager : MonoBehaviour
 
     public static MapManager Instance { get { return _instance; } }
 
-    public delegate void AddEnemyToSpawnTileHandler(int laneNumber);
-    public static event AddEnemyToSpawnTileHandler AddEnemyToSpawnTileEvent;
-
-    public delegate void RemoveEnemyFromSpawnTileHandler(int laneNumber);
-    public static event RemoveEnemyFromSpawnTileHandler RemoveEnemyFromSpawnTileEvent;
-
     private static MapManager _instance;
     private int ringCount; // rings around the map
     private int laneCount; // lanes per quadrant
     [SerializeField] private List<MapQuadrant> quadrantData = new List<MapQuadrant>();
-    [SerializeField] private List<EnemySpawnTile> spawnTiles = new List<EnemySpawnTile>();
 
     private void Awake()
     {
@@ -46,19 +39,6 @@ public class MapManager : MonoBehaviour
         quadrantData.Add(new MapQuadrant(Quadrant.NW));
         quadrantData.Add(new MapQuadrant(Quadrant.SW));
         quadrantData.Add(new MapQuadrant(Quadrant.SE));
-    }
-
-    public void InitializeSpawnTiles()
-    {
-        Debug.Log("Creating Spawn tiles");
-        for (int i = 0; i < laneCount * 4; i++)
-        {
-            EnemySpawnTile spawnTile = new EnemySpawnTile();
-            spawnTile.enemyStats = null;
-            spawnTile.name = "Lane " + i.ToString();
-            //Debug.Log("new spawnTile lane " + i);
-            spawnTiles.Add(spawnTile);
-        }
     }
 
     public int GetRingCount()
@@ -88,11 +68,25 @@ public class MapManager : MonoBehaviour
         return quadrantData[quadrant].GetTileFromQuadrant(ringNumber, laneNumber);
     }
 
-    public StructureUnit AddStructureToMapTile(int ringNumber, int laneNumber, BasicStructureStats structure)
+    public TrapUnit AddTrapToMapTile(int ringNumber, int laneNumber, string unitName)
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
+        BasicTrapStats ta = TileActorManager.Instance.GetTrapTileActorByName(unitName);
+        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0, tile.GetTileCenter().z);
+        GameObject trapUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
+        trapUnitPrefab.transform.parent = TileActorManager.Instance.transform;
+        TrapUnit trapUnit = trapUnitPrefab.GetComponent<TrapUnit>();
+        trapUnit.Spawn(tile);
+        tile.SetCurrentTileActor(trapUnit);
+        return trapUnit;
+    }
+
+    public StructureUnit AddStructureToMapTile(int ringNumber, int laneNumber, string unitName)
+    {
+        MapTile tile = GetTile(ringNumber, laneNumber);
+        BasicStructureStats ta = TileActorManager.Instance.GetStructureTileActorByName(unitName);
         Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
-        GameObject structureUnitPrefab = Instantiate(structure.actorPrefab, tilePosition, Quaternion.identity);
+        GameObject structureUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         structureUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
         structureUnit.Spawn(tile);
@@ -112,29 +106,6 @@ public class MapManager : MonoBehaviour
         tile.SetCurrentTileActor(enemyUnit);
         TileActorManager.Instance.AddEnemyToCurrentEnemyList(enemyUnit);
         return enemyUnit;
-    }
-
-    public void AddEnemyToSpawnTile(int laneNumber, BasicEnemyStats enemyStats)
-    {
-        EnemySpawnTile spawnTile = spawnTiles[laneNumber];
-        spawnTile.enemyStats = enemyStats;
-        spawnTiles[laneNumber] = spawnTile;
-        AddEnemyToSpawnTileEvent?.Invoke(laneNumber);
-    }
-
-    public void MoveSpawnUnitsToMap()
-    {   
-        for (int i = 0; i < spawnTiles.Count; i++)
-        {
-            EnemySpawnTile spawnTile = spawnTiles[i];
-            if (spawnTile.enemyStats != null)
-            {
-                AddEnemyToMapTile(ringCount - 1, i, spawnTile.enemyStats.unitName);
-                spawnTile.enemyStats = null;
-                spawnTiles[i] = spawnTile;
-                RemoveEnemyFromSpawnTileEvent?.Invoke(i);
-            }
-        }
     }
 
     // Quadrant Index is same as enum values (Ex. NE = 0, NW = 1, etc.)
