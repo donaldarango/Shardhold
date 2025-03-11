@@ -55,11 +55,30 @@ public class Base : MonoBehaviour
         }
     }
 
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        if(currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+
     void GameOver()
     {
         Debug.Log("Game Over! The base was destroyed.");
         Destroy(gameObject);
         gameOverScreen.SetActive(true);
         Time.timeScale = 0;
+    }
+
+    public void SetBaseHealth(int health)
+    {
+        currentHealth = health;
+    }
+
+    public int GetBaseHealth()
+    {
+        return currentHealth;
     }
 }

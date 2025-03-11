@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using static CustomDebug;
 
 public class Deck : MonoBehaviour
 {
@@ -11,13 +12,15 @@ public class Deck : MonoBehaviour
     public List<Transform> cardPositions;
 
     public TMP_Text drawPileNum;
+    public static Deck Instance { get; private set; }
+
     //this will be used for converting int into a Card
     public List<Card> cardLookup = new List<Card>();
 
     //stores what has been unlocked for the player; is not the actual deck necessarily
     //each card is an index value; the value at that index is the number of copies of that card unlocked
     //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
-    List<int> cardsUnlocked = new List<int>();
+    public List<int> cardsUnlocked = new List<int>();
 
     //stores the cards in the current draw pile/deck
     //>>>>>>>>>>NO LONGER TRUE: the index position in this list determines order of draw(? - undecided)
@@ -39,10 +42,85 @@ public class Deck : MonoBehaviour
         drawPileNum.text = drawPile.Count().ToString(); 
     }
 
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            if (DeckDebugging(DebuggingType.Warnings))
+            {
+                Debug.Log("Multiple deck instances detected.");
+            }
+        }
+    }
+
+    #region Public Methods (not including Gets and Sets)
+
+    /// <summary>
+    /// Call this at the start of the player's turn
+    /// </summary>
+    public void NextTurn()
+    {
+        DrawCardsUntilFull();
+    }
+
+    /// <summary>
+    /// remove a card from the hand based on its position in the hand list and send it to the discard pile
+    /// </summary>
+    /// <param name="handPosition">Which card to discard; refers to position in hand, *NOT* the card as an int representation</param>
+    public void DiscardCard(int handPosition)
+    {
+        //send to discard pile
+        discardPile.Add(hand[handPosition].GetId());
+
+        //remove from hand
+        hand.RemoveAt(handPosition);
+    }
+
+    /// <summary>
+    /// remove a card from the hand and send it to the discard pile
+    /// </summary>
+    /// <param name="card">Which card to discard</param>
+    public void DiscardCard(Card card)
+    {
+        //send to discard pile
+        discardPile.Add(card.GetId());
+
+        //remove from hand
+        hand.Remove(card);
+
+        DeleteCard(card);
+    }
+     
+
+    #endregion
+
+    private Card CreateCard(int cardInt, int handPosition)
+    {
+        //TODO
+        if (DeckDebugging(DebuggingType.ErrorOnly))
+        {
+            RanUnimplementedCode("CreateCard()");
+        }
+        return null;
+    }
+
+    private void DeleteCard(Card card)
+    {
+        //TODO
+        if (DeckDebugging(DebuggingType.ErrorOnly))
+        {
+            RanUnimplementedCode("DeleteCard()");
+        }
+    }
+
     /// <summary>
     /// To be used at the beginning of the player's turn to fill their hand
     /// </summary>
-    public void DrawCardsUntilFull()
+    private void DrawCardsUntilFull()
     {
         int safety = 200;
         while (CountCardsInHand() < handCapacity)
@@ -214,7 +292,7 @@ public class Deck : MonoBehaviour
     /// <summary>
     /// use this when draw pile is empty to send the discard pile to the draw pile (and vice versa)
     /// </summary>
-    public void SwapDrawAndDiscard()
+    private void SwapDrawAndDiscard()
     {
         List<int> temp = drawPile;
         drawPile = discardPile;
@@ -290,7 +368,7 @@ public class Deck : MonoBehaviour
     /// Return a list of card objects that are in the player's hand
     /// </summary>
     /// <returns></returns>
-    public List<Card> GetCardsInHand()
+    /*public List<Card> GetCardsInHand()
     {
         List <Card> cards = new List<Card>();
         for (int i = 0; i < CountCardsInHand(); i++)
@@ -298,6 +376,11 @@ public class Deck : MonoBehaviour
             cards.Add(cardLookup[i]);
         }
         return cards;
+    }*/
+
+    public List<Card> GetHand()
+    {
+        return hand;
     }
 
     /// <summary>
@@ -322,5 +405,33 @@ public class Deck : MonoBehaviour
         return cardsInHand;
     }
 
+    /// <summary>
+    /// returns the number of cards in the draw pile
+    /// </summary>
+    /// <returns></returns>
+    public int CountCardsInDrawPile()
+    {
+        return drawPile.Count;
+    }
+    // returns the number of cards in the discard pile
+    /// </summary>
+    /// <returns></returns>
+    public int CountCardsInDiscardPile()
+    {
+        return discardPile.Count;
+    }
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        TileActorManager.PlayerTurnStart += NextTurn;
+    }
+
+    private void OnDisable()
+    {
+        TileActorManager.PlayerTurnStart -= NextTurn;
+    }
     #endregion
 }
