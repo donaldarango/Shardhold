@@ -8,17 +8,6 @@ public class SpawnWarningUI : MonoBehaviour
 
     public List<Image> warningImages;
 
-    private void OnEnable()
-    {
-        MapManager.AddEnemyToSpawnTileEvent += turnWarningLabelOn;
-        MapManager.RemoveEnemyFromSpawnTileEvent += turnWarningLabelOff;
-    }
-
-    private void OnDisable()
-    {
-        MapManager.AddEnemyToSpawnTileEvent -= turnWarningLabelOn;
-        MapManager.RemoveEnemyFromSpawnTileEvent -= turnWarningLabelOff;
-    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

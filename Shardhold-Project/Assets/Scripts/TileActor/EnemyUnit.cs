@@ -31,7 +31,8 @@ public class EnemyUnit : TileActor
         currentTile = tile;
 
         spriteHandler = GetComponent<TileActorSpriteHandler>();
-        spriteHandler.setSpriteOrientation(tile.GetQuadrant());
+        spriteHandler.SetSpriteOrientation(tile.GetQuadrant());
+        spriteHandler.SpawnAnimation();
     }
 
     public override void SetActorData()

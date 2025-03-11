@@ -27,7 +27,7 @@
     "EnemySpawnData": {
         "Rounds": [
             {
-                "RoundNumber": 0,
+                "RoundNumber": 1,
                 "RoundSpawnList": [
                     {
                         "EnemyUnit": "Basic Melee Enemy",
@@ -40,7 +40,7 @@
                 ]
             },
             {
-                "RoundNumber": 1,
+                "RoundNumber": 2,
                 "RoundSpawnList": [
                     {
                         "EnemyUnit": "Basic Tank Enemy",

@@ -29,6 +29,7 @@ public class TileActorManager : MonoBehaviour
     [SerializeField] private TextAsset levelSettingsJSON;
     [SerializeField] private List<BasicEnemyStats> enemyTileActorsStats = new List<BasicEnemyStats>();
     [SerializeField] private List<BasicStructureStats> structureTileActorStats = new List<BasicStructureStats>();
+    [SerializeField] private List<BasicTrapStats> trapTileActorStats = new List<BasicTrapStats>();
     [SerializeField] private List<EnemyUnit> currentEnemyUnits = new List<EnemyUnit>();
     [SerializeField] private List<RoundSpawnInfo> gameSpawnList = new List<RoundSpawnInfo>();
 
@@ -62,7 +63,6 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Tile Actor Manager Begin");
         InitializeSpawnData();
     }
 
@@ -93,41 +93,36 @@ public class TileActorManager : MonoBehaviour
                 int laneNumber = enemyRoundData[j]["LaneNumber"].intValue;
                 BasicEnemyStats enemyStats = GetEnemyTileActorByName(unitName);
 
-                if (roundNumber == 0) // Add starting round enemies to spawn tiles
-                {
-                    MapManager.Instance.AddEnemyToSpawnTile(laneNumber, enemyStats);
-                }
-                else
-                {
-                    EnemySpawnInfo enemySpawnInfo = new EnemySpawnInfo();
-                    enemySpawnInfo.enemyUnit = enemyStats.unitName;
-                    enemySpawnInfo.laneNumber = laneNumber;
+               
+                EnemySpawnInfo enemySpawnInfo = new EnemySpawnInfo();
+                enemySpawnInfo.enemyUnit = enemyStats.unitName;
+                enemySpawnInfo.laneNumber = laneNumber;
 
-                    roundSpawnInfo.roundSpawnList.Add(enemySpawnInfo);
-                }
+                roundSpawnInfo.roundSpawnList.Add(enemySpawnInfo);
                 
             }
-            if (roundNumber > 0) // Do not add start round enemies
-            {
-                gameSpawnList.Add(roundSpawnInfo);
-            }
+            gameSpawnList.Add(roundSpawnInfo);
         }
     }
 
-    public void AddUnitsToSpawnTiles(int roundNumber)
+    public void SpawnEnemyUnits(int roundNumber)
     {
-        for (int i = 0; i < gameSpawnList.Count; i++)
+        Debug.Log($"Spawning Enemies for round: {roundNumber}");
+
+        foreach (RoundSpawnInfo roundSpawnInfo in gameSpawnList)
         {
-            if (gameSpawnList[i].roundNumber+1 == roundNumber)
             {
-                for (int j = 0; j < gameSpawnList[i].roundSpawnList.Count; j++)
+                if (roundSpawnInfo.roundNumber == roundNumber)
                 {
-                    EnemySpawnInfo enemySpawnInfo = gameSpawnList[i].roundSpawnList[j];
-                    //MapManager.Instance.AddEnemyToSpawnTile(enemySpawnInfo.laneNumber, enemySpawnInfo.enemyUnit);
-                    MapManager.Instance.AddEnemyToMapTile(MapManager.Instance.GetRingCount() - 1, enemySpawnInfo.laneNumber, enemySpawnInfo.enemyUnit);
+                    foreach (EnemySpawnInfo enemySpawnInfo in roundSpawnInfo.roundSpawnList)
+                    {
+                        {
+                            MapManager.Instance.AddEnemyToMapTile(MapManager.Instance.GetRingCount() - 1, enemySpawnInfo.laneNumber, enemySpawnInfo.enemyUnit);
+                        }
+                    }
+                    gameSpawnList.Remove(roundSpawnInfo);
+                    return;
                 }
-                gameSpawnList.RemoveAt(i);
-                return;
             }
         }
     }
@@ -141,8 +136,7 @@ public class TileActorManager : MonoBehaviour
             enemyUnit.MoveEnemy();
         }
 
-        MapManager.Instance.MoveSpawnUnitsToMap();
-        AddUnitsToSpawnTiles(currentRound);
+        SpawnEnemyUnits(currentRound);
         PlayerTurnStart?.Invoke();
     }
 
@@ -164,6 +158,16 @@ public class TileActorManager : MonoBehaviour
                 return structureTileActorStats[i];
         }
         throw new System.Exception($"Structure unit with name: {unitName} not found");
+    }
+
+    public BasicTrapStats GetTrapTileActorByName(string unitName)
+    {
+        for (int i = 0; i < trapTileActorStats.Count; i++)
+        {
+            if (unitName == trapTileActorStats[i].unitName)
+                return trapTileActorStats[i];
+        }
+        throw new System.Exception($"Trap unit with name: {unitName} not found");
     }
 
     public void AddEnemyToCurrentEnemyList(EnemyUnit unit)

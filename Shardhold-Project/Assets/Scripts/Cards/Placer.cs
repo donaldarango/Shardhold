@@ -25,7 +25,7 @@ class Placer : Card
             var actor = target.GetCurrentTileActor();
             if (!actor)
             {
-                MapManager.Instance.AddStructureToMapTile(tile.Item1, tile.Item2, stats);
+                MapManager.Instance.AddStructureToMapTile(tile.Item1, tile.Item2, stats.unitName);
             }
 
         }
