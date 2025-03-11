@@ -183,7 +183,14 @@ public class SaveLoad : MonoBehaviour
         data.spawnList = TileActorManager.Instance.GetSpawnList();
 
         #endregion
-        
+
+        #endregion
+
+        #region Cards
+
+        //TODO
+        RanUnimplementedCode("Cards are not saved.");
+
         #endregion
 
         data.initialized = true;
