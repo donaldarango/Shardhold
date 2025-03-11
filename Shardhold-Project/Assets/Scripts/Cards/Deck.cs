@@ -394,12 +394,12 @@ public class Deck : MonoBehaviour
 
     private void OnEnable()
     {
-        TileActorManager.PlayerTurnStart += NextTurn;
+        TileActorManager.EndEnemyTurn += NextTurn;
     }
 
     private void OnDisable()
     {
-        TileActorManager.PlayerTurnStart -= NextTurn;
+        TileActorManager.EndEnemyTurn -= NextTurn;
     }
     #endregion
 }
