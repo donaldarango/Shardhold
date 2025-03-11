@@ -7,6 +7,7 @@ public class Base : MonoBehaviour
 
     public int maxHealth = 20;
     [SerializeField] private int currentHealth;
+    public GameObject gameOverScreen;
 
     private void Awake()
     {
@@ -34,6 +35,13 @@ public class Base : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        if (gameOverScreen!= null) 
+        {
+            gameOverScreen.SetActive(false);
+            if (Time.timeScale == 0) {
+                Time.timeScale = 1;
+            }
+        }
     }
 
     public void OnTakeDamage(int amount)
@@ -60,6 +68,8 @@ public class Base : MonoBehaviour
     {
         Debug.Log("Game Over! The base was destroyed.");
         Destroy(gameObject);
+        gameOverScreen.SetActive(true);
+        Time.timeScale = 0;
     }
 
     public void SetBaseHealth(int health)

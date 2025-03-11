@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class TileHover : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class TileHover : MonoBehaviour
     [SerializeField]TMP_Text currentHealthDisplay;
     [SerializeField]TMP_Text attackDisplay;
     [SerializeField]TMP_Text attackRange;
+    [SerializeField]GameObject enemySprite;
     public GameObject tileDisplayUI;
 
     private void OnEnable()
@@ -50,5 +52,6 @@ public class TileHover : MonoBehaviour
         currentHealthDisplay.text = "HP    : " +ta.GetCurrentHealth().ToString() + " / " + ta.GetMaxHealth().ToString();
         attackDisplay.text = "ATK   : " + ta.GetAttackDamage().ToString();
         attackRange.text = "RANGE : " +ta.GetAttackRange().ToString();
+        enemySprite.GetComponent<Image>().sprite = ta.GetSprite();
     }
 }
