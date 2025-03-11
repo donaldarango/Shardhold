@@ -1698,7 +1698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1545570300756008695
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2036,7 +2036,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85298cca5272bc045b70d1004a5feaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSettingsJSON: {fileID: 4900000, guid: 6ef1deaa65432cd4982aa2b1c614692c, type: 3}
+  resourceFilePath: LevelSettings/
+  levelSettingsJSON: {fileID: 0}
   enemyTileActorsStats:
   - {fileID: 11400000, guid: 8aed781e7f73ade4cb33eea5c87353bc, type: 2}
   - {fileID: 11400000, guid: 58270f19f7673074c83286202b4dda47, type: 2}
@@ -3953,7 +3954,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6760634949711446414}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: RestartLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5302071812913899757
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,10 +4255,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LoadSceneIndex, Assembly-CSharp
-        m_MethodName: LoadByIndex
-        m_Mode: 3
+      - m_Target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: LoadMainMenu
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
