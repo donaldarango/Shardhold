@@ -67,34 +67,7 @@ public class Deck : MonoBehaviour
         DrawCardsUntilFull();
     }
 
-    /// <summary>
-    /// remove a card from the hand based on its position in the hand list and send it to the discard pile
-    /// </summary>
-    /// <param name="handPosition">Which card to discard; refers to position in hand, *NOT* the card as an int representation</param>
-    public void DiscardCard(int handPosition)
-    {
-        //send to discard pile
-        discardPile.Add(hand[handPosition].GetId());
 
-        //remove from hand
-        hand.RemoveAt(handPosition);
-    }
-
-    /// <summary>
-    /// remove a card from the hand and send it to the discard pile
-    /// </summary>
-    /// <param name="card">Which card to discard</param>
-    public void DiscardCard(Card card)
-    {
-        //send to discard pile
-        discardPile.Add(card.GetId());
-
-        //remove from hand
-        hand.Remove(card);
-
-        DeleteCard(card);
-    }
-     
 
     #endregion
 
@@ -141,14 +114,14 @@ public class Deck : MonoBehaviour
             if (discardPile.Count() > 0)
             {
                 SwapDrawAndDiscard();
-                if (CustomDebug.DeckDebugging())
+                if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
                 {
                     Debug.Log("Draw pile was empty, which should not happen. Thankfully, the discard pile was not empty, so draw pile has been filled and a card can be drawn.");
                 }
             }
             else
             {
-                if (CustomDebug.DeckDebugging())
+                if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
                 {
                     Debug.LogError("Attempting to draw card when both the draw and discard pile are empty.");
                 }
@@ -159,7 +132,7 @@ public class Deck : MonoBehaviour
         //check that hand is not full
         if (CountCardsInHand() >= hand.Length)
         {
-            if (CustomDebug.DeckDebugging())
+            if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
             {
                 Debug.LogError("Attemping to draw a card while the hand is already full with " + CountCardsInHand() + " cards. Cancelling Draw operation.");
             }
@@ -176,7 +149,7 @@ public class Deck : MonoBehaviour
         hand[openSlot] = cardLookup[drawPile[choice]];
         cardsInHand++;
         Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName);
-        if (CustomDebug.DeckDebugging())
+        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
         {
             Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
         }
@@ -238,7 +211,7 @@ public class Deck : MonoBehaviour
         //check that the hand is not empty and that the handPosition is valid
         if (CountCardsInHand() <=0)
         {
-            if (CustomDebug.DeckDebugging())
+            if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
             {
                 Debug.LogError("Hand is empty; cannot discard.");
             }
@@ -246,7 +219,7 @@ public class Deck : MonoBehaviour
         }
         if (handPosition >= hand.Length)
         {
-            if (CustomDebug.DeckDebugging())
+            if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
             {
                 Debug.LogError("Attempting to discard above the hand's maximum index of " + (hand.Length - 1) + " with handPosition of " + handPosition);
             }
@@ -254,7 +227,7 @@ public class Deck : MonoBehaviour
         }
         if (handPosition < 0)
         {
-            if (CustomDebug.DeckDebugging())
+            if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
             {
                 Debug.LogError("Attempting to discard with a negative handPosition: " + handPosition);
             }
@@ -262,7 +235,7 @@ public class Deck : MonoBehaviour
         }
         if (occupiedSlots[handPosition] == false)
         {
-            if (CustomDebug.DeckDebugging())
+            if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
             {
                 Debug.LogError("Attempting to discard from an unoccupied slot: " + handPosition);
             }
@@ -283,7 +256,7 @@ public class Deck : MonoBehaviour
         //remove from hand (non-UI)
         hand[handPosition] = null;    //since hand references the cards, we DO NOT delete the cards with the current implementation, just remove the reference to it by deleting the entry in the hand list
         cardsInHand--;
-        if (CustomDebug.DeckDebugging())
+        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
         {
             Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after discarding one.");
         }
@@ -377,11 +350,6 @@ public class Deck : MonoBehaviour
         }
         return cards;
     }*/
-
-    public List<Card> GetHand()
-    {
-        return hand;
-    }
 
     /// <summary>
     /// get the Card that is at a certain position in the hand
