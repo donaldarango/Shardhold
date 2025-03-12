@@ -21,3 +21,4 @@ MonoBehaviour:
   damage: 0
   hp: 0
   stats: {fileID: 11400000, guid: ca3e49442cccefe4b8d43b654fc46471, type: 2}
+  isTrap: 1
