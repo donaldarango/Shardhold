@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee22658e25e21644283c920854d45c88, type: 3}
   m_Name: BasicTrapUnit
   m_EditorClassIdentifier: 
-  unitName: Basic Trap
+  unitName: Spike
   actorType: 2
   maxHealth: 2
   attackRange: 0
   damage: 1
+  prefferedTerrain: 0
   actorPrefab: {fileID: 0}
