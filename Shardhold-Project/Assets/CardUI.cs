@@ -11,10 +11,23 @@ public class CardUI : MonoBehaviour
     [SerializeField]private TMP_Text hp;
     [SerializeField]private TMP_Text range;
     [SerializeField]private TMP_Text damage;
-    [SerializeField]Card card;
+    [SerializeReference]Card card_;
+    [SerializeField]Button cardButton;
+
+    private void Awake()
+    {
+        // Get the Button component attached to this object
+        cardButton = GetComponent<Button>();
+
+        if (cardButton != null)
+        {
+            cardButton.onClick.AddListener(OnCardSelected);
+        }
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void initializeCardUI (Card card) {
         //finds the card color component of the prefab
+        card_ = card;
         Transform background = transform.Find("CardColor");
         cardImage.sprite = card.cardImage;
         cardName.text = card.cardName;
@@ -30,5 +43,10 @@ public class CardUI : MonoBehaviour
         }
         range.text = card.range.ToString();
         damage.text = card.damage.ToString();
+    }
+    public void OnCardSelected(){
+        MapGenerator mapGenerator = FindFirstObjectByType<MapGenerator>();
+        Debug.Log("Card selected/clicked: " + cardName.text);
+        mapGenerator.SelectCard(card_);
     }
 }
