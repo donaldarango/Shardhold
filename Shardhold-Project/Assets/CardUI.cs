@@ -14,12 +14,19 @@ public class CardUI : MonoBehaviour
     [SerializeField]Card card;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void initializeCardUI (Card card) {
+        //finds the card color component of the prefab
+        Transform background = transform.Find("CardColor");
         cardImage.sprite = card.cardImage;
         cardName.text = card.cardName;
         cardDescription.text = card.description;
         if (card is Spell) {
             hp.text = "0";
-            cardDescription.text += " This card deals damage in a " + card.targetType + ".";
+            cardDescription.text += "\nThis card deals damage in a " + card.targetType + ".";
+            background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
+        }
+        if (card is Placer) {
+            hp.text = ((Placer)card).stats.maxHealth.ToString();
+            // background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
         }
         range.text = card.range.ToString();
         damage.text = card.damage.ToString();

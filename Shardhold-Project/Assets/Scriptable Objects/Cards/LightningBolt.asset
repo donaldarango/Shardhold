@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: LightningBolt
   m_EditorClassIdentifier: 
   id: 1
+  cardImage: {fileID: 0}
   cardName: LightningBolt
   targetType: 0
   range: 4
+  description: Zap!
   damage: 3
+  hp: 0
   heal: 0
   friendlyFire: 0
