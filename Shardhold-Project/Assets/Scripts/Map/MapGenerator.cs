@@ -54,12 +54,12 @@ public class MapGenerator : MonoBehaviour
 
     private void OnEnable()
     {
-        TileActorManager.PlayerTurnStart += OnRoundResetSelection;
+        TileActorManager.EndEnemyTurn += OnRoundResetSelection;
     }
 
     private void OnDisable()
     {
-        TileActorManager.PlayerTurnStart -= OnRoundResetSelection;
+        TileActorManager.EndEnemyTurn -= OnRoundResetSelection;
 
     }
 
