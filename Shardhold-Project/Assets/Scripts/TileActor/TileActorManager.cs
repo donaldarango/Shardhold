@@ -26,6 +26,7 @@ public class TileActorManager : MonoBehaviour
 
     private static TileActorManager _instance;
 
+    [SerializeField] private string resourceFilePath = "LevelSettings/";
     [SerializeField] private TextAsset levelSettingsJSON;
     [SerializeField] private List<BasicEnemyStats> enemyTileActorsStats = new List<BasicEnemyStats>();
     [SerializeField] private List<BasicStructureStats> structureTileActorStats = new List<BasicStructureStats>();
@@ -33,19 +34,19 @@ public class TileActorManager : MonoBehaviour
     [SerializeField] private List<EnemyUnit> currentEnemyUnits = new List<EnemyUnit>();
     [SerializeField] private List<RoundSpawnInfo> gameSpawnList = new List<RoundSpawnInfo>();
 
-    public delegate void PlayerTurnHandler();
-    public static event PlayerTurnHandler PlayerTurnStart;
+    public delegate void EndEnemyTurnHandler();
+    public static event EndEnemyTurnHandler EndEnemyTurn;
     public int currentRound = 0;
 
 
     public static TileActorManager Instance { get { return _instance; } }
     void OnEnable()
     {
-        TurnTimer.EnemyTurnStart += OnNextRound;
+        GameManager.PlayerTurnEnd += OnEnemyTurnStart;
     }
     void OnDisable()
     {
-        TurnTimer.EnemyTurnStart -= OnNextRound;
+        GameManager.PlayerTurnEnd -= OnEnemyTurnStart;
     }
 
     private void Awake()
@@ -63,12 +64,16 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
+        SetLevelJSONFile();
         InitializeSpawnData();
     }
 
-    void Update()
+    private void SetLevelJSONFile()
     {
-
+        int level = GameManager.Instance.currentLevel;
+        string filePath = resourceFilePath + $"Level_{level}_Settings";
+        Debug.Log(filePath);
+        levelSettingsJSON = Resources.Load<TextAsset>(filePath);
     }
 
     public void InitializeSpawnData()
@@ -127,7 +132,7 @@ public class TileActorManager : MonoBehaviour
         }
     }
 
-    public void OnNextRound()
+    public void OnEnemyTurnStart()
     {
         currentRound = currentRound + 1;
 
@@ -137,7 +142,7 @@ public class TileActorManager : MonoBehaviour
         }
 
         SpawnEnemyUnits(currentRound);
-        PlayerTurnStart?.Invoke();
+        EndEnemyTurn?.Invoke();
     }
 
     public BasicEnemyStats GetEnemyTileActorByName(string unitName)
