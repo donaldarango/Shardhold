@@ -18,4 +18,4 @@ MonoBehaviour:
   attackRange: 0
   damage: 1
   prefferedTerrain: 0
-  actorPrefab: {fileID: 0}
+  actorPrefab: {fileID: 4056473965733300984, guid: 68cb2b23c5e62574cb74476d38d5ac18, type: 3}
