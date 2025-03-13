@@ -8,6 +8,7 @@ using static UnityEngine.JsonUtility;
 using Unity.VisualScripting;
 using System.Data;
 using JetBrains.Annotations;
+using System.Linq;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -188,8 +189,14 @@ public class SaveLoad : MonoBehaviour
 
         #region Cards
 
+        data.hand = new List<Card>(Deck.Instance.hand);
+        data.drawPile = Deck.Instance.drawPile;
+        data.discardPile = Deck.Instance.discardPile;
+
+
+
+        RanUnimplementedCode("Card saving not complete.");
         //TODO
-        RanUnimplementedCode("Cards are not saved.");
 
         #endregion
 
@@ -373,10 +380,19 @@ public class SaveLoad : MonoBehaviour
             TileActorManager.Instance.SetSpawnList(data.spawnList);
 
             #endregion
-            
-            
+
+
 
             //special abilities: TODO
+            #endregion
+
+            #region Cards
+
+            //TODO
+            RanUnimplementedCode("Loading of cards incomplete.");
+
+            Deck.Instance.hand = new Card[Deck.Instance.hand.Length];
+
             #endregion
 
             #endregion
