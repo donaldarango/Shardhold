@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using NUnit.Framework;
 using UnityEditor;
@@ -25,10 +24,21 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField]protected int attackRange;
     [SerializeField]protected int damage;
     [SerializeReference]protected PrefabAssetType actorPrefab;
-    [SerializeField] protected bool isShielded = false;
-    [SerializeField] protected bool isPoisoned = false;
 
     [SerializeField] protected TileActorSpriteHandler spriteHandler;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
     public abstract void Spawn(MapTile tile);
 
     public virtual void SetActorData()
@@ -39,8 +49,6 @@ public abstract class TileActor : MonoBehaviour
         currentHealth = tileActorStats.maxHealth;
         attackRange = tileActorStats.attackRange;
         damage = tileActorStats.damage;
-        isShielded = tileActorStats.isShielded;
-        //isPoisoned should be false by default regardless, so.
     }
 
     public virtual TileActor DetectEnemyInFront(int tileRange)
@@ -123,13 +131,6 @@ public abstract class TileActor : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        if(isShielded)
-        {
-            isShielded = false;
-            Debug.Log($"{gameObject.name}'s shield took the blow and shattered!");
-            return;
-        }
-
         // Damage amount is a variable, special cases like Traps will pass in a low number like 1 to reduce usage number.
         currentHealth -= damageAmount;
         spriteHandler.SpriteDamageAnimation();

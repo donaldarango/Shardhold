@@ -149,7 +149,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugging: 1
-  runAssertionTesting: 0
   deckDebugging: 1
   saveLoadDebugging: 1
   cusmtomMathDebugging: 1
@@ -6498,6 +6497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b566b9f09578d8d4986a465cdf7718dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugging: 1
   mapGenerator: {fileID: 0}
   defaultSaveType: 2
   fileToUse: current_save.json
@@ -6565,6 +6565,7 @@ MonoBehaviour:
   timeText: {fileID: 565745612}
   sliderRight: {fileID: 1682467308}
   sliderLeft: {fileID: 1879180411}
+  playerTurn: 0
 --- !u!4 &1756367400
 Transform:
   m_ObjectHideFlags: 0
@@ -8077,7 +8078,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da11f176a0d2ddd4d96b3dbfd5a395ec, type: 2}
   - {fileID: 11400000, guid: a8ea345e4dd86fd4aa350ac0a0c6c96b, type: 2}
   - {fileID: 11400000, guid: 8df11e146bf676a4ca1981a020101872, type: 2}
-  cardsUnlocked: 
   drawPile: 01000000020000000300000000000000
   discardPile: 
   occupiedSlots: 000000
@@ -8140,7 +8140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85298cca5272bc045b70d1004a5feaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceFilePath: LevelSettings/
   levelSettingsJSON: {fileID: 4900000, guid: 6ef1deaa65432cd4982aa2b1c614692c, type: 3}
   enemyTileActorsStats:
   - {fileID: 11400000, guid: 8aed781e7f73ade4cb33eea5c87353bc, type: 2}
@@ -8148,7 +8147,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3bf19a004edbf0d4aa9c2693f4e957e3, type: 2}
   structureTileActorStats:
   - {fileID: 11400000, guid: 25fc881dc5819a448bfd315a8d4cedc3, type: 2}
-  trapTileActorStats: []
   currentEnemyUnits: []
   gameSpawnList: []
   currentRound: 0
