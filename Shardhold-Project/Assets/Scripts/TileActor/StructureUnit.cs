@@ -19,6 +19,12 @@ public class StructureUnit: TileActor
         // Maybe add Armor to structures so they take like -1 damage if they have 1 armor? Add some diversity and unique traits to Structures.
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
     public override void Spawn(MapTile tile)
     {
         currentTile = tile;
@@ -35,15 +41,6 @@ public class StructureUnit: TileActor
 
     public void AttackCheck()
     {
-        // I figure this will get called every round as the only action the structure will take, so it will take its damage here.
-        // I want this to be called when Enemies move into range, however it might be better to do it player turn..?
-        if (isPoisoned)
-        {
-            TakeDamage(1);
-        }
-
-        if (damage == 0) { return; }
-
         TileActor target = DetectEnemyInFront(attackRange); // Check for first enemy in range.
         if(target != null)
         {
