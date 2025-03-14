@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: DeerStats
   m_EditorClassIdentifier: 
   unitName: Deer
+  damage: 2
   maxHealth: 4

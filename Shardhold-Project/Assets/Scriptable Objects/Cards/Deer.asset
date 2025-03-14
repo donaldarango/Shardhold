@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c0f7c3ee00db594087a99655648d38d, type: 3}
   m_Name: Deer
   m_EditorClassIdentifier: 
-  id: 0
+  id: 6
   cardImage: {fileID: 0}
-  cardName: 
+  cardName: Deer
   targetType: 0
-  range: 0
+  range: 3
   description: 
-  damage: 0
-  hp: 0
+  damage: 2
+  hp: 4
+  stats: {fileID: 11400000, guid: bf7f4e57fe39b2b4381b61886ed4cd16, type: 2}
+  currentHealth: 4
