@@ -1,13 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class AllyUnit : Card
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public abstract int health { get; set; }
-    public abstract int damage { get; }
 
+[CreateAssetMenu(fileName = "AllyUnit", menuName = "Scriptable Objects/AllyUnit")]
+public class AllyUnit : Card
+{
     public override CardType cardType => CardType.Unit;
+
+    public AllyUnitStats stats;
+    public int currentHealth;
+
+    void Awake()
+    {
+        Setup();
+    }
+
+    public void Setup()
+    {
+        currentHealth = stats.maxHealth;
+        hp = currentHealth;
+        damage = stats.damage;
+    }
 
     public override void Play(HashSet<(int, int)> tiles)
     {
@@ -17,11 +30,18 @@ abstract public class AllyUnit : Card
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
             TileActor actor = target.GetCurrentTileActor();
 
-            if (actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit) //attack enemy. recieve damage. return to hand
+            if (actor && actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit) //attack enemy. recieve damage. return to hand
             {
                 actor.TakeDamage(damage);
-                health -= actor.tileActorStats.damage;
+                currentHealth -= actor.tileActorStats.damage;
                 //return to hand
+                Debug.Log("ally unit hp : " + currentHealth);
+                if(currentHealth <= 0)
+                {
+                    Debug.Log("ally unit died, resetting");
+                    Setup();
+                    //discard self
+                }
             }
         }
 
