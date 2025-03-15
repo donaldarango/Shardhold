@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac647accb1740cd468efb8e82c126426, type: 3}
-  m_Name: Basic Ranged Enemy
+  m_Name: Glass Cannon
   m_EditorClassIdentifier: 
-  unitName: Basic Ranged Enemy
+  unitName: Glass Cannon
   actorType: 0
   maxHealth: 1
-  attackRange: 2
-  damage: 2
-  isShielded: 0
-  actorPrefab: {fileID: 9028454918137198027, guid: 12b102072b35e794c8be544b7cb52a03, type: 3}
+  attackRange: 1
+  damage: 5
+  isShielded: 1
+  isPoisoned: 0
+  actorPrefab: {fileID: 0}
   moveSpeed: 1
