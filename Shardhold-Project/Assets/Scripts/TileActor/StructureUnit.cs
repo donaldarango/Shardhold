@@ -50,4 +50,10 @@ public class StructureUnit: TileActor
             Attack(target); // Attack it.
         }
     }
+
+    public override void Die()
+    {
+        currentTile.SetCurrentTileActor(null);
+        base.Die();
+    }
 }

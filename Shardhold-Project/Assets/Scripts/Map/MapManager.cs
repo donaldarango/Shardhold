@@ -77,7 +77,7 @@ public class MapManager : MonoBehaviour
         trapUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         TrapUnit trapUnit = trapUnitPrefab.GetComponent<TrapUnit>();
         trapUnit.Spawn(tile);
-        tile.SetCurrentTileActor(trapUnit);
+        tile.SetCurrentTrap(trapUnit);
         return trapUnit;
     }
 
