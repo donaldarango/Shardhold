@@ -122,13 +122,6 @@ public class SaveLoad : MonoBehaviour
 
         #region TileActors
 
-
-        //TODO not-yet-spawned enemies
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            RanUnimplementedCode("currently no saving of not-yet-spawned enemies");
-        }
-
         #region Spawned TileActors
 
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
@@ -157,6 +150,7 @@ public class SaveLoad : MonoBehaviour
             sta.pos = new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber());
             sta.attackRange = actors[i].GetAttackRange();
             sta.damage = actors[i].GetAttackDamage();
+            RanUnimplementedCode("some tileactor variables");
 
 
             /*
@@ -762,6 +756,7 @@ class SpawnedTileActor
     public TileActor.TileActorType type;
     public int damage;
     public int attackRange;
+    public bool hasImmunity;
 
 #pragma warning restore 0649
 }
