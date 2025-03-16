@@ -114,7 +114,7 @@ public class MapManager : MonoBehaviour
         quadrantData[quadrantIndex].AddTile(tile);
     }
 
-    public List<TileActor> GetTileActorList()
+    public List<TileActor> GetTileActorList(bool includeTraps = false)
     {
         List<TileActor> tileActors = new List<TileActor>();
         for (int i = 0; i < 4; i++) // for each quadrant
@@ -126,7 +126,15 @@ public class MapManager : MonoBehaviour
                 if (ta != null)
                 {
                     tileActors.Add(ta);
-                }  
+                }
+                if (includeTraps)
+                {
+                    TrapUnit trap = mapTiles[j].GetCurrentTrapUnit();
+                    if(trap != null)
+                    {
+                        tileActors.Add(trap);
+                    }
+                }
             }
         }
         return tileActors;

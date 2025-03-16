@@ -104,13 +104,24 @@ public class SaveLoad : MonoBehaviour
         data.curTurn = getCurTurn();
 
         //TODO iterate over the map to gather terrain data
-        for (int i = 0; i < data.maxActualRange; i++)
+        /*(for (int i = 0; i < data.maxActualRange; i++)
         {
             for (int j = 0; j < data.sectorCount; j++)
             {
+
                 //TODO
             }
+        }*/
+
+        for (int i = 0; i < 4; i++)
+        {
+            List<MapTile> tileList;
+            switch (i)
+            {
+                
+            }
         }
+
 
         #endregion
 
@@ -150,7 +161,8 @@ public class SaveLoad : MonoBehaviour
             sta.pos = new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber());
             sta.attackRange = actors[i].GetAttackRange();
             sta.damage = actors[i].GetAttackDamage();
-            RanUnimplementedCode("some tileactor variables");
+            sta.isShielded = actors[i].GetIsShielded();
+            sta.isPoisoned = actors[i].GetIsPoisoned();
 
 
             /*
@@ -164,13 +176,6 @@ public class SaveLoad : MonoBehaviour
             data.ta_attackRange.Add(actors[i].GetAttackRange());
             */
         }
-
-        //TODO
-        //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
-        //List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
-
-        //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
-        //special abilities: TODO
         #endregion
 
         #region Not-Yet-Spawned Enemies
@@ -345,9 +350,10 @@ public class SaveLoad : MonoBehaviour
                         newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, sta.name);
                         break;
                     case TileActor.TileActorType.Trap:
-                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+                        newTA = MapManager.Instance.AddTrapToMapTile(sta.pos.x, sta.pos.y, sta.name);
+                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Warnings))
                         {
-                            RanUnimplementedCode("Loading of traps not implemented.");
+                            Debug.Log("Trap detected in the TileActor slot for tile: " + sta.pos.x + ", " + sta.pos.y);
                         }
                         break;
                     default:
@@ -361,6 +367,8 @@ public class SaveLoad : MonoBehaviour
 
                 //put in all the other variables for this tileactor
                 newTA.SetCurrentHealth(sta.curHealth);
+                newTA.SetIsShielded(sta.isShielded);
+                newTA.SetIsPoisoned(sta.isPoisoned);
                 //NOTE: we aren't actually setting the max health
                 
 
@@ -696,7 +704,13 @@ class GameStateData
     
     //the terrains are stored in a 1D list
     //this will correlate to a spiral starting with the innermost ring and the "northernmost" direction of the map and working its way slowly outward
-    public List<int> terrains = new List<int>();
+    //public List<int> terrains = new List<int>();
+
+    //same index order as quadrant map tile list
+    public List<Terrain> NETerrains = new List<Terrain>();
+    public List<Terrain> NWTerrains = new List<Terrain>();
+    public List<Terrain> SETerrains = new List<Terrain>();
+    public List<Terrain> SWTerrains = new List<Terrain>();
     #endregion
 
     #region Base
@@ -718,6 +732,7 @@ class GameStateData
     public List<SpawnedTileActor> spawnedTileActors;
     public List<TileActorManager.RoundSpawnInfo> spawnList;
 
+    public List<TrapUnit> trapUnits;
 
     //public List<TileActor> actors;
     /*
@@ -756,8 +771,21 @@ class SpawnedTileActor
     public TileActor.TileActorType type;
     public int damage;
     public int attackRange;
-    public bool hasImmunity;
+    public bool isShielded;
+    public bool isPoisoned;
 
+#pragma warning restore 0649
+}
+
+[Serializable]
+class SpawnedTrap
+{
+#pragma warning disable 0649
+    public string name;
+    public int curHealth;
+    public Vector2Int pos;
+    public bool isShielded;
+    public bool isPoisoned;
 #pragma warning restore 0649
 }
 
