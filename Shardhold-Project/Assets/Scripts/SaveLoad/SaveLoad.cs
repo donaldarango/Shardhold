@@ -137,7 +137,7 @@ public class SaveLoad : MonoBehaviour
 
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
         data.spawnedTileActors = new List<SpawnedTileActor>();
-        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+        List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
         
         /*
         data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
@@ -351,10 +351,10 @@ public class SaveLoad : MonoBehaviour
                         break;
                     case TileActor.TileActorType.Trap:
                         newTA = MapManager.Instance.AddTrapToMapTile(sta.pos.x, sta.pos.y, sta.name);
-                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Warnings))
+                        /*if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Warnings))
                         {
                             Debug.Log("Trap detected in the TileActor slot for tile: " + sta.pos.x + ", " + sta.pos.y);
-                        }
+                        }*/
                         break;
                     default:
                         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))

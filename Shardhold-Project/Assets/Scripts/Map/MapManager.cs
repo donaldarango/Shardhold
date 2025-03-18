@@ -140,6 +140,24 @@ public class MapManager : MonoBehaviour
         return tileActors;
     }
 
+    public List<TrapUnit> GetTrapUnitList()
+    {
+        List<TrapUnit> traps = new List<TrapUnit>();
+        for (int i = 0; i < 4; i++) // for each quadrant
+        {
+            List<MapTile> mapTiles = quadrantData[i].GetMapTilesList();
+            for (int j = 0; j < mapTiles.Count; j++)
+            {
+                TrapUnit trap = mapTiles[j].GetCurrentTrapUnit();
+                if (trap != null)
+                {
+                    traps.Add(trap);
+                }
+            }
+        }
+        return traps;
+    }
+
     // Returns current TileActor of specified tile, if none returns null
     public TileActor DoesTileContainTileActor(MapTile tile)
     {
