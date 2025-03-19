@@ -41,6 +41,11 @@ public class MapManager : MonoBehaviour
         quadrantData.Add(new MapQuadrant(Quadrant.SE));
     }
 
+    public MapQuadrant GetQuadrant(int index)
+    {
+        return quadrantData[index];
+    }
+
     public int GetRingCount()
     {
         return ringCount;

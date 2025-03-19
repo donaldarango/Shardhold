@@ -107,7 +107,7 @@ public class SaveLoad : MonoBehaviour
         #region Map Info
 
         data.sectorCount = getLaneCount();
-        data.maxVisibleRange = getRingCount() - 1;
+        //data.maxVisibleRange = getRingCount() - 1;
         data.maxActualRange = getRingCount();
         data.curTurn = getCurTurn();
 
@@ -123,10 +123,12 @@ public class SaveLoad : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            List<MapTile> tileList;
-            switch (i)
+            data.terrains.Add(new List<Terrain>());
+            List<MapTile> tileList = MapManager.Instance.GetQuadrant(i).GetMapTilesList();
+            for (int j = 0; j < tileList.Count; j++)
             {
-                
+                data.terrains[i].Add(tileList[j].GetTerrain());
+                Print("i, j: " + i + ", " + j, CustomDebug.DebuggingType.Verbose);
             }
         }
 
@@ -323,7 +325,9 @@ public class SaveLoad : MonoBehaviour
             setRingCount(data.maxActualRange);
             setCurTurn(data.curTurn);
 
-            //TODO iterate over the map to gather terrain data
+            MapManager.Instance.InitializeQuadrants();
+
+            //TODO iterate over the map to set terrain values
             for (int i = 0; i < data.maxActualRange; i++)
             {
                 for (int j = 0; j < data.sectorCount; j++)
@@ -708,7 +712,7 @@ class GameStateData
     //we will assume that the game is only ever saved on the player's turn
     #region Map Info
     public int sectorCount;        //how many directions there are (currently this will always be 4)
-    public int maxVisibleRange;    //the gameboard as it apears to the player
+    //public int maxVisibleRange;    //the gameboard as it apears to the player
     public int maxActualRange;     //maxVisibleRange plus the hidden range stuff that is used for spawning and such
     public int curTurn;            //the turn counter's current value
     
@@ -717,10 +721,11 @@ class GameStateData
     //public List<int> terrains = new List<int>();
 
     //same index order as quadrant map tile list
-    public List<Terrain> NETerrains = new List<Terrain>();
+    /*public List<Terrain> NETerrains = new List<Terrain>();
     public List<Terrain> NWTerrains = new List<Terrain>();
     public List<Terrain> SETerrains = new List<Terrain>();
-    public List<Terrain> SWTerrains = new List<Terrain>();
+    public List<Terrain> SWTerrains = new List<Terrain>();*/
+    public List<List<Terrain>> terrains = new List<List<Terrain>>();
     #endregion
 
     #region Base
