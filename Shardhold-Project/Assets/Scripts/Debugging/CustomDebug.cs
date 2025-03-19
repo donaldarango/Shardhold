@@ -118,7 +118,10 @@ public class CustomDebug : MonoBehaviour
                 output += "\n" + i + ": " + (100 * frequencies[i]) + "%";
             }
             float expectedFrequency = 1f / (maxValue + 1);
-            Debug.Log("TEST NUMBER " + testNum + "\nExpected frequency: " + (100 * expectedFrequency) + "%" + output);
+            if (Debugging(DebuggingType.Warnings))
+            {
+                Debug.Log("TEST NUMBER " + testNum + "\nExpected frequency: " + (100 * expectedFrequency) + "%" + output);
+            }
         }
     }
 
