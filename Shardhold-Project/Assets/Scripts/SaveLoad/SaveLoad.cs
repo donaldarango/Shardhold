@@ -47,6 +47,14 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
+    public static void Print(string output, CustomDebug.DebuggingType level = CustomDebug.DebuggingType.Normal)
+    {
+        if (CustomDebug.SaveLoadDebugging(level))
+        {
+            Debug.Log(output);
+        }
+    }
+
     #region Text File I/O
     public void WriteFile(string filename, string contents)
     {
@@ -365,6 +373,8 @@ public class SaveLoad : MonoBehaviour
 
                 }
 
+                Print("Created new tile actor: " + newTA.name);
+
                 //put in all the other variables for this tileactor
                 newTA.SetCurrentHealth(sta.curHealth);
                 newTA.SetIsShielded(sta.isShielded);
@@ -461,7 +471,7 @@ public class SaveLoad : MonoBehaviour
 
 
 
-        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+        List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
 
         for (int i = 0; i < actors.Count; i++)
         {
