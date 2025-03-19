@@ -146,10 +146,10 @@ public class Deck : MonoBehaviour
             if (discardPile.Count() > 0)
             {
                 SwapDrawAndDiscard();
-                if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
+                /*if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
                 {
                     Debug.Log("Draw pile was empty, which should not happen. Thankfully, the discard pile was not empty, so draw pile has been filled and a card can be drawn.");
-                }
+                }*/
             }
             else
             {
@@ -180,11 +180,11 @@ public class Deck : MonoBehaviour
         drawPile.RemoveAt(choice);
         Debug.Log(" Cards left in drawpile: " + drawPile.Count);
 
-        //ensure non-empty draw pile
-        if (drawPile.Count <= 0)
+        //ensure non-empty draw pile; MOVED TO START OF DRAW
+        /*if (drawPile.Count <= 0)
         {
             SwapDrawAndDiscard();
-        }
+        }*/
     }
     
     //finding an open slot/pos in card UI 

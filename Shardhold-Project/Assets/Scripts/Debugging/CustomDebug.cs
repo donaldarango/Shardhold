@@ -19,6 +19,10 @@ public class CustomDebug : MonoBehaviour
     public bool runAssertionTesting = false;
     #endregion
 
+    #region Other Tests
+    bool testRandomInt = false;
+    #endregion
+
     //FOR INTIAL SETTING ONLY; USE GET METHODS
     //per-class debugging bool controls (the respective class will check this, rather than holding its own debugging variable):
     public DebuggingType deckDebugging = DebuggingType.Warnings;
@@ -38,6 +42,13 @@ public class CustomDebug : MonoBehaviour
                 Debug.Log("Multiple CustomDebug instances detected! First is " + instance.gameObject.name + ", and this is " + gameObject.name);
             }
         }
+
+        #region Other Tests
+        if (testRandomInt)
+        {
+            TestRandomInt(5);
+        }
+        #endregion
     }
 
     public static void RanUnimplementedCode(string descriptor = "<no descriptor>", DebuggingType level=DebuggingType.ErrorOnly)
@@ -76,4 +87,41 @@ public class CustomDebug : MonoBehaviour
     }
 
     #endregion
+
+
+
+
+
+
+
+
+    #region Testing Functions
+
+    public static void TestRandomInt(int testsToRun = 1)
+    {
+        for (int testNum = 0; testNum < testsToRun; testNum++)
+        {
+            int maxValue = 19;
+            int testRuns = 1000;
+            int[] counts = new int[maxValue + 1];
+            float[] frequencies = new float[maxValue + 1];
+            string output = "";
+
+            for (int i = 0; i < testRuns; i++)
+            {
+                //get a bunch of random numbers
+                counts[CustomMath.RandomInt(0, maxValue)]++;
+            }
+            for (int i = 0; i < counts.Length; i++)
+            {
+                frequencies[i] = (float)counts[i] / (float)testRuns;
+                output += "\n" + i + ": " + (100 * frequencies[i]) + "%";
+            }
+            float expectedFrequency = 1f / (maxValue + 1);
+            Debug.Log("TEST NUMBER " + testNum + "\nExpected frequency: " + (100 * expectedFrequency) + "%" + output);
+        }
+    }
+
+    #endregion
+
 }
