@@ -211,10 +211,13 @@ public class SaveLoad : MonoBehaviour
         data.hand = new List<SavedCard>();
         for (int i = 0; i < Deck.Instance.hand.Length; i++)
         {
-            SavedCard savedCard = new SavedCard();
-            data.hand.Add(savedCard);
-            savedCard.cardId = Deck.Instance.hand[i].GetId();
-            savedCard.cardHealth = Deck.Instance.hand[i].hp;
+            if (Deck.Instance.hand[i] != null)
+            {
+                SavedCard savedCard = new SavedCard();
+                data.hand.Add(savedCard);
+                savedCard.cardId = Deck.Instance.hand[i].GetId();
+                savedCard.cardHealth = Deck.Instance.hand[i].hp;
+            }
         }
         data.drawPile = Deck.Instance.drawPile;
         data.discardPile = Deck.Instance.discardPile;
@@ -333,7 +336,7 @@ public class SaveLoad : MonoBehaviour
 
             #region Overall Game/Map Info
 
-            RanUnimplementedCode("Terrains, base effects, and map effects are not yet loadable (or saveable).");
+            RanUnimplementedCode("Any effects are not yet loadable (or savable).");
 
             //general map stuff
             setLaneCount(data.sectorCount);
