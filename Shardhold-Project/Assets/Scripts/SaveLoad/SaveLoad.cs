@@ -104,7 +104,7 @@ public class SaveLoad : MonoBehaviour
         GameStateData data = new GameStateData();
         #region Copy game state data to GameStateData
 
-        RanUnimplementedCode("Terrains, base effects, and map effects are not yet saveable (or loadable).");
+        RanUnimplementedCode("Ant effects are not yet saveable (or loadable).");
 
         #region Map Info
 
@@ -112,16 +112,6 @@ public class SaveLoad : MonoBehaviour
         //data.maxVisibleRange = getRingCount() - 1;
         data.maxActualRange = getRingCount();
         data.curTurn = getCurTurn();
-
-        //TODO iterate over the map to gather terrain data
-        /*(for (int i = 0; i < data.maxActualRange; i++)
-        {
-            for (int j = 0; j < data.sectorCount; j++)
-            {
-
-                //TODO
-            }
-        }*/
 
         //data.terrainArray = new Terrain[4,MapManager.Instance.GetLaneCount() * MapManager.Instance.GetRingCount()];
         data.lanes = new List<SavedLane>();
@@ -217,14 +207,17 @@ public class SaveLoad : MonoBehaviour
 
         #region Cards
 
-        data.hand = new List<Card>(Deck.Instance.hand);
+        //data.hand = new List<Card>(Deck.Instance.hand);
+        data.hand = new List<SavedCard>();
+        for (int i = 0; i < Deck.Instance.hand.Length; i++)
+        {
+            SavedCard savedCard = new SavedCard();
+            data.hand.Add(savedCard);
+            savedCard.cardId = Deck.Instance.hand[i].GetId();
+            savedCard.cardHealth = Deck.Instance.hand[i].hp;
+        }
         data.drawPile = Deck.Instance.drawPile;
         data.discardPile = Deck.Instance.discardPile;
-
-
-
-        RanUnimplementedCode("Card saving not complete.");
-        //TODO
 
         #endregion
 
@@ -427,10 +420,13 @@ public class SaveLoad : MonoBehaviour
 
             #region Cards
 
-            //TODO
-            RanUnimplementedCode("Loading of cards incomplete.");
-
+            Deck.Instance.DeleteAllCardsInHand();
             Deck.Instance.hand = new Card[Deck.Instance.hand.Length];
+            for (int i = 0; i < data.hand.Count; i++)
+            {
+                Deck.Instance.CreateCard(data.hand[i].cardId);
+                Deck.Instance.hand[i].hp = data.hand[i].cardHealth;
+            }
 
             #endregion
 
@@ -775,7 +771,7 @@ class GameStateData
     #region Cards
     public List<int> drawPile = new List<int>();
     public List<int> discardPile = new List<int>();
-    public List<Card> hand = new List<Card>();
+    public List<SavedCard> hand = new List<SavedCard>();
     #endregion
 
 
@@ -818,6 +814,15 @@ public class SavedLane
 {
 #pragma warning disable 0649
     public List<int> terrains;
+#pragma warning restore 0649
+}
+
+[Serializable]
+public class SavedCard
+{
+#pragma warning disable 0649
+    public int cardId;
+    public int cardHealth;
 #pragma warning restore 0649
 }
 

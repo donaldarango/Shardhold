@@ -70,15 +70,17 @@ public class Deck : MonoBehaviour
 
     #endregion
 
-    public void CreateCard(int cardInt)
+    public void CreateCard(int cardID)
     {
+        
+
         //find an open slot
         int openSlot = FindFirstOpenUISlot();
 
         //add it to hand (non-UI)
-        hand[openSlot] = cardLookup[drawPile[cardInt]];
+        hand[openSlot] = cardLookup[cardID];
         cardsInHand++;
-        Debug.Log("Card drawn: " + cardLookup[drawPile[cardInt]].cardName);
+        Debug.Log("Card drawn: " + cardLookup[cardID].cardName);
         if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
         {
             Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
@@ -89,7 +91,7 @@ public class Deck : MonoBehaviour
         Debug.Log("Open slot: " + openSlot);
         Transform cardUISlot = cardPositions[openSlot];         //get the open slot's transform component
         occupiedSlots[openSlot] = true;                         //mark slot as occupied
-        UIHand[openSlot] = CreateCardUI(cardLookup[drawPile[cardInt]], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
+        UIHand[openSlot] = CreateCardUI(cardLookup[cardID], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
 
     }
 
@@ -174,7 +176,7 @@ public class Deck : MonoBehaviour
         //choose a card from the draw pile
         int choice = CustomMath.RandomInt(0, drawPile.Count-1);
 
-        CreateCard(choice);
+        CreateCard(drawPile[choice]);
 
         //remove from draw pile
         drawPile.RemoveAt(choice);
