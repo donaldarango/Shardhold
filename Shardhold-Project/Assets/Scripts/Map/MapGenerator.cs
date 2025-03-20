@@ -26,6 +26,8 @@ public class MapGenerator : MonoBehaviour
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
     public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
 
+    public List<GameObject> tileGameObjects = new List<GameObject>();
+
     public enum TargetType
     {
         Tile,
@@ -149,6 +151,7 @@ public class MapGenerator : MonoBehaviour
                 float endAngle = ((l + 1) * sectionAngle) * Mathf.Deg2Rad;
 
                 GameObject tileObj = new GameObject($"Tile_R{r}_L{l}");
+                tileGameObjects.Add(tileObj);
                 tileObj.transform.parent = transform;
                 MeshFilter meshFilter = tileObj.AddComponent<MeshFilter>();
                 MeshRenderer meshRenderer = tileObj.AddComponent<MeshRenderer>();

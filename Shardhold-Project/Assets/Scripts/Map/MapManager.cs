@@ -125,6 +125,13 @@ public class MapManager : MonoBehaviour
         {
             quadrantData[i].RemoveAllTiles();
         }
+
+        //gameObject destruction:
+        for (int i = 0; i < MapGenerator.Instance.tileGameObjects.Count; i++)
+        {
+            Destroy(MapGenerator.Instance.tileGameObjects[i]);
+        }
+        MapGenerator.Instance.tileGameObjects.Clear();
     }
 
     public List<TileActor> GetTileActorList(bool includeTraps = false)
