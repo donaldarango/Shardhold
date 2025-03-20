@@ -119,6 +119,14 @@ public class MapManager : MonoBehaviour
         quadrantData[quadrantIndex].AddTile(tile);
     }
 
+    public void RemoveAllTiles()
+    {
+        for (int i = 0; i < quadrantData.Count; i++)
+        {
+            quadrantData[i].RemoveAllTiles();
+        }
+    }
+
     public List<TileActor> GetTileActorList(bool includeTraps = false)
     {
         List<TileActor> tileActors = new List<TileActor>();

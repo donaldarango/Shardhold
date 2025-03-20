@@ -30,6 +30,8 @@ public class SaveLoad : MonoBehaviour
 
     public string playerStatsFile = "player_stats.json";
 
+    public List<SavedLane> lastLoadedLanes = null;
+
     public void Awake()
     {
         saveFolder = Application.persistentDataPath;
@@ -102,7 +104,7 @@ public class SaveLoad : MonoBehaviour
         GameStateData data = new GameStateData();
         #region Copy game state data to GameStateData
 
-        RanUnimplementedCode("Terrains, base effects and map effects, and TileActors are not yet saveable (or loadable).");
+        RanUnimplementedCode("Terrains, base effects, and map effects are not yet saveable (or loadable).");
 
         #region Map Info
 
@@ -121,14 +123,31 @@ public class SaveLoad : MonoBehaviour
             }
         }*/
 
-        for (int i = 0; i < 4; i++)
+        //data.terrainArray = new Terrain[4,MapManager.Instance.GetLaneCount() * MapManager.Instance.GetRingCount()];
+        data.lanes = new List<SavedLane>();
+        /*for (int i = 0; i < 4; i++)
         {
-            data.terrains.Add(new List<Terrain>());
+            //data.terrains.Add(new List<Terrain>());
+            SavedLane curLane = new SavedLane();
+            data.lanes.Add(curLane);
             List<MapTile> tileList = MapManager.Instance.GetQuadrant(i).GetMapTilesList();
             for (int j = 0; j < tileList.Count; j++)
             {
-                data.terrains[i].Add(tileList[j].GetTerrain());
+                //data.terrains[i].Add(tileList[j].GetTerrain());
+                //data.terrainArray[i,j] = tileList[j].GetTerrain();
+                curLane.terrains.Add(MapManager.Instance.GetTile)
                 Print("i, j: " + i + ", " + j, CustomDebug.DebuggingType.Verbose);
+            }
+        }*/
+
+        for (int i = 0; i < MapManager.Instance.GetLaneCount() * 4; i++)
+        {
+            SavedLane curLane = new SavedLane();
+            curLane.terrains = new List<int>();
+            data.lanes.Add(curLane);
+            for (int j = 0; j < MapManager.Instance.GetRingCount(); j++)
+            {
+                curLane.terrains.Add(((int)MapManager.Instance.GetTile(j, i).GetTerrain().terrainType));
             }
         }
 
@@ -209,6 +228,7 @@ public class SaveLoad : MonoBehaviour
 
         #endregion
 
+        //data.saveTime = DateTime.Now;
         data.initialized = true;
 
         #endregion
@@ -314,27 +334,30 @@ public class SaveLoad : MonoBehaviour
         noProblemLoading = noProblemLoading && data != null;
         if (noProblemLoading)
         {
+            MapManager.Instance.RemoveAllTiles();
+
             #region turn the GameStateData object into the actual state of the game
 
             #region Overall Game/Map Info
 
-            RanUnimplementedCode("Terrains, base effects and map effects, and TileActors are not yet loadable (or saveable).");
+            RanUnimplementedCode("Terrains, base effects, and map effects are not yet loadable (or saveable).");
 
             //general map stuff
             setLaneCount(data.sectorCount);
             setRingCount(data.maxActualRange);
             setCurTurn(data.curTurn);
 
-            MapManager.Instance.InitializeQuadrants();
+            //MapManager.Instance.InitializeQuadrants();
 
-            //TODO iterate over the map to set terrain values
-            for (int i = 0; i < data.maxActualRange; i++)
+            //clear loaded lanes
+            lastLoadedLanes.Clear();
+
+            for (int i = 0; i < data.lanes.Count; i++)
             {
-                for (int j = 0; j < data.sectorCount; j++)
-                {
-                    //TODO
-                }
+                lastLoadedLanes.Add(data.lanes[i]);
             }
+
+            MapGenerator.Instance.GenerateMap();
 
             #endregion
 
@@ -485,7 +508,11 @@ public class SaveLoad : MonoBehaviour
         TileActorManager.Instance.SetSpawnList(new List<TileActorManager.RoundSpawnInfo>());    //empty list
 
         //for (all tile objects) { destroy them safely to make room for a new load }
+
+        //destroy map tiles moved to load to avoid issues with Update functions accessing map
+
     }
+
 
     //TODO? I'm not sure if we need this
     /*public bool LoadInAddition(string filename)
@@ -517,18 +544,8 @@ public class SaveLoad : MonoBehaviour
     //set the number of directions on the map
     private void setLaneCount(int amt)
     {
-        MapManager.Instance.SetLaneCount(amt);
-
-        /*if (mapGenerator == null)
-        {
-            if (debugging) {
-                Debug.LogError("No MapGenerator assigned to SaveLoad.");
-            }
-        }
-        else
-        {
-            mapGenerator.laneCount = amt;
-        }*/
+        //MapManager.Instance.SetLaneCount(amt);
+        MapGenerator.Instance.laneCount = amt;
     }
 
     //get the number of rings around the base; does not include the base but does include invisible spawning rings (currently assumes 1 spawning ring, see load and save functions)
@@ -553,19 +570,8 @@ public class SaveLoad : MonoBehaviour
     //set the number of rings around the base
     private void setRingCount(int amt)
     {
-        MapManager.Instance.SetRingCount(amt);
-
-        /*if (mapGenerator == null)
-        {
-            if (debugging)
-            {
-                Debug.LogError("No MapGenerator assigned to SaveLoad.");
-            }
-        }
-        else
-        {
-            mapGenerator.ringCount = amt;
-        }*/
+        //MapManager.Instance.SetRingCount(amt);
+        MapGenerator.Instance.ringCount = amt;
     }
 
     //get the current turn counter
@@ -725,7 +731,9 @@ class GameStateData
     public List<Terrain> NWTerrains = new List<Terrain>();
     public List<Terrain> SETerrains = new List<Terrain>();
     public List<Terrain> SWTerrains = new List<Terrain>();*/
-    public List<List<Terrain>> terrains = new List<List<Terrain>>();
+    //public List<List<Terrain>> terrains = new List<List<Terrain>>();
+    //public Terrain[,] terrainArray;
+    public List<SavedLane> lanes = new List<SavedLane>();
     #endregion
 
     #region Base
@@ -804,6 +812,14 @@ class SpawnedTrap
 #pragma warning restore 0649
 }
 
+
+[Serializable]
+public class SavedLane
+{
+#pragma warning disable 0649
+    public List<int> terrains;
+#pragma warning restore 0649
+}
 
 [Serializable]
 class PlayerStats
