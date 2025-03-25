@@ -8,6 +8,7 @@ using static UnityEngine.JsonUtility;
 using Unity.VisualScripting;
 using System.Data;
 using JetBrains.Annotations;
+using System.Linq;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -27,7 +28,10 @@ public class SaveLoad : MonoBehaviour
     public string fileToUse = "current_save.json";   //default save file
     public string saveFolder = "on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go
 
+    public PlayerStats playerStats = null;
     public string playerStatsFile = "player_stats.json";
+
+    public List<SavedLane> lastLoadedLanes = null;
 
     public void Awake()
     {
@@ -43,6 +47,14 @@ public class SaveLoad : MonoBehaviour
         if (CustomDebug.SaveLoadDebugging(level))
         {
             CustomDebug.RanUnimplementedCode(descriptor);
+        }
+    }
+
+    public static void Print(string output, CustomDebug.DebuggingType level = CustomDebug.DebuggingType.Normal)
+    {
+        if (CustomDebug.SaveLoadDebugging(level))
+        {
+            Debug.Log(output);
         }
     }
 
@@ -93,23 +105,43 @@ public class SaveLoad : MonoBehaviour
         GameStateData data = new GameStateData();
         #region Copy game state data to GameStateData
 
-        RanUnimplementedCode("Terrains, base effects and map effects, and TileActors are not yet saveable (or loadable).");
+        RanUnimplementedCode("Ant effects are not yet saveable (or loadable).");
 
         #region Map Info
 
         data.sectorCount = getLaneCount();
-        data.maxVisibleRange = getRingCount() - 1;
+        //data.maxVisibleRange = getRingCount() - 1;
         data.maxActualRange = getRingCount();
         data.curTurn = getCurTurn();
 
-        //TODO iterate over the map to gather terrain data
-        for (int i = 0; i < data.maxActualRange; i++)
+        //data.terrainArray = new Terrain[4,MapManager.Instance.GetLaneCount() * MapManager.Instance.GetRingCount()];
+        data.lanes = new List<SavedLane>();
+        /*for (int i = 0; i < 4; i++)
         {
-            for (int j = 0; j < data.sectorCount; j++)
+            //data.terrains.Add(new List<Terrain>());
+            SavedLane curLane = new SavedLane();
+            data.lanes.Add(curLane);
+            List<MapTile> tileList = MapManager.Instance.GetQuadrant(i).GetMapTilesList();
+            for (int j = 0; j < tileList.Count; j++)
             {
-                //TODO
+                //data.terrains[i].Add(tileList[j].GetTerrain());
+                //data.terrainArray[i,j] = tileList[j].GetTerrain();
+                curLane.terrains.Add(MapManager.Instance.GetTile)
+                Print("i, j: " + i + ", " + j, CustomDebug.DebuggingType.Verbose);
+            }
+        }*/
+
+        for (int i = 0; i < MapManager.Instance.GetLaneCount() * 4; i++)
+        {
+            SavedLane curLane = new SavedLane();
+            curLane.terrains = new List<int>();
+            data.lanes.Add(curLane);
+            for (int j = 0; j < MapManager.Instance.GetRingCount(); j++)
+            {
+                curLane.terrains.Add(((int)MapManager.Instance.GetTile(j, i).GetTerrain().terrainType));
             }
         }
+
 
         #endregion
 
@@ -121,18 +153,11 @@ public class SaveLoad : MonoBehaviour
 
         #region TileActors
 
-
-        //TODO not-yet-spawned enemies
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            RanUnimplementedCode("currently no saving of not-yet-spawned enemies");
-        }
-
         #region Spawned TileActors
 
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
         data.spawnedTileActors = new List<SpawnedTileActor>();
-        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+        List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
         
         /*
         data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
@@ -156,6 +181,8 @@ public class SaveLoad : MonoBehaviour
             sta.pos = new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber());
             sta.attackRange = actors[i].GetAttackRange();
             sta.damage = actors[i].GetAttackDamage();
+            sta.isShielded = actors[i].GetIsShielded();
+            sta.isPoisoned = actors[i].GetIsPoisoned();
 
 
             /*
@@ -169,13 +196,6 @@ public class SaveLoad : MonoBehaviour
             data.ta_attackRange.Add(actors[i].GetAttackRange());
             */
         }
-
-        //TODO
-        //List<TileActor.ObjType> tileActorTypes = new List<TileActor.ObjType>();
-        //List<int> ta_spawnTurn = new List<int>();       //the turn on which this TileActor did/will spawn; mainly important for enemies which have not yet spawned
-
-        //List<int> ta_faction = new List<int>();         //0 for defender, 1 for attacker
-        //special abilities: TODO
         #endregion
 
         #region Not-Yet-Spawned Enemies
@@ -183,9 +203,29 @@ public class SaveLoad : MonoBehaviour
         data.spawnList = TileActorManager.Instance.GetSpawnList();
 
         #endregion
-        
+
         #endregion
 
+        #region Cards
+
+        //data.hand = new List<Card>(Deck.Instance.hand);
+        data.hand = new List<SavedCard>();
+        for (int i = 0; i < Deck.Instance.hand.Length; i++)
+        {
+            if (Deck.Instance.hand[i] != null)
+            {
+                SavedCard savedCard = new SavedCard();
+                data.hand.Add(savedCard);
+                savedCard.cardId = Deck.Instance.hand[i].GetId();
+                savedCard.cardHealth = Deck.Instance.hand[i].hp;
+            }
+        }
+        data.drawPile = Deck.Instance.drawPile;
+        data.discardPile = Deck.Instance.discardPile;
+
+        #endregion
+
+        //data.saveTime = DateTime.Now;
         data.initialized = true;
 
         #endregion
@@ -291,25 +331,30 @@ public class SaveLoad : MonoBehaviour
         noProblemLoading = noProblemLoading && data != null;
         if (noProblemLoading)
         {
+            MapManager.Instance.RemoveAllTiles();
+
             #region turn the GameStateData object into the actual state of the game
 
             #region Overall Game/Map Info
 
-            RanUnimplementedCode("Terrains, base effects and map effects, and TileActors are not yet loadable (or saveable).");
+            RanUnimplementedCode("Any effects are not yet loadable (or savable).");
 
             //general map stuff
             setLaneCount(data.sectorCount);
             setRingCount(data.maxActualRange);
             setCurTurn(data.curTurn);
 
-            //TODO iterate over the map to gather terrain data
-            for (int i = 0; i < data.maxActualRange; i++)
+            //MapManager.Instance.InitializeQuadrants();
+
+            //clear loaded lanes
+            lastLoadedLanes.Clear();
+
+            for (int i = 0; i < data.lanes.Count; i++)
             {
-                for (int j = 0; j < data.sectorCount; j++)
-                {
-                    //TODO
-                }
+                lastLoadedLanes.Add(data.lanes[i]);
             }
+
+            MapGenerator.Instance.GenerateMap();
 
             #endregion
 
@@ -337,10 +382,11 @@ public class SaveLoad : MonoBehaviour
                         newTA = MapManager.Instance.AddStructureToMapTile(sta.pos.x, sta.pos.y, sta.name);
                         break;
                     case TileActor.TileActorType.Trap:
-                        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+                        newTA = MapManager.Instance.AddTrapToMapTile(sta.pos.x, sta.pos.y, sta.name);
+                        /*if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Warnings))
                         {
-                            RanUnimplementedCode("Loading of traps not implemented.");
-                        }
+                            Debug.Log("Trap detected in the TileActor slot for tile: " + sta.pos.x + ", " + sta.pos.y);
+                        }*/
                         break;
                     default:
                         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
@@ -351,8 +397,12 @@ public class SaveLoad : MonoBehaviour
 
                 }
 
+                Print("Created new tile actor: " + newTA.name);
+
                 //put in all the other variables for this tileactor
                 newTA.SetCurrentHealth(sta.curHealth);
+                newTA.SetIsShielded(sta.isShielded);
+                newTA.SetIsPoisoned(sta.isPoisoned);
                 //NOTE: we aren't actually setting the max health
                 
 
@@ -366,10 +416,22 @@ public class SaveLoad : MonoBehaviour
             TileActorManager.Instance.SetSpawnList(data.spawnList);
 
             #endregion
-            
-            
+
+
 
             //special abilities: TODO
+            #endregion
+
+            #region Cards
+
+            Deck.Instance.DeleteAllCardsInHand();
+            Deck.Instance.hand = new Card[Deck.Instance.hand.Length];
+            for (int i = 0; i < data.hand.Count; i++)
+            {
+                Deck.Instance.CreateCard(data.hand[i].cardId);
+                Deck.Instance.hand[i].hp = data.hand[i].cardHealth;
+            }
+
             #endregion
 
             #endregion
@@ -436,7 +498,7 @@ public class SaveLoad : MonoBehaviour
 
 
 
-        List<TileActor> actors = MapManager.Instance.GetTileActorList();
+        List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
 
         for (int i = 0; i < actors.Count; i++)
         {
@@ -446,7 +508,11 @@ public class SaveLoad : MonoBehaviour
         TileActorManager.Instance.SetSpawnList(new List<TileActorManager.RoundSpawnInfo>());    //empty list
 
         //for (all tile objects) { destroy them safely to make room for a new load }
+
+        //destroy map tiles moved to load to avoid issues with Update functions accessing map
+
     }
+
 
     //TODO? I'm not sure if we need this
     /*public bool LoadInAddition(string filename)
@@ -478,18 +544,8 @@ public class SaveLoad : MonoBehaviour
     //set the number of directions on the map
     private void setLaneCount(int amt)
     {
-        MapManager.Instance.SetLaneCount(amt);
-
-        /*if (mapGenerator == null)
-        {
-            if (debugging) {
-                Debug.LogError("No MapGenerator assigned to SaveLoad.");
-            }
-        }
-        else
-        {
-            mapGenerator.laneCount = amt;
-        }*/
+        //MapManager.Instance.SetLaneCount(amt);
+        MapGenerator.Instance.laneCount = amt;
     }
 
     //get the number of rings around the base; does not include the base but does include invisible spawning rings (currently assumes 1 spawning ring, see load and save functions)
@@ -514,19 +570,8 @@ public class SaveLoad : MonoBehaviour
     //set the number of rings around the base
     private void setRingCount(int amt)
     {
-        MapManager.Instance.SetRingCount(amt);
-
-        /*if (mapGenerator == null)
-        {
-            if (debugging)
-            {
-                Debug.LogError("No MapGenerator assigned to SaveLoad.");
-            }
-        }
-        else
-        {
-            mapGenerator.ringCount = amt;
-        }*/
+        //MapManager.Instance.SetRingCount(amt);
+        MapGenerator.Instance.ringCount = amt;
     }
 
     //get the current turn counter
@@ -595,26 +640,17 @@ public class SaveLoad : MonoBehaviour
 
     //text file io: https://support.unity.com/hc/en-us/articles/115000341143-How-do-I-read-and-write-data-from-a-text-file
 
+
     public void SaveStats()
     {
-        //first ready the player data
-        PlayerStats playerStats = new PlayerStats();
-
-        //get the player stats
+        //get the playerStats cardsUnlocked from the Deck cardsUnlocked
         playerStats.cardsUnlocked = Deck.Instance.cardsUnlocked;
-
-        //TODO: save next level variable
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            CustomDebug.RanUnimplementedCode("SaveStats() only saves unlocked cards.");
-        }
 
         //now convert player data into a json
         string jsonStats = ToJson(playerStats, true);
 
         //finally, save the json string into a file
         WriteFile(playerStatsFile, jsonStats);
-
     }
 
     public void LoadStats()
@@ -623,16 +659,10 @@ public class SaveLoad : MonoBehaviour
         string jsonStats = ReadFile(playerStatsFile);
 
         //now convert json into player data object
-        PlayerStats playerStats = FromJson<PlayerStats>(jsonStats);
+        playerStats = FromJson<PlayerStats>(jsonStats);
 
         //finally, use the player statistics as needed
         Deck.Instance.cardsUnlocked = playerStats.cardsUnlocked;
-
-        //TODO: load next level variable
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            CustomDebug.RanUnimplementedCode("LoadStats() is not complete.");
-        }
     }
 
     #endregion
@@ -673,13 +703,22 @@ class GameStateData
     //we will assume that the game is only ever saved on the player's turn
     #region Map Info
     public int sectorCount;        //how many directions there are (currently this will always be 4)
-    public int maxVisibleRange;    //the gameboard as it apears to the player
+    //public int maxVisibleRange;    //the gameboard as it apears to the player
     public int maxActualRange;     //maxVisibleRange plus the hidden range stuff that is used for spawning and such
     public int curTurn;            //the turn counter's current value
     
     //the terrains are stored in a 1D list
     //this will correlate to a spiral starting with the innermost ring and the "northernmost" direction of the map and working its way slowly outward
-    public List<int> terrains = new List<int>();
+    //public List<int> terrains = new List<int>();
+
+    //same index order as quadrant map tile list
+    /*public List<Terrain> NETerrains = new List<Terrain>();
+    public List<Terrain> NWTerrains = new List<Terrain>();
+    public List<Terrain> SETerrains = new List<Terrain>();
+    public List<Terrain> SWTerrains = new List<Terrain>();*/
+    //public List<List<Terrain>> terrains = new List<List<Terrain>>();
+    //public Terrain[,] terrainArray;
+    public List<SavedLane> lanes = new List<SavedLane>();
     #endregion
 
     #region Base
@@ -701,6 +740,7 @@ class GameStateData
     public List<SpawnedTileActor> spawnedTileActors;
     public List<TileActorManager.RoundSpawnInfo> spawnList;
 
+    public List<TrapUnit> trapUnits;
 
     //public List<TileActor> actors;
     /*
@@ -720,7 +760,7 @@ class GameStateData
     #region Cards
     public List<int> drawPile = new List<int>();
     public List<int> discardPile = new List<int>();
-    public List<Card> hand = new List<Card>();
+    public List<SavedCard> hand = new List<SavedCard>();
     #endregion
 
 
@@ -739,13 +779,44 @@ class SpawnedTileActor
     public TileActor.TileActorType type;
     public int damage;
     public int attackRange;
+    public bool isShielded;
+    public bool isPoisoned;
 
+#pragma warning restore 0649
+}
+
+[Serializable]
+class SpawnedTrap
+{
+#pragma warning disable 0649
+    public string name;
+    public int curHealth;
+    public Vector2Int pos;
+    public bool isShielded;
+    public bool isPoisoned;
 #pragma warning restore 0649
 }
 
 
 [Serializable]
-class PlayerStats
+public class SavedLane
+{
+#pragma warning disable 0649
+    public List<int> terrains;
+#pragma warning restore 0649
+}
+
+[Serializable]
+public class SavedCard
+{
+#pragma warning disable 0649
+    public int cardId;
+    public int cardHealth;
+#pragma warning restore 0649
+}
+
+[Serializable]
+public class PlayerStats
 {
 #pragma warning disable 0649
 

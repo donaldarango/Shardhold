@@ -44,7 +44,20 @@ public class MapQuadrant
     public MapTile GetTileFromQuadrant(int ringNumber, int laneNumber)
     {
         int laneCount = MapManager.Instance.GetLaneCount();
-        int index = (ringNumber * 3) + (laneNumber % laneCount);
-        return mapTiles[index];
+        int index = (ringNumber * laneCount/*3*/) + (laneNumber % laneCount);
+        try
+        {
+            return mapTiles[index];
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Debug.LogError("ERROR when getting map tile with ringNumber: " + ringNumber + ", laneNumber: " + laneNumber + ", laneCount: " + laneCount + ", resulting in index of " + index + " out of list size of " + mapTiles.Count + ". ");
+            return mapTiles[0];
+        }
+    }
+
+    public void RemoveAllTiles()
+    {
+        mapTiles.Clear();
     }
 }

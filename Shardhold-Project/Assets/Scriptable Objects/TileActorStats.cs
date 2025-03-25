@@ -11,6 +11,8 @@ public abstract class TileActorStats : ScriptableObject
     public int maxHealth;
     public int attackRange;
     public int damage;
+    public bool isShielded;
+    public bool isPoisoned;
 
     [Header("Tile Actor Prefab")]
     public GameObject actorPrefab; // Prefab reference for the actor (enemy, structure, trap)

@@ -30,7 +30,6 @@ public class Deck : MonoBehaviour
     //uses same rules as drawPile
     public List<int> discardPile = new List<int>();
     public bool[] occupiedSlots;
-    public int handCapacity = 3;
 
     //uses same rules as drawPile
     public Card[] hand;
@@ -44,7 +43,7 @@ public class Deck : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -71,13 +70,67 @@ public class Deck : MonoBehaviour
 
     #endregion
 
+    public void CreateCard(int cardID)
+    {
+        
+
+        //find an open slot
+        int openSlot = FindFirstOpenUISlot();
+
+        //add it to hand (non-UI)
+        hand[openSlot] = cardLookup[cardID];
+        cardsInHand++;
+        Debug.Log("Card drawn: " + cardLookup[cardID].cardName);
+        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
+        {
+            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
+        }
+
+        //add it to hand (UI)
+
+        Debug.Log("Open slot: " + openSlot);
+        Transform cardUISlot = cardPositions[openSlot];         //get the open slot's transform component
+        occupiedSlots[openSlot] = true;                         //mark slot as occupied
+        UIHand[openSlot] = CreateCardUI(cardLookup[cardID], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
+
+    }
+
+    public void DeleteCard(int handPosition)
+    {
+        //free up occupied slot
+        occupiedSlots[handPosition] = false;
+
+        //remove from hand (UI)
+        Destroy(UIHand[handPosition]);  //delete the UI card
+        UIHand[handPosition] = null;  //remove from the list
+
+        //remove from hand (non-UI)
+        hand[handPosition] = null;    //since hand references the cards, we DO NOT delete the cards with the current implementation, just remove the reference to it by deleting the entry in the hand list
+        cardsInHand--;
+        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
+        {
+            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after discarding one.");
+        }
+    }
+
+    public void DeleteAllCardsInHand()
+    {
+        for (int i = 0; i < hand.Length; i++)
+        {
+            if (occupiedSlots[i])
+            {
+                DeleteCard(i);
+            }
+        }
+    }
+
     /// <summary>
     /// To be used at the beginning of the player's turn to fill their hand
     /// </summary>
     private void DrawCardsUntilFull()
     {
         int safety = 200;
-        while (CountCardsInHand() < handCapacity)
+        while (CountCardsInHand() < hand.Length)
         {
             if(safety-- < 0) {  break; }
             DrawCard();
@@ -95,10 +148,10 @@ public class Deck : MonoBehaviour
             if (discardPile.Count() > 0)
             {
                 SwapDrawAndDiscard();
-                if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
+                /*if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
                 {
                     Debug.Log("Draw pile was empty, which should not happen. Thankfully, the discard pile was not empty, so draw pile has been filled and a card can be drawn.");
-                }
+                }*/
             }
             else
             {
@@ -123,34 +176,17 @@ public class Deck : MonoBehaviour
         //choose a card from the draw pile
         int choice = CustomMath.RandomInt(0, drawPile.Count-1);
 
-        //find an open slot
-        int openSlot = FindFirstOpenUISlot();
-
-        //add it to hand (non-UI)
-        hand[openSlot] = cardLookup[drawPile[choice]];
-        cardsInHand++;
-        Debug.Log("Card drawn: " + cardLookup[drawPile[choice]].cardName);
-        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
-        {
-            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
-        }
-
-        //add it to hand (UI)
-        
-        Debug.Log("Open slot: " + openSlot);
-        Transform cardUISlot = cardPositions[openSlot];         //get the open slot's transform component
-        occupiedSlots[openSlot] = true;                         //mark slot as occupied
-        UIHand[openSlot] = CreateCardUI(cardLookup[drawPile[choice]], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
+        CreateCard(drawPile[choice]);
 
         //remove from draw pile
         drawPile.RemoveAt(choice);
         Debug.Log(" Cards left in drawpile: " + drawPile.Count);
 
-        //ensure non-empty draw pile
-        if(drawPile.Count <= 0)
+        //ensure non-empty draw pile; MOVED TO START OF DRAW
+        /*if (drawPile.Count <= 0)
         {
             SwapDrawAndDiscard();
-        }
+        }*/
     }
     
     //finding an open slot/pos in card UI 
@@ -227,20 +263,7 @@ public class Deck : MonoBehaviour
         discardPile.Add(hand[handPosition].GetId());
         Debug.Log("Card discarded: " + hand[handPosition].cardName);
 
-        //free up occupied slot
-        occupiedSlots[handPosition] = false;
-
-        //remove from hand (UI)
-        Destroy(UIHand[handPosition]);  //delete the UI card
-        UIHand[handPosition] = null;  //remove from the list
-
-        //remove from hand (non-UI)
-        hand[handPosition] = null;    //since hand references the cards, we DO NOT delete the cards with the current implementation, just remove the reference to it by deleting the entry in the hand list
-        cardsInHand--;
-        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
-        {
-            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after discarding one.");
-        }
+       DeleteCard(handPosition);
     }
 
     /// <summary>
@@ -352,6 +375,15 @@ public class Deck : MonoBehaviour
     public int CountCardsInHand()
     {
         return cardsInHand;
+    }
+
+    public void SetCardsInHand(int amt)
+    {
+        if (CustomDebug.DeckDebugging(DebuggingType.Normal))
+        {
+            Debug.Log("External setting of cardsInHand variable occurred. This should only happen when loading a saved game.");
+        }
+        cardsInHand = amt;
     }
 
     /// <summary>

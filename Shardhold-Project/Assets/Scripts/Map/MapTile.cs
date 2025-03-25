@@ -13,7 +13,7 @@ public class MapTile
     [SerializeField] private int laneNumber;
     [SerializeReference] private Terrain terrain; 
     [SerializeField] private TileActor currentTileActor = null;
-    // TODO: Add Current Trap once traps implemented
+    [SerializeField] private TrapUnit currentTrapUnit = null;
     private Vector3 tileCenter;
 
     public MapTile(Quadrant quadrant, int ringNumber, int laneNumber, Vector3 tileCenter, Terrain terrain)
@@ -50,12 +50,24 @@ public class MapTile
     {
         return tileCenter;
     }
+
     public TileActor GetCurrentTileActor()
     {
         return currentTileActor;
     }
+
     public void SetCurrentTileActor(TileActor tileActor)
     {
         currentTileActor = tileActor;
+    }
+
+    public TrapUnit GetCurrentTrapUnit()
+    {
+        return currentTrapUnit;
+    }
+
+    public void SetCurrentTrap(TrapUnit trap)
+    {
+        currentTrapUnit = trap;
     }
 }
