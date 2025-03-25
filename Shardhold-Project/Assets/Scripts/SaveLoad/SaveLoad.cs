@@ -33,6 +33,9 @@ public class SaveLoad : MonoBehaviour
 
     public List<SavedLane> lastLoadedLanes = null;
 
+    private string curSaveLoadVersion = "1.00";
+    private string saveFileVersionsFile = "version_record.json";
+
     public void Awake()
     {
         saveFolder = Application.persistentDataPath;
@@ -689,6 +692,16 @@ public class SaveLoad : MonoBehaviour
             }
         }
     }
+
+    #region Save File Version System
+
+    public string GetVersion(string fileName)
+    {
+
+    }
+
+    #endregion
+
 }
 
 [Serializable]
@@ -830,6 +843,28 @@ public class PlayerStats
     //each card is an index value; the value at that index is the number of copies of that card unlocked
     //{4, 0, 1} means that card 0 has 4 copies, card 1 has not been unlocked, and card 2 has only 1 available copy
     public List<int> cardsUnlocked = new List<int>();
+
+#pragma warning restore 0649
+}
+
+
+[Serializable]
+public class SaveFileList
+{
+#pragma warning disable 0649
+
+    public List<SaveFileMetaData> files;
+
+#pragma warning restore 0649
+}
+
+[Serializable]
+public class SaveFileMetaData
+{
+#pragma warning disable 0649
+
+    public string fileName;
+    public string version;
 
 #pragma warning restore 0649
 }
