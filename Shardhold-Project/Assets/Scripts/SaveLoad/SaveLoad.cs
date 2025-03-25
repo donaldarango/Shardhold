@@ -28,6 +28,7 @@ public class SaveLoad : MonoBehaviour
     public string fileToUse = "current_save.json";   //default save file
     public string saveFolder = "on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go
 
+    public PlayerStats playerStats = null;
     public string playerStatsFile = "player_stats.json";
 
     public List<SavedLane> lastLoadedLanes = null;
@@ -639,26 +640,17 @@ public class SaveLoad : MonoBehaviour
 
     //text file io: https://support.unity.com/hc/en-us/articles/115000341143-How-do-I-read-and-write-data-from-a-text-file
 
+
     public void SaveStats()
     {
-        //first ready the player data
-        PlayerStats playerStats = new PlayerStats();
-
-        //get the player stats
+        //get the playerStats cardsUnlocked from the Deck cardsUnlocked
         playerStats.cardsUnlocked = Deck.Instance.cardsUnlocked;
-
-        //TODO: save next level variable
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            CustomDebug.RanUnimplementedCode("SaveStats() only saves unlocked cards.");
-        }
 
         //now convert player data into a json
         string jsonStats = ToJson(playerStats, true);
 
         //finally, save the json string into a file
         WriteFile(playerStatsFile, jsonStats);
-
     }
 
     public void LoadStats()
@@ -667,16 +659,10 @@ public class SaveLoad : MonoBehaviour
         string jsonStats = ReadFile(playerStatsFile);
 
         //now convert json into player data object
-        PlayerStats playerStats = FromJson<PlayerStats>(jsonStats);
+        playerStats = FromJson<PlayerStats>(jsonStats);
 
         //finally, use the player statistics as needed
         Deck.Instance.cardsUnlocked = playerStats.cardsUnlocked;
-
-        //TODO: load next level variable
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            CustomDebug.RanUnimplementedCode("LoadStats() is not complete.");
-        }
     }
 
     #endregion
@@ -830,7 +816,7 @@ public class SavedCard
 }
 
 [Serializable]
-class PlayerStats
+public class PlayerStats
 {
 #pragma warning disable 0649
 
