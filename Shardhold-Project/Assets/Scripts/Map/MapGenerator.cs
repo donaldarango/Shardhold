@@ -452,6 +452,7 @@ public class MapGenerator : MonoBehaviour
                             if (selectedCard)
                             {
                                 selectedCard.Play(clickedTiles);
+                                // Deck.Instance.
                                 selectedCard = null;
                                 StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
