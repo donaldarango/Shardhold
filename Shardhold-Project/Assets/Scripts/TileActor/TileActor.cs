@@ -120,6 +120,22 @@ public abstract class TileActor : MonoBehaviour
     public int GetAttackRange() {
         return attackRange;
     }
+    public bool GetIsShielded()
+    {
+        return isShielded;
+    }
+    public void SetIsShielded(bool value)
+    {
+        isShielded = value;
+    }
+    public bool GetIsPoisoned()
+    {
+        return isPoisoned;
+    }
+    public void SetIsPoisoned(bool value)
+    {
+        isPoisoned = value;
+    }
 
     public void TakeDamage(int damageAmount)
     {
