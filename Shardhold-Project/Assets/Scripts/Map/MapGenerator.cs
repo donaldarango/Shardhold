@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using static Card;
+#nullable enable 
 
 public class MapGenerator : MonoBehaviour
 {
@@ -33,8 +34,9 @@ public class MapGenerator : MonoBehaviour
         Invalid
     }
 
-    public Card selectedCard = null;
-    public Card oldCard = null;
+    public AllyUnit? selectedUnit = null; 
+    public Card? selectedCard = null;
+    public Card? oldCard = null;
     public delegate void PlayCardHandler(HashSet<(int, int)> tiles);
     public static event PlayCardHandler PlayCard;
 
@@ -100,9 +102,9 @@ public class MapGenerator : MonoBehaviour
         //{
         //    HandleTargeting(selectedCard.type);
         //}
-        if (selectedCard != null)
+        if (selectedCard != null || selectedUnit != null)
         {
-            HandleTargeting(selectedCard);
+            HandleTargeting(selectedCard, selectedUnit);
         }
         else
         {
@@ -317,7 +319,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void HandleTargeting(Card card)
+    void HandleTargeting(Card? card = null, AllyUnit? unit = null)
     {
         if (card != oldCard) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
         {
@@ -338,7 +340,7 @@ public class MapGenerator : MonoBehaviour
             string tileName = hit.collider.gameObject.name;
             if (tileName.StartsWith("Tile_R"))
             {
-                int range = card.range;
+                int range = card != null ? card.range : (unit != null ? unit.stats.range : 0);
                 string[] parts = tileName.Split('_');
                 int r = int.Parse(parts[1].Substring(1));
                 int l = int.Parse(parts[2].Substring(1));
@@ -359,7 +361,7 @@ public class MapGenerator : MonoBehaviour
                 }
 
                 int offset = Mathf.FloorToInt(l / 3) * 3; // Cull targeting into either 0, 3, 6, or 9 so quadrants are respected
-                switch (card.targetType)
+                switch (card != null ? card.targetType : (unit != null ? unit.stats.targetType : TargetType.Invalid))
                 {
                     case TargetType.Tile: // Single tile, like the prior implementation
 
@@ -449,10 +451,16 @@ public class MapGenerator : MonoBehaviour
                             }
                             targetedTiles.Clear();
                             Debug.Log("play card via new target");
-                            if (selectedCard)
+                            if (selectedCard != null)
                             {
                                 selectedCard.Play(clickedTiles);
                                 selectedCard = null;
+                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                            }
+                            else if(selectedUnit != null)
+                            {
+                                selectedUnit.Play(clickedTiles);
+                                selectedUnit = null;
                                 StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
                             //PlayCard?.Invoke(clickedTiles);
@@ -471,10 +479,16 @@ public class MapGenerator : MonoBehaviour
                         targetedTiles.Clear();
                         Debug.Log("play card via first target");
 
-                        if (selectedCard)
+                        if (selectedCard != null)
                         {
                             selectedCard.Play(clickedTiles);
                             selectedCard = null;
+                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                        }
+                        else if (selectedUnit != null)
+                        {
+                            selectedUnit.Play(clickedTiles);
+                            selectedUnit = null;
                             StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }
                         //PlayCard?.Invoke(clickedTiles);
@@ -485,16 +499,13 @@ public class MapGenerator : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    if (card.targetType == TargetType.Tile && card.cardType == CardType.Spell)
+                    if (card != null && selectedCard != null && card.targetType == TargetType.Tile && card.cardType == CardType.Spell)
                     {
-                        if (selectedCard)
-                        {
-                            HashSet<(int, int)> set = new HashSet<(int, int)>();
-                            set.Add((-1, -1));
-                            selectedCard.Play(set);
-                            selectedCard = null;
-                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
-                        }
+                        HashSet<(int, int)> set = new HashSet<(int, int)>();
+                        set.Add((-1, -1));
+                        selectedCard.Play(set);
+                        selectedCard = null;
+                        StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                     }
                 }
             }
@@ -541,7 +552,7 @@ public class MapGenerator : MonoBehaviour
             // Keep clicked tile color as clickColor
             tileMeshes[tile].material.color = clickColor;
         }
-        else if (selectedCard && tile.Item1 >= selectedCard.range)
+        else if ((selectedCard != null || selectedUnit != null) && tile.Item1 >= (selectedCard != null ? selectedCard.range : selectedUnit != null ? selectedUnit.stats.range : 0))
         {   
             // Tile is out of range of current card, set it to farColor
             tileMeshes[tile].material.color = farColor;
@@ -585,14 +596,8 @@ public class MapGenerator : MonoBehaviour
 
     public void SelectCard(Card newCard)
     {
-        if (newCard)
-        {
-            selectedCard = newCard;
-        }
-        else
-        {
-            selectedCard = null;
-        }
+        selectedCard = newCard != null ? newCard : null;
+        selectedUnit = null;
 
         clickedTile = null;
         clickedTiles.Clear();
@@ -605,7 +610,22 @@ public class MapGenerator : MonoBehaviour
             ResetTileColor(tile.Key);
         }
     }
+    public void SelectUnit(AllyUnit newUnit)
+    {
+        selectedUnit = newUnit != null ? newUnit : null;
+        selectedCard = null;
 
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        HandleTargeting(null, newUnit);
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+    }
 
     private void OnRoundResetSelection()
     {
