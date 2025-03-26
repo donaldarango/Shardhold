@@ -40,4 +40,10 @@ public class TrapUnit : TileActor
 
         TakeDamage(1);
     }
+
+    public override void Die()
+    {
+        currentTile.SetCurrentTrap(null);
+        base.Die();
+    }
 }

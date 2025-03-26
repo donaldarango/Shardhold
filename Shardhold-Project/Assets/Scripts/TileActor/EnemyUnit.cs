@@ -1,4 +1,6 @@
 using DG.Tweening;
+using JetBrains.Annotations;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class EnemyUnit : TileActor
@@ -77,6 +79,11 @@ public class EnemyUnit : TileActor
             return;
         }
 
+        if(isPoisoned)
+        {
+            TakeDamage(1);
+        }
+
         int moveSpeed = enemyStats.moveSpeed;
         if (currentTile == null)
         {
@@ -114,6 +121,10 @@ public class EnemyUnit : TileActor
                 {
                     Debug.Log("Enemy attacks structure!");
                     Attack((StructureUnit)actor);
+
+                    // CHECK IF ENEMY IS STILL IN A TRAP SINCE IT DOESN'T MOVE!
+                    // if current tile has a trap, call trap's trigger and attack.
+
                     return; // Stop moving if attacking
                 }
                 else if(actor.GetTileActorType() == TileActorType.Trap)
@@ -137,7 +148,7 @@ public class EnemyUnit : TileActor
         }
     }
 
-    public void AttackBase()
+    public virtual void AttackBase()
     {
         DamageBase?.Invoke(damage);
     }

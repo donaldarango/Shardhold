@@ -41,6 +41,11 @@ public class MapManager : MonoBehaviour
         quadrantData.Add(new MapQuadrant(Quadrant.SE));
     }
 
+    public MapQuadrant GetQuadrant(int index)
+    {
+        return quadrantData[index];
+    }
+
     public int GetRingCount()
     {
         return ringCount;
@@ -77,7 +82,7 @@ public class MapManager : MonoBehaviour
         trapUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         TrapUnit trapUnit = trapUnitPrefab.GetComponent<TrapUnit>();
         trapUnit.Spawn(tile);
-        tile.SetCurrentTileActor(trapUnit);
+        tile.SetCurrentTrap(trapUnit);
         return trapUnit;
     }
 
@@ -114,7 +119,22 @@ public class MapManager : MonoBehaviour
         quadrantData[quadrantIndex].AddTile(tile);
     }
 
-    public List<TileActor> GetTileActorList()
+    public void RemoveAllTiles()
+    {
+        for (int i = 0; i < quadrantData.Count; i++)
+        {
+            quadrantData[i].RemoveAllTiles();
+        }
+
+        //gameObject destruction:
+        for (int i = 0; i < MapGenerator.Instance.tileGameObjects.Count; i++)
+        {
+            Destroy(MapGenerator.Instance.tileGameObjects[i]);
+        }
+        MapGenerator.Instance.tileGameObjects.Clear();
+    }
+
+    public List<TileActor> GetTileActorList(bool includeTraps = false)
     {
         List<TileActor> tileActors = new List<TileActor>();
         for (int i = 0; i < 4; i++) // for each quadrant
@@ -126,10 +146,36 @@ public class MapManager : MonoBehaviour
                 if (ta != null)
                 {
                     tileActors.Add(ta);
-                }  
+                }
+                if (includeTraps)
+                {
+                    TrapUnit trap = mapTiles[j].GetCurrentTrapUnit();
+                    if(trap != null)
+                    {
+                        tileActors.Add(trap);
+                    }
+                }
             }
         }
         return tileActors;
+    }
+
+    public List<TrapUnit> GetTrapUnitList()
+    {
+        List<TrapUnit> traps = new List<TrapUnit>();
+        for (int i = 0; i < 4; i++) // for each quadrant
+        {
+            List<MapTile> mapTiles = quadrantData[i].GetMapTilesList();
+            for (int j = 0; j < mapTiles.Count; j++)
+            {
+                TrapUnit trap = mapTiles[j].GetCurrentTrapUnit();
+                if (trap != null)
+                {
+                    traps.Add(trap);
+                }
+            }
+        }
+        return traps;
     }
 
     // Returns current TileActor of specified tile, if none returns null

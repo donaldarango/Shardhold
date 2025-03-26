@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Assertions;
 using static Card;
@@ -8,6 +9,9 @@ using static Card;
 
 public class MapGenerator : MonoBehaviour
 {
+    public static MapGenerator Instance { get { return _instance; } }
+    private static MapGenerator _instance;
+
     public delegate void HoverEventHandler(TileActor ta);
     public static event HoverEventHandler HoverTile;
     public static event EventHandler<SelectTileEventArgs> SelectTile;
@@ -22,6 +26,8 @@ public class MapGenerator : MonoBehaviour
     public Color clickColor = new Color(0.8f, 0.3f, 0.3f, 0.6f); // Red when clicked
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
     public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
+
+    public List<GameObject> tileGameObjects = new List<GameObject>();
 
     public enum TargetType
     {
@@ -65,18 +71,38 @@ public class MapGenerator : MonoBehaviour
 
     }
 
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            throw new System.Exception("An instance of this singleton already exists.");
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     void Start()
+    {
+        //all prior code from here was moved to GenerateMap()
+
+        GenerateMap();
+    }
+
+    public void GenerateMap()
     {
         // Always set map at 0,0,0
         transform.position = Vector3.zero;
 
-        totalLaneCount = laneCount * 4; 
+        totalLaneCount = laneCount * 4;
         sectionAngle = 360f / totalLaneCount;
         circleRadii = new float[ringCount + 1];
 
-		targetedTiles = new HashSet<(int, int)>();
+        targetedTiles = new HashSet<(int, int)>();
         clickedTiles = new HashSet<(int, int)>();
-        
+
 
         // Debugging
         Assert.IsTrue(circleRadii.Length > 0);
@@ -127,6 +153,7 @@ public class MapGenerator : MonoBehaviour
                 float endAngle = ((l + 1) * sectionAngle) * Mathf.Deg2Rad;
 
                 GameObject tileObj = new GameObject($"Tile_R{r}_L{l}");
+                tileGameObjects.Add(tileObj);
                 tileObj.transform.parent = transform;
                 MeshFilter meshFilter = tileObj.AddComponent<MeshFilter>();
                 MeshRenderer meshRenderer = tileObj.AddComponent<MeshRenderer>();
@@ -148,15 +175,23 @@ public class MapGenerator : MonoBehaviour
                 // Determine Terrain Type and update materials
                 // TODO: read in map terrain info
 
-                // TESTING: even quadrant = default ; odd = mountain
                 Terrain terrain;
-                if (q % 2 == 0)
+                if (SaveLoad.saveLoad.lastLoadedLanes == null || SaveLoad.saveLoad.lastLoadedLanes.Count < totalLaneCount || SaveLoad.saveLoad.lastLoadedLanes[0].terrains.Count < ringCount)
                 {
-                    terrain = CreateTerrain(TerrainType.Default);
+                    // TESTING: even quadrant = default ; odd = mountain
+                    
+                    if (q % 2 == 0)
+                    {
+                        terrain = CreateTerrain(TerrainType.Default);
+                    }
+                    else
+                    {
+                        terrain = CreateTerrain(TerrainType.Mountain);
+                    }
                 }
                 else
                 {
-                    terrain = CreateTerrain(TerrainType.Mountain);
+                    terrain = CreateTerrain((TerrainType)SaveLoad.saveLoad.lastLoadedLanes[l].terrains[r]);
                 }
                 SetMeshRendererTerrainMaterial(terrain, meshRenderer);
 

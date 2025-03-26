@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee22658e25e21644283c920854d45c88, type: 3}
-  m_Name: BasicTrapUnit
+  m_Script: {fileID: 11500000, guid: ac647accb1740cd468efb8e82c126426, type: 3}
+  m_Name: Glass Cannon
   m_EditorClassIdentifier: 
-  unitName: Spike
-  actorType: 2
-  maxHealth: 2
-  attackRange: 0
-  damage: 1
-  prefferedTerrain: 0
-  actorPrefab: {fileID: 4056473965733300984, guid: 68cb2b23c5e62574cb74476d38d5ac18, type: 3}
+  unitName: Glass Cannon
+  actorType: 0
+  maxHealth: 1
+  attackRange: 1
+  damage: 5
+  isShielded: 1
+  isPoisoned: 0
+  actorPrefab: {fileID: 0}
+  moveSpeed: 1
