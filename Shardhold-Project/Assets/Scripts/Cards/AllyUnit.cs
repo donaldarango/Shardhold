@@ -21,11 +21,21 @@ abstract public class AllyUnit : Card
             {
                 actor.TakeDamage(damage);
                 health -= actor.tileActorStats.damage;
+                if (DiscardAfterPlay() == true) {
+                    
+                }
                 //return to hand
             }
         }
 
     }
 
+    public override bool DiscardAfterPlay()
+    {
+        if (health <= 0) {
+            return true;
+        }
+        return false;
+    }
 }
 
