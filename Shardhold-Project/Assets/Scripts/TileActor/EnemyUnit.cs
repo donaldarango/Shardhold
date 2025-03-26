@@ -180,11 +180,11 @@ public class EnemyUnit : TileActor
 
         MapTile frontTile = MapManager.Instance.GetTile(currentRingNumber - 1, currentLaneNumber);
         TileActor frontTileActor = frontTile.GetCurrentTileActor();
-        if (frontTileActor == null)
+        if (frontTileActor == null && frontTile.GetTerrain().terrainType != TerrainType.Mountain)   //mountains are impassable and must be navigated around
         {
             return frontTile;
         }
-        else if (frontTileActor.GetTileActorType() == TileActorType.EnemyUnit)
+        else if ((frontTileActor != null && (frontTileActor.GetTileActorType() == TileActorType.EnemyUnit)) || (frontTile.GetTerrain().terrainType == TerrainType.Mountain))
         {
             MapTile sideTile = CheckSideAvailability(currentQuadrant, currentRingNumber, currentLaneNumber);
             return sideTile;
@@ -203,7 +203,7 @@ public class EnemyUnit : TileActor
         {
             MapTile tile = MapManager.Instance.GetTile(currentRingNumber - 1, currentQuadrant * laneCount + i);
 
-            if (MapManager.Instance.DoesTileContainTileActor(tile) == null)
+            if (MapManager.Instance.DoesTileContainTileActor(tile) == null && tile.GetTerrain().terrainType != TerrainType.Mountain)
             {
                 return tile;
             }
