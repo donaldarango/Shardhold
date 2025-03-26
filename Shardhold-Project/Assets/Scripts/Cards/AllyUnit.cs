@@ -21,9 +21,6 @@ abstract public class AllyUnit : Card
             {
                 actor.TakeDamage(damage);
                 health -= actor.tileActorStats.damage;
-                if (DiscardAfterPlay() == true) {
-                    
-                }
                 //return to hand
             }
         }
