@@ -11,6 +11,8 @@ public class CardUI : MonoBehaviour
     [SerializeField]private TMP_Text hp;
     [SerializeField]private TMP_Text range;
     [SerializeField]private TMP_Text damage;
+    [SerializeField]public int cardIndex;
+
     [SerializeReference]Card card_;
     [SerializeField]Button cardButton;
 
@@ -47,6 +49,8 @@ public class CardUI : MonoBehaviour
     public void OnCardSelected(){
         MapGenerator mapGenerator = FindFirstObjectByType<MapGenerator>();
         Debug.Log("Card selected/clicked: " + cardName.text);
+        Debug.Log("Hand Index: " + cardIndex);
+        mapGenerator.selectedHandIndex = cardIndex;
         mapGenerator.SelectCard(card_);
     }
 }

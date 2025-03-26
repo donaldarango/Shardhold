@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -40,6 +41,7 @@ public class MapGenerator : MonoBehaviour
     }
 
     public Card selectedCard = null;
+    public int selectedHandIndex = -1;
     public Card oldCard = null;
     public delegate void PlayCardHandler(HashSet<(int, int)> tiles);
     public static event PlayCardHandler PlayCard;
@@ -487,7 +489,6 @@ public class MapGenerator : MonoBehaviour
                             if (selectedCard)
                             {
                                 selectedCard.Play(clickedTiles);
-                                // Deck.Instance.
                                 selectedCard = null;
                                 StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
@@ -510,6 +511,9 @@ public class MapGenerator : MonoBehaviour
                         if (selectedCard)
                         {
                             selectedCard.Play(clickedTiles);
+                            if (selectedCard.DiscardAfterPlay() == true) {
+                                Deck.Instance.DiscardCard(selectedHandIndex);
+                            }
                             selectedCard = null;
                             StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }
@@ -528,6 +532,8 @@ public class MapGenerator : MonoBehaviour
                             HashSet<(int, int)> set = new HashSet<(int, int)>();
                             set.Add((-1, -1));
                             selectedCard.Play(set);
+                            Debug.Log(selectedCard);
+                            Deck.Instance.DiscardCard(selectedHandIndex);
                             selectedCard = null;
                             StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }

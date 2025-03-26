@@ -38,6 +38,13 @@ abstract public class Card : ScriptableObject
     {
         return id;
     }
+    public bool DiscardAfterPlay()
+    {
+        if(cardType == CardType.Spell || cardType == CardType.Placer){
+            return true;
+        }
+        return false;
+    }
     #endregion
     abstract public void Play(HashSet<(int, int)> tiles);
 }
