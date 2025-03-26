@@ -70,13 +70,22 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    public string ReadFile(string filename)
+    public bool ReadFile(string filename, out string contents)
     {
-        string contents = "";
-        using (StreamReader reader = new StreamReader(saveFolder + "/" + filename)) {
-            contents = reader.ReadToEnd();
+        contents = "";
+        string absoluteFile = saveFolder + "/" + filename;
+        if (File.Exists(absoluteFile))
+        {
+            using (StreamReader reader = new StreamReader(absoluteFile))
+            {
+                contents = reader.ReadToEnd();
+            }
+            return true;
         }
-        return contents;
+        else
+        {
+            return false;
+        }
     }
     #endregion
 
@@ -233,6 +242,8 @@ public class SaveLoad : MonoBehaviour
 
         #endregion
 
+        StoreVersion(filename, data.saveVersion);
+
         #region Writing to File
 
         if (saveType == SaveType.chooseDefault){
@@ -320,6 +331,7 @@ public class SaveLoad : MonoBehaviour
                 break;
             case SaveType.json:
                 noProblemLoading = JsonLoad(filename, out data);
+                Print("Json no problem loading: " + noProblemLoading, CustomDebug.DebuggingType.Normal);
                 break;
             default:
                 if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
@@ -439,6 +451,10 @@ public class SaveLoad : MonoBehaviour
 
             #endregion
         }
+        else
+        {
+            Print("Problem Loading.", CustomDebug.DebuggingType.Warnings);
+        }
         return noProblemLoading;
 
     }
@@ -472,17 +488,26 @@ public class SaveLoad : MonoBehaviour
         try
         {
             //read the file into a string
-            string jsonData = ReadFile(filename);
-
-            //convert json into GameStateData object
-            data = FromJson<GameStateData>(jsonData);
-
-            //presumably the operation was successful
-            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+            string jsonData;
+            if (ReadFile(filename, out jsonData))
             {
-                Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
+
+                //convert json into GameStateData object
+                data = FromJson<GameStateData>(jsonData);
+
+                //presumably the operation was successful
+                if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+                {
+                    Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
+                }
+                return true;
             }
-            return true;
+            else
+            {
+                Print("Problem reading json file.", CustomDebug.DebuggingType.Warnings);
+                data = null;
+                return false;
+            }
         }
         catch (Exception e)
         {
@@ -659,10 +684,20 @@ public class SaveLoad : MonoBehaviour
     public void LoadStats()
     {
         //first read the file into a string
-        string jsonStats = ReadFile(playerStatsFile);
+        string jsonStats;
+        if (ReadFile(playerStatsFile, out jsonStats))
+        {
+            //now convert json into player data object
+            playerStats = FromJson<PlayerStats>(jsonStats);
+        }
+        else
+        {
+            //no stats yet
+            playerStats = new PlayerStats();
 
-        //now convert json into player data object
-        playerStats = FromJson<PlayerStats>(jsonStats);
+            //TODO default player stats
+            RanUnimplementedCode("Default stats not set up.");
+        }
 
         //finally, use the player statistics as needed
         Deck.Instance.cardsUnlocked = playerStats.cardsUnlocked;
@@ -679,7 +714,14 @@ public class SaveLoad : MonoBehaviour
         WriteFile(testFileName, "Test line 1\nTest line 2");
         Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
         Debug.Log("Attempting to read that test file...");
-        Debug.Log("Successful read, contents are as follows:\n" + ReadFile(testFileName));
+        string readString = "";
+        if (ReadFile(testFileName, out readString)) {
+            Debug.Log("Successful read, contents are as follows:\n" + readString);
+        }
+        else
+        {
+            Debug.Log("Unsuccessful read; file not found.");
+        }
         if (saveLoad != null)
         {
             if (saveLoad == this)
@@ -697,6 +739,61 @@ public class SaveLoad : MonoBehaviour
 
     public string GetVersion(string fileName)
     {
+        string jsonVersionFile;
+        if (ReadFile(saveFileVersionsFile, out jsonVersionFile))
+        {
+            SaveFileList saveFileList = FromJson<SaveFileList>(jsonVersionFile);
+
+            for (int i = 0; i < saveFileList.files.Count; i++)
+            {
+                if (saveFileList.files[i].fileName == fileName)
+                {
+                    return saveFileList.files[i].version;
+                }
+            }
+        }
+        return "";
+
+    }
+
+    public void StoreVersion(string fileName, string version)
+    {
+        string jsonVersionFile;
+        SaveFileList saveFileList = null;
+        if (ReadFile(saveFileVersionsFile, out jsonVersionFile))
+        {
+            saveFileList = FromJson<SaveFileList>(jsonVersionFile);
+        }
+
+        if (saveFileList != null)
+        {
+            for (int i = 0; i < saveFileList.files.Count; i++)
+            {
+                if (saveFileList.files[i].fileName == fileName)
+                {
+                    saveFileList.files[i].version = version;
+
+                    //save the updated list
+                    jsonVersionFile = ToJson(saveFileList, true);
+                    WriteFile(saveFileVersionsFile, jsonVersionFile);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            saveFileList = new SaveFileList();
+            saveFileList.files = new List<SaveFileMetaData>();
+        }
+        SaveFileMetaData newData = new SaveFileMetaData();
+        newData.fileName = fileName;
+        newData.version = version;
+        saveFileList.files.Add(newData);
+
+        //save the updated list
+        jsonVersionFile = ToJson(saveFileList, true);
+        WriteFile(saveFileVersionsFile, jsonVersionFile);
+        return;
 
     }
 
