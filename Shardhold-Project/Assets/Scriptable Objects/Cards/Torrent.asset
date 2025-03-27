@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Torrent
   m_EditorClassIdentifier: 
   id: 2
+  cardImage: {fileID: 0}
   cardName: Torrent
   targetType: 1
   range: 3
+  description: Splash . . .
   damage: 1
+  hp: 0
   heal: 0
   friendlyFire: 0

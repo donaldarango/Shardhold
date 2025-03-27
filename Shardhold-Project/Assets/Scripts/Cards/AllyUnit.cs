@@ -43,4 +43,11 @@ public class AllyUnit : MonoBehaviour
         }
 
     }
+    public override bool DiscardAfterPlay()
+    {
+        if (health <= 0) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -38,6 +38,10 @@ abstract public class Card : ScriptableObject
     {
         return id;
     }
+    public virtual bool DiscardAfterPlay()
+    {
+        return true;
+    }
     #endregion
     abstract public void Play(HashSet<(int, int)> tiles);
 }
