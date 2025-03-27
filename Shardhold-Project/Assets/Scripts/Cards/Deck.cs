@@ -16,7 +16,7 @@ public class Deck : MonoBehaviour
     public static Deck Instance { get; private set; }
 
     //this will be used for converting int into a Card
-    public List<Card> cardLookup = new List<Card>();
+    public List<ScriptableObject> cardLookup = new List<ScriptableObject>();
 
     //stores what has been unlocked for the player; is not the actual deck necessarily
     //each card is an index value; the value at that index is the number of copies of that card unlocked
@@ -33,7 +33,7 @@ public class Deck : MonoBehaviour
     public bool[] occupiedSlots;
 
     //uses same rules as drawPile
-    public Card[] hand;
+    public ScriptableObject[] hand;
     public GameObject[] UIHand;
     private int cardsInHand = 0;
 
@@ -71,15 +71,24 @@ public class Deck : MonoBehaviour
 
     #endregion
 
-    public void CreateCard(int cardID)
+    public ScriptableObject CreateCard(int cardID)
     {
         //find an open slot
         int openSlot = FindFirstOpenUISlot();
 
         //add it to hand (non-UI)
-        hand[openSlot] = cardLookup[cardID];
+        ScriptableObject intermediate = cardLookup[cardID];
+
+        hand[openSlot] = intermediate;
         cardsInHand++;
-        Debug.Log("Card drawn: " + cardLookup[cardID].cardName);
+        if (intermediate is Card)
+        {
+            Debug.Log("Card drawn: " + ((Card)intermediate).cardName);
+        }
+        else
+        {
+            Debug.Log("Card drawn: " + ((AllyUnitStats)intermediate).cardName);
+        }
         if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
         {
             Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
@@ -92,6 +101,7 @@ public class Deck : MonoBehaviour
         occupiedSlots[openSlot] = true;                         //mark slot as occupied
         UIHand[openSlot] = CreateCardUI(cardLookup[cardID], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
         UIHand[openSlot].GetComponent<CardUI>().cardIndex = openSlot;
+        return intermediate;
     }
 
     public void DeleteCard(int handPosition)
@@ -259,8 +269,17 @@ public class Deck : MonoBehaviour
         }
 
         //send to discard pile
-        discardPile.Add(hand[handPosition].GetId());
-        Debug.Log("Card discarded: " + hand[handPosition].cardName);
+        ScriptableObject intermediate = hand[handPosition];
+        if (intermediate is Card)
+        {
+            discardPile.Add(((Card)intermediate).GetId());
+            Debug.Log("Card discarded: " + ((Card)intermediate).cardName);
+        }
+        else
+        {
+            discardPile.Add(((AllyUnitStats)intermediate).GetId());
+            Debug.Log("Card discarded: " + ((AllyUnitStats)intermediate).cardName);
+        }
 
         DeleteCard(handPosition);
     }
@@ -275,8 +294,14 @@ public class Deck : MonoBehaviour
         discardPile = temp;
     }
 
-    public GameObject CreateCardUI(Card card, Transform position) {
+    public GameObject CreateCardUI(ScriptableObject card, Transform position) {
         GameObject cardObject = Instantiate(cardPrefab, position);
+        if(card is AllyUnitStats)
+        {
+            AllyUnit unit = cardObject.AddComponent<AllyUnit>();
+            unit.stats = (AllyUnitStats)card;
+        }
+
         CardUI cardUI = cardObject.GetComponent<CardUI>();
         if (cardUI != null)
         {
@@ -359,7 +384,7 @@ public class Deck : MonoBehaviour
     /// </summary>
     /// <param name="handPosition">The position in the hand to investigate</param>
     /// <returns></returns>
-    public Card GetCardInHandPos(int handPosition)
+    public ScriptableObject GetCardInHandPos(int handPosition)
     {
         //int cardInt = hand[handPosition];   //get the int representation of the card at the given position in the hand
         //Card card = cardLookup[cardInt];    //turn the int representation into an actual Card object

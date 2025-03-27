@@ -5,8 +5,8 @@ using static MapGenerator;
 public class AllyUnit : MonoBehaviour
 {
     public AllyUnitStats stats;
-    int currentHealth;
-
+    public int currentHealth;
+    public int currentAttacks; //unfinished; for later
     public CardType cardType => CardType.Unit;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,9 +43,9 @@ public class AllyUnit : MonoBehaviour
         }
 
     }
-    public override bool DiscardAfterPlay()
+    public bool DiscardAfterPlay()
     {
-        if (health <= 0) {
+        if (currentHealth <= 0) {
             return true;
         }
         return false;

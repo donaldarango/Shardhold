@@ -216,8 +216,17 @@ public class SaveLoad : MonoBehaviour
             {
                 SavedCard savedCard = new SavedCard();
                 data.hand.Add(savedCard);
-                savedCard.cardId = Deck.Instance.hand[i].GetId();
-                savedCard.cardHealth = Deck.Instance.hand[i].hp;
+                ScriptableObject intermediate = Deck.Instance.hand[i];
+                if(intermediate is Card)
+                {
+                    savedCard.cardId = ((Card)intermediate).GetId();
+                    savedCard.cardHealth = ((Card)intermediate).hp;
+                }
+                else
+                {
+                    savedCard.cardId = ((AllyUnitStats)intermediate).GetId();
+                    savedCard.cardHealth = ((AllyUnitStats)intermediate).hp;
+                }
             }
         }
         data.drawPile = Deck.Instance.drawPile;
@@ -429,7 +438,16 @@ public class SaveLoad : MonoBehaviour
             for (int i = 0; i < data.hand.Count; i++)
             {
                 Deck.Instance.CreateCard(data.hand[i].cardId);
-                Deck.Instance.hand[i].hp = data.hand[i].cardHealth;
+                ScriptableObject intermediate = Deck.Instance.hand[i];
+
+                if(intermediate is Card)
+                {
+                    ((Card)intermediate).hp = data.hand[i].cardHealth;
+                }
+                else
+                {
+                    ((AllyUnitStats)intermediate).GetComponent<AllyUnit>().currentHealth = data.hand[i].cardHealth;
+                }
             }
 
             #endregion

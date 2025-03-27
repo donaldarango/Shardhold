@@ -730,7 +730,11 @@ MonoBehaviour:
   defaultSaveType: 2
   fileToUse: current_save.json
   saveFolder: on Awake(), sets to "Application.persistentDataPath"
+  playerStats:
+    nextLevel: 0
+    cardsUnlocked: 
   playerStatsFile: player_stats.json
+  lastLoadedLanes: []
 --- !u!1 &1066579232098203590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2770,8 +2774,11 @@ MonoBehaviour:
   terrainConfigs:
   - {fileID: 11400000, guid: 1c1e56264cd89274a846b75e8282d12d, type: 2}
   - {fileID: 11400000, guid: eaa45c9ce077eb145b47511fc924131c, type: 2}
+  tileGameObjects: []
+  selectedUnit: {fileID: 0}
   selectedCard: {fileID: 0}
   oldCard: {fileID: 0}
+  selectedHandIndex: -1
 --- !u!114 &4965959596325518376
 MonoBehaviour:
   m_ObjectHideFlags: 0

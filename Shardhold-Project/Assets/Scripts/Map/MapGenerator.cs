@@ -528,6 +528,10 @@ public class MapGenerator : MonoBehaviour
                         else if (selectedUnit != null)
                         {
                             selectedUnit.Play(clickedTiles);
+                            if (selectedUnit.DiscardAfterPlay() == true)
+                            {
+                                Deck.Instance.DiscardCard(selectedHandIndex);
+                            }
                             selectedUnit = null;
                             StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                         }

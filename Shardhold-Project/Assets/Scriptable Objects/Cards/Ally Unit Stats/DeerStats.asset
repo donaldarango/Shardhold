@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f4172f0d84194c499c59fcde7a7ffe0, type: 3}
   m_Name: DeerStats
   m_EditorClassIdentifier: 
-  unitName: Deer
+  cardImage: {fileID: 0}
+  cardName: Deer
+  targetType: 0
+  range: 3
+  description: 
   damage: 2
-  maxHealth: 4
+  hp: 4
