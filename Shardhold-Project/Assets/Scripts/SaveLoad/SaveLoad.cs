@@ -298,7 +298,7 @@ public class SaveLoad : MonoBehaviour
             //success, presumably
             if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
             {
-                Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder);
+                Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder + "\"");
             }
             return true;
         }
@@ -471,7 +471,7 @@ public class SaveLoad : MonoBehaviour
 
 
             if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
-                Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
+                Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder + "\"");
             }
             return true;
         }else{
