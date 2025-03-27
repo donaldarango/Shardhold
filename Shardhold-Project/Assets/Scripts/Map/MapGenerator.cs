@@ -285,69 +285,72 @@ public class MapGenerator : MonoBehaviour
 
     void HandleTileSelection()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (PauseMenu.isPaused == false)
         {
-            string tileName = hit.collider.gameObject.name;
-            if (tileName.StartsWith("Tile_R"))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                string[] parts = tileName.Split('_');
-                int r = int.Parse(parts[1].Substring(1));
-                int l = int.Parse(parts[2].Substring(1));
-
-                
-                if (hoveredTile.HasValue && hoveredTile.Value != (r, l))
+                string tileName = hit.collider.gameObject.name;
+                if (tileName.StartsWith("Tile_R"))
                 {
-                    ResetTileColor(hoveredTile.Value);
-                }
-
-                hoveredTile = (r, l);
-                tileMeshes[(r, l)].material.color = hoverColor;
-
-                // Quadrant check and also debugging messages to check for tileactor
-                MapTile tile = MapManager.Instance.GetTile(r, l);
-                HoverTile?.Invoke(tile.GetCurrentTileActor());
+                    string[] parts = tileName.Split('_');
+                    int r = int.Parse(parts[1].Substring(1));
+                    int l = int.Parse(parts[2].Substring(1));
 
 
-                // Handle mouse click
-                if (Input.GetMouseButtonDown(0)) // Left click
-                {
-                    if (clickedTile.HasValue) // There is a selected tile
+                    if (hoveredTile.HasValue && hoveredTile.Value != (r, l))
                     {
-                        if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it
+                        ResetTileColor(hoveredTile.Value);
+                    }
+
+                    hoveredTile = (r, l);
+                    tileMeshes[(r, l)].material.color = hoverColor;
+
+                    // Quadrant check and also debugging messages to check for tileactor
+                    MapTile tile = MapManager.Instance.GetTile(r, l);
+                    HoverTile?.Invoke(tile.GetCurrentTileActor());
+
+
+                    // Handle mouse click
+                    if (Input.GetMouseButtonDown(0)) // Left click
+                    {
+                        if (clickedTile.HasValue) // There is a selected tile
                         {
-                            ResetTileColor(clickedTile.Value);
-                            Debug.Log($"Deselected {clickedTile.Value}");
-                            SelectTile?.Invoke(this, new SelectTileEventArgs(null));
-                            clickedTile = null;
+                            if (clickedTile.Value == (r, l)) // If same tile is selected, deselect it
+                            {
+                                ResetTileColor(clickedTile.Value);
+                                Debug.Log($"Deselected {clickedTile.Value}");
+                                SelectTile?.Invoke(this, new SelectTileEventArgs(null));
+                                clickedTile = null;
+                            }
+                            else // New tile selected
+                            {
+                                (int, int) prevTile = clickedTile.Value;
+                                clickedTile = (r, l);
+                                ResetTileColor(prevTile);
+                                tileMeshes[(r, l)].material.color = clickColor;
+                                SelectTile?.Invoke(this, new SelectTileEventArgs((r, l)));
+                                Debug.Log($"Selected {clickedTile.Value}");
+                            }
                         }
-                        else // New tile selected
+                        else // No currently selected tile
                         {
-                            (int, int) prevTile = clickedTile.Value;
                             clickedTile = (r, l);
-                            ResetTileColor(prevTile);
                             tileMeshes[(r, l)].material.color = clickColor;
                             SelectTile?.Invoke(this, new SelectTileEventArgs((r, l)));
                             Debug.Log($"Selected {clickedTile.Value}");
                         }
                     }
-                    else // No currently selected tile
-                    {
-                        clickedTile = (r, l);
-                        tileMeshes[(r, l)].material.color = clickColor;
-                        SelectTile?.Invoke(this, new SelectTileEventArgs((r, l)));
-                        Debug.Log($"Selected {clickedTile.Value}");
-                    }   
                 }
             }
-        }
-        else
-        {
-            // Reset hover if no tile is hit
-            if (hoveredTile.HasValue)
+            else
             {
-                ResetTileColor(hoveredTile.Value);
-                hoveredTile = null;
+                // Reset hover if no tile is hit
+                if (hoveredTile.HasValue)
+                {
+                    ResetTileColor(hoveredTile.Value);
+                    hoveredTile = null;
+                }
             }
         }
     }
