@@ -124,6 +124,10 @@ public class EnemyUnit : TileActor
 
                     // CHECK IF ENEMY IS STILL IN A TRAP SINCE IT DOESN'T MOVE!
                     // if current tile has a trap, call trap's trigger and attack.
+                    if(currentTile.GetCurrentTrapUnit())
+                    {
+                        currentTile.GetCurrentTrapUnit().Attack(this);
+                    } 
 
                     return; // Stop moving if attacking
                 }
@@ -145,6 +149,13 @@ public class EnemyUnit : TileActor
             if (nextTile == null) break; // Stop if no open tile
 
             MoveToTile(nextTile);
+
+            // Once enemy moves to the next tile, see if there's a trap and if there is attack and stop its movement.
+            if(nextTile.GetCurrentTrapUnit())
+            {
+                nextTile.GetCurrentTrapUnit().Attack(this);
+                return;
+            }
         }
     }
 
