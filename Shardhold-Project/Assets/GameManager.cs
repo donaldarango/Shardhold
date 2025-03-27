@@ -9,10 +9,10 @@ public class GameManager : MonoBehaviour
     public delegate void PlayerTurnEndHandler();
     public static event PlayerTurnEndHandler PlayerTurnEnd;
 
-    public delegate void ChangeLevelHandler(int levelNumber);
+    public delegate void ChangeLevelHandler(string level);
     public static event ChangeLevelHandler ChangeLevel;
 
-    public int currentLevel = -1;
+    public string currentLevel = null;
     public bool playerTurn = false;
 
     private void Awake()
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
+    #region Turn Handling
     public void OnStartPlayerTurn()
     {
         Debug.Log("Player turn started");
@@ -63,16 +64,20 @@ public class GameManager : MonoBehaviour
     {
         playerTurn = true;
     }
+
+    #endregion
+
+    #region Scene Loading
     public void LoadByIndex(int index)
     {
         SceneManager.LoadScene(index);
     }
 
-    public void LoadLevel(int levelNumber)
+    public void LoadLevel(string level)
     {
-        currentLevel = levelNumber;
+        currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
-        ChangeLevel?.Invoke(levelNumber);
+        ChangeLevel?.Invoke(level);
     }
 
     public void RestartLevel()
@@ -83,6 +88,8 @@ public class GameManager : MonoBehaviour
     public void LoadMainMenu()
     {
         SceneManager.LoadScene("Main-Menu");
-        currentLevel = -1;
+        currentLevel = null;
     }
 }
+
+#endregion

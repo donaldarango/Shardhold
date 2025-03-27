@@ -730,7 +730,11 @@ MonoBehaviour:
   defaultSaveType: 2
   fileToUse: current_save.json
   saveFolder: on Awake(), sets to "Application.persistentDataPath"
+  playerStats:
+    nextLevel: 0
+    cardsUnlocked: 
   playerStatsFile: player_stats.json
+  lastLoadedLanes: []
 --- !u!1 &1066579232098203590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2770,6 +2774,7 @@ MonoBehaviour:
   terrainConfigs:
   - {fileID: 11400000, guid: 1c1e56264cd89274a846b75e8282d12d, type: 2}
   - {fileID: 11400000, guid: eaa45c9ce077eb145b47511fc924131c, type: 2}
+  tileGameObjects: []
   selectedCard: {fileID: 0}
   oldCard: {fileID: 0}
 --- !u!114 &4965959596325518376
@@ -3125,6 +3130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669f2ea00d80e804680c849cd50a6307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timerPaused: 0
+  canPressTimer: 1
   resetTime: 30
   gradient:
     serializedVersion: 2
@@ -3158,6 +3165,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   RightBar: {fileID: 2972786891589840671}
   LeftBar: {fileID: 7282015162215683262}
+  timerButton: {fileID: 1071086822472596462}
   timeText: {fileID: 8884211614841758349}
   sliderRight: {fileID: 3893165082603415931}
   sliderLeft: {fileID: 3097983108308126973}
