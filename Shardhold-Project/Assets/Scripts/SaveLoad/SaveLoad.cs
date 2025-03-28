@@ -17,16 +17,22 @@ public class SaveLoad : MonoBehaviour
     public static SaveLoad saveLoad;
     public MapGenerator mapGenerator;
 
-    public enum SaveType{
+    public enum FileType{
         chooseDefault,
         binary,
         json
-        //TODO smart choosing of saveType that looks at file extension
     }
 
-    public SaveType defaultSaveType = SaveType.json;
+    public enum SaveType
+    {
+        playerSave,
+        levelFile
+    }
+
+    public FileType defaultFileType = FileType.json;
     public string fileToUse = "current_save.json";   //default save file
-    public string saveFolder = "on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go
+    public string saveFolder = "on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go (when the player saves a game)
+    public string levelsFolder = "LevelSettings/";  //from TileActor
 
     public PlayerStats playerStats = null;
     public string playerStatsFile = "player_stats.json";
@@ -62,18 +68,18 @@ public class SaveLoad : MonoBehaviour
     }
 
     #region Text File I/O
-    public void WriteFile(string filename, string contents)
+    public void WriteFile(string filename, string fileLocation, string contents)
     {
-        using (StreamWriter writer = new StreamWriter(saveFolder + "/" + filename))
+        using (StreamWriter writer = new StreamWriter(fileLocation + "/" + filename))
         {
             writer.Write(contents);
         }
     }
 
-    public bool ReadFile(string filename, out string contents)
+    public bool ReadFile(string filename, string fileLocation, out string contents)
     {
         contents = "";
-        string absoluteFile = saveFolder + "/" + filename;
+        string absoluteFile = fileLocation + "/" + filename;
         if (File.Exists(absoluteFile))
         {
             using (StreamReader reader = new StreamReader(absoluteFile))
@@ -92,22 +98,22 @@ public class SaveLoad : MonoBehaviour
 
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
     public void SaveToDefault(){
-        SaveType saveType = SaveType.chooseDefault;
+        FileType fileType = FileType.chooseDefault;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
-        Save(fileToUse, saveType);
+        Save(fileToUse, SaveType.playerSave, fileType);
     }
 
     public void LoadFromDefault(){
-        SaveType saveType = SaveType.chooseDefault;
+        FileType saveType = FileType.chooseDefault;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
-        Load(fileToUse, saveType);
+        Load(fileToUse, SaveType.playerSave, saveType);
     }
 
-    public bool Save(string filename, SaveType saveType = SaveType.chooseDefault){
+    public bool Save(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault){
         if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
         {
             Debug.Log("Saving game to specified file \"" + fileToUse + "\"");
@@ -246,14 +252,14 @@ public class SaveLoad : MonoBehaviour
 
         #region Writing to File
 
-        if (saveType == SaveType.chooseDefault){
-            saveType = defaultSaveType;
+        if (fileType == FileType.chooseDefault){
+            fileType = defaultFileType;
         }
-        switch(saveType){
-            case SaveType.binary:
+        switch(fileType){
+            case FileType.binary:
                 return BinarySave(filename, data);
-            case SaveType.json:
-                return JsonSave(filename, data);
+            case FileType.json:
+                return JsonSave(filename, saveType, data);
             default:
                 if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
                     Debug.LogError("Unidentified save type!");
@@ -285,15 +291,25 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    private bool JsonSave(string filename, GameStateData data)
+    private bool JsonSave(string filename, SaveType saveType, GameStateData data)
     {
         try
         {
             //convert game data into a json
             string jsonData = ToJson(data, true);
 
+            string saveLocation = "";
+            if (saveType == SaveType.levelFile)
+            {
+                saveLocation = levelsFolder;
+            }
+            else
+            {
+                saveLocation = saveFolder;
+            }
+
             //save the json string into a file
-            WriteFile(filename, jsonData);
+            WriteFile(filename, saveLocation, jsonData);
 
             //success, presumably
             if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
@@ -312,7 +328,7 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    public bool Load(string filename, SaveType saveType = SaveType.chooseDefault){
+    public bool Load(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault){
         if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
@@ -322,15 +338,15 @@ public class SaveLoad : MonoBehaviour
         GameStateData data = new GameStateData();
         bool noProblemLoading = true;   //set to false if there are any issues with the loading process
 
-        if(saveType == SaveType.chooseDefault){
-            saveType = defaultSaveType;
+        if(fileType == FileType.chooseDefault){
+            fileType = defaultFileType;
         }
-        switch(saveType){
-            case SaveType.binary:
+        switch(fileType){
+            case FileType.binary:
                 noProblemLoading = BinaryLoad(filename, out data);
                 break;
-            case SaveType.json:
-                noProblemLoading = JsonLoad(filename, out data);
+            case FileType.json:
+                noProblemLoading = JsonLoad(filename, saveType, out data);
                 Print("Json no problem loading: " + noProblemLoading, CustomDebug.DebuggingType.Normal);
                 break;
             default:
@@ -346,6 +362,7 @@ public class SaveLoad : MonoBehaviour
         noProblemLoading = noProblemLoading && data != null;
         if (noProblemLoading)
         {
+            Unload();
             MapManager.Instance.RemoveAllTiles();
 
             #region turn the GameStateData object into the actual state of the game
@@ -462,7 +479,7 @@ public class SaveLoad : MonoBehaviour
     //this has also been replaced with json file save system, like the save system
     private bool BinaryLoad(string filename, out GameStateData data){
         //remove all current stuff from the board in preparation for the new stuff
-        Unload();
+        //Unload();
         if(File.Exists(saveFolder + "/" + filename)){
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(saveFolder + "/" + filename, FileMode.Open);
@@ -483,13 +500,22 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-	private bool JsonLoad(string filename, out GameStateData data)
+	private bool JsonLoad(string filename, SaveType saveType, out GameStateData data)
     {
         try
         {
             //read the file into a string
             string jsonData;
-            if (ReadFile(filename, out jsonData))
+            string saveLocation = "";
+            if (saveType == SaveType.levelFile)
+            {
+                saveLocation = levelsFolder;
+            }
+            else
+            {
+                saveLocation = saveFolder;
+            }
+            if (ReadFile(filename, saveLocation, out jsonData))
             {
 
                 //convert json into GameStateData object
@@ -520,7 +546,7 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-	public void Unload()
+	private void Unload()
 	{
         //TODO remove any map effects or similar; don't worry about adjusting base HP or weapon, as these will be set when loading anyways
 
@@ -678,14 +704,14 @@ public class SaveLoad : MonoBehaviour
         string jsonStats = ToJson(playerStats, true);
 
         //finally, save the json string into a file
-        WriteFile(playerStatsFile, jsonStats);
+        WriteFile(playerStatsFile, saveFolder, jsonStats);
     }
 
     public void LoadStats()
     {
         //first read the file into a string
         string jsonStats;
-        if (ReadFile(playerStatsFile, out jsonStats))
+        if (ReadFile(playerStatsFile, saveFolder, out jsonStats))
         {
             //now convert json into player data object
             playerStats = FromJson<PlayerStats>(jsonStats);
@@ -711,11 +737,11 @@ public class SaveLoad : MonoBehaviour
     public void ReadWriteTest()
     {
         string testFileName = "text_io_test.txt";
-        WriteFile(testFileName, "Test line 1\nTest line 2");
+        WriteFile(testFileName, saveFolder, "Test line 1\nTest line 2");
         Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
         Debug.Log("Attempting to read that test file...");
         string readString = "";
-        if (ReadFile(testFileName, out readString)) {
+        if (ReadFile(testFileName, saveFolder, out readString)) {
             Debug.Log("Successful read, contents are as follows:\n" + readString);
         }
         else
@@ -740,7 +766,7 @@ public class SaveLoad : MonoBehaviour
     public string GetVersion(string fileName)
     {
         string jsonVersionFile;
-        if (ReadFile(saveFileVersionsFile, out jsonVersionFile))
+        if (ReadFile(saveFileVersionsFile, saveFolder, out jsonVersionFile))
         {
             SaveFileList saveFileList = FromJson<SaveFileList>(jsonVersionFile);
 
@@ -760,7 +786,7 @@ public class SaveLoad : MonoBehaviour
     {
         string jsonVersionFile;
         SaveFileList saveFileList = null;
-        if (ReadFile(saveFileVersionsFile, out jsonVersionFile))
+        if (ReadFile(saveFileVersionsFile, saveFolder, out jsonVersionFile))
         {
             saveFileList = FromJson<SaveFileList>(jsonVersionFile);
         }
@@ -775,7 +801,7 @@ public class SaveLoad : MonoBehaviour
 
                     //save the updated list
                     jsonVersionFile = ToJson(saveFileList, true);
-                    WriteFile(saveFileVersionsFile, jsonVersionFile);
+                    WriteFile(saveFileVersionsFile, saveFolder, jsonVersionFile);
                     return;
                 }
             }
@@ -792,7 +818,7 @@ public class SaveLoad : MonoBehaviour
 
         //save the updated list
         jsonVersionFile = ToJson(saveFileList, true);
-        WriteFile(saveFileVersionsFile, jsonVersionFile);
+        WriteFile(saveFileVersionsFile, saveFolder, jsonVersionFile);
         return;
 
     }
