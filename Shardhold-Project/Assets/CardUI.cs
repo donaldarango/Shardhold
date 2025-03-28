@@ -61,6 +61,7 @@ public class CardUI : MonoBehaviour
 
             unit_ = allystats;
             Transform background = transform.Find("CardColor");
+            background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
             cardImage.sprite = allystats.cardImage;
             cardName.text = allystats.cardName;
             cardDescription.text = allystats.description;
@@ -91,16 +92,30 @@ public class CardUI : MonoBehaviour
         MapGenerator mapGenerator = FindFirstObjectByType<MapGenerator>();
         Debug.Log("Card selected/clicked: " + cardName.text);
         Debug.Log("Hand Index: " + cardIndex);
-        mapGenerator.selectedHandIndex = cardIndex;
+        //mapGenerator.selectedHandIndex = cardIndex;
 
         if (card_ != null)
         {
+            Debug.Log("Card selected/clicked: " + cardName.text);
+            Debug.Log("Hand Index: " + cardIndex);
+            mapGenerator.selectedHandIndex = cardIndex;
             mapGenerator.SelectCard(card_);
         }
         else if (unit_ != null)
         {
             AllyUnit instance = this.gameObject.GetComponent<AllyUnit>();
-            mapGenerator.SelectUnit(instance);
+            if (instance.currentAttacks > 0)
+            {
+                Debug.Log("Card selected/clicked: " + cardName.text);
+                Debug.Log("Hand Index: " + cardIndex);
+                mapGenerator.selectedHandIndex = cardIndex;
+                mapGenerator.SelectUnit(instance);
+            }
+            else
+            {
+                Debug.Log("ignoring attempt to select exhausted unit");
+            }
+
         }
     }
 }

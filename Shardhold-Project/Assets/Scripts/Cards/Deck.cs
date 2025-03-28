@@ -65,6 +65,17 @@ public class Deck : MonoBehaviour
     public void NextTurn()
     {
         DrawCardsUntilFull();
+
+        foreach(GameObject obj in UIHand)
+        {
+            AllyUnit unit = obj.GetComponent<AllyUnit>();
+            if(unit != null)
+            {
+                unit.currentAttacks = unit.stats.attacks;
+                Transform background = unit.transform.Find("CardColor");
+                background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
+            }
+        }
     }
 
 

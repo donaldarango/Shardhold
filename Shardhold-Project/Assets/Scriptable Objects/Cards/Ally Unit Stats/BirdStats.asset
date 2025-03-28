@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f4172f0d84194c499c59fcde7a7ffe0, type: 3}
-  m_Name: DeerStats
+  m_Name: BirdStats
   m_EditorClassIdentifier: 
   id: 6
   cardImage: {fileID: 0}
   cardName: Deer
   targetType: 0
-  range: 3
+  range: 4
   description: 
-  damage: 2
-  hp: 4
+  damage: 1
+  hp: 2
   attacks: 1
