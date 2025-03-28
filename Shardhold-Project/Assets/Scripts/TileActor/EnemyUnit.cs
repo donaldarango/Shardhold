@@ -13,7 +13,8 @@ public class EnemyUnit : TileActor
 
     public BasicEnemyStats enemyStats;
 
-    [SerializeField]private int moveSpeed;
+    [SerializeField] protected int moveSpeed;
+    [SerializeField] protected AudioClip movementClip;
 
     void Start()
     {
@@ -47,6 +48,8 @@ public class EnemyUnit : TileActor
         base.SetActorData();
         
         moveSpeed = enemyStats.moveSpeed; // Store move speed
+
+        movementClip = enemyStats.movementClip;
     }
 
     public int GetMoveSpeed()
@@ -133,6 +136,11 @@ public class EnemyUnit : TileActor
                 }
                 else if(actor.GetTileActorType() == TileActorType.Trap)
                 {
+                    if(movementClip)
+                    {
+                        SoundFXManager.instance.PlaySoundFXClip(movementClip, transform, 10f);
+                    }
+
                     MoveToTile(frontTile); // Move onto trap & trigger it
                     Debug.Log("Enemy triggers a trap!");
                     TrapUnit trap = (TrapUnit)actor;
@@ -150,18 +158,31 @@ public class EnemyUnit : TileActor
 
             MoveToTile(nextTile);
 
+            if (movementClip)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(movementClip, gameObject.transform, 10f);
+            }
+
             // Once enemy moves to the next tile, see if there's a trap and if there is attack and stop its movement.
-            if(nextTile.GetCurrentTrapUnit())
+            if (nextTile.GetCurrentTrapUnit())
             {
                 nextTile.GetCurrentTrapUnit().Attack(this);
                 return;
             }
+
+            // Notably no check for another structure or anything in here, fine for now but may need to rework this function and throw it all inside the loop
         }
     }
 
     public virtual void AttackBase()
     {
         DamageBase?.Invoke(damage);
+
+        if(attackClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(attackClip, gameObject.transform, 10f);
+        }
+
     }
     public override void ShowStats() {
         base.ShowStats();
