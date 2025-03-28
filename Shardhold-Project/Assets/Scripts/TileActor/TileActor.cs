@@ -28,6 +28,12 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField] protected bool isShielded = false;
     [SerializeField] protected bool isPoisoned = false;
 
+    [Header("Scriptable Object Audio")]
+    [SerializeField] protected AudioClip attackClip;
+    [SerializeField] protected AudioClip damagedClip;
+    [SerializeField] protected AudioClip deathClip;
+    [SerializeField] protected AudioClip placementClip;
+
     [SerializeField] protected TileActorSpriteHandler spriteHandler;
     public abstract void Spawn(MapTile tile);
 
@@ -41,6 +47,12 @@ public abstract class TileActor : MonoBehaviour
         damage = tileActorStats.damage;
         isShielded = tileActorStats.isShielded;
         //isPoisoned should be false by default regardless, so.
+
+        // Audio
+        attackClip = tileActorStats.attackClip;
+        damagedClip = tileActorStats.damagedClip;
+        placementClip = tileActorStats.placementClip;
+        deathClip = tileActorStats.deathClip;
     }
 
     public virtual TileActor DetectEnemyInFront(int tileRange)

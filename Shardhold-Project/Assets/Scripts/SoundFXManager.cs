@@ -9,10 +9,12 @@ public class SoundFXManager : MonoBehaviour
 
     [SerializeField] private AudioSource soundFXObject;
 
-    private void Awaken()
+    private void Awake()
     {
         if (instance == null)
+        {
             instance = this;
+        }
     }
 
     public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume)
