@@ -43,7 +43,6 @@ public class TurnTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (GameManager.Instance.playerTurn == true && time > 0 && !isTimerPaused) {
             string timerInt = time.ToString("0");
             timeText.text = timerInt;

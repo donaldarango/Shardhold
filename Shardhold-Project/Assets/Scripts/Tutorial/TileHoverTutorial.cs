@@ -17,10 +17,10 @@ public class TileHoverTutorial : Tutorial
         MapGenerator.HoverTile -= OnHoverTile;
     }
 
-    public override void Start()
-    {
-        base.Start();
-    }
+    //public override void Start()
+    //{
+    //    base.Start();
+    //}
 
     public override void TutorialStart()
     {

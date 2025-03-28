@@ -12,10 +12,10 @@ public class TextTutorial : Tutorial
         TutorialUIManager.NextButtonPressed -= OnNextButtonPressed;
     }
 
-    public override void Start()
-    {
-        base.Start();
-    }
+    //public override void Start()
+    //{
+    //    base.Start();
+    //}
 
     public override void  TutorialStart()
     {

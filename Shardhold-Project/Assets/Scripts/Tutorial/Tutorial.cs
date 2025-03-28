@@ -9,14 +9,19 @@ public class Tutorial : MonoBehaviour
     public bool pausesTimer = true;
     public bool disablesTimer = true;
 
-    public virtual void Start()
+    //public virtual void Start()
+    //{
+    //    if (TutorialManager.Instance == null)
+    //    {
+    //        Debug.LogError("Tutorial Manager not initialized");
+    //        return;
+    //    }
+    //    TutorialManager.Instance.AddTutorialToList( this );
+    //}
+
+    private void Awake()
     {
-        if (TutorialManager.Instance == null)
-        {
-            Debug.LogError("Tutorial Manager not initialized");
-            return;
-        }
-        TutorialManager.Instance.AddTutorialToList( this );
+        TutorialManager.Instance.AddTutorialToList(this);
     }
 
     public virtual void TutorialStart() { }

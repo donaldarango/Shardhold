@@ -9,7 +9,18 @@ public class TutorialManager : MonoBehaviour
 {
 
     private static TutorialManager _instance;
-    public static TutorialManager Instance { get { return _instance; } }
+    public static TutorialManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject go = new GameObject("TutorialManager");
+                _instance = go.AddComponent<TutorialManager>();
+            }
+            return _instance;
+        }
+    }
 
     [SerializeField] private List<Tutorial> tutorials = new List<Tutorial>();
     [SerializeField] private Tutorial currentTutorial;
@@ -50,7 +61,6 @@ public class TutorialManager : MonoBehaviour
     public void SetNextTutorial(int currentOrder)
     {
         currentTutorial = GetTutorialByOrder(currentOrder);
-        Debug.Log($"Current tutorial: {currentOrder}");
 
         if(!currentTutorial)
         {
@@ -97,7 +107,7 @@ public class TutorialManager : MonoBehaviour
                 return tutorial;
         }
 
-        Debug.Log($"Tutorial with order {order} is not found");
+        //Debug.Log($"Tutorial with order {order} is not found");
         return null;
     }
 

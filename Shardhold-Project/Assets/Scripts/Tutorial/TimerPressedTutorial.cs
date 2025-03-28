@@ -13,10 +13,10 @@ public class TimerPressedTutorial : Tutorial
 
     }
 
-    public override void Start()
-    {
-        base.Start();
-    }
+    //public override void Start()
+    //{
+    //    base.Start();
+    //}
 
     public override void TutorialStart()
     {
