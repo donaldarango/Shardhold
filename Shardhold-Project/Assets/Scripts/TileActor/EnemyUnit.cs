@@ -175,6 +175,7 @@ public class EnemyUnit : TileActor
         {
             return;
         }
+        Debug.Log($"Enemy {name} moving from r:{currentTile.GetRingNumber()} l:{currentTile.GetLaneNumber()} -> r:{newTile.GetRingNumber()} l:{newTile.GetLaneNumber()}");
         SetCurrentTile(newTile);
         Vector3 target = new Vector3(newTile.GetTileCenter().x, 0.35f, newTile.GetTileCenter().z);
         float duration = 1.0f;
