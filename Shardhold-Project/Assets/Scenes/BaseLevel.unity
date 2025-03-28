@@ -514,7 +514,11 @@ MonoBehaviour:
   defaultSaveType: 2
   fileToUse: current_save.json
   saveFolder: 
+  playerStats:
+    nextLevel: 0
+    cardsUnlocked: 
   playerStatsFile: player_stats.json
+  lastLoadedLanes: []
 --- !u!114 &8400422571918609032
 MonoBehaviour:
   m_ObjectHideFlags: 0
