@@ -178,7 +178,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     // TESTING: even quadrant = default ; odd = mountain
                     
-                    if (q % 2 == 0)
+                    if (true)//q % 2 == 0)
                     {
                         terrain = CreateTerrain(TerrainType.Default);
                     }
