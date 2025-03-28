@@ -177,6 +177,12 @@ public class EnemyUnit : TileActor
     public virtual void AttackBase()
     {
         DamageBase?.Invoke(damage);
+
+        if(attackClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(attackClip, gameObject.transform, 10f);
+        }
+
     }
     public override void ShowStats() {
         base.ShowStats();

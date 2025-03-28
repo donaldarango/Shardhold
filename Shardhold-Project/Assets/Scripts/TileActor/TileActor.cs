@@ -84,6 +84,11 @@ public abstract class TileActor : MonoBehaviour
     {
         if (target == null) return; // Invalid target
 
+        if(attackClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(attackClip, gameObject.transform, 10f);
+        }
+
         // Simply call take damage using the damage from the TileActor
         Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
         target.TakeDamage(damage);
@@ -162,6 +167,11 @@ public abstract class TileActor : MonoBehaviour
         currentHealth -= damageAmount;
         spriteHandler.SpriteDamageAnimation();
 
+        if(damagedClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, 10f);
+        }
+
         Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining HP: {currentHealth}");
 
         if (currentHealth <= 0)
@@ -180,6 +190,10 @@ public abstract class TileActor : MonoBehaviour
     }
     public virtual void Die()
     {
+        if(deathClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(deathClip, gameObject.transform, 10f);
+        }
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
     }
