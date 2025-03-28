@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Defective.JSON;
 using UnityEngine;
@@ -134,13 +135,19 @@ public class TileActorManager : MonoBehaviour
 
     public void OnEnemyTurnStart()
     {
-        currentRound = currentRound + 1;
+        StartCoroutine(OnEnemyTurnStartCoroutine());
+    }
 
+    private IEnumerator OnEnemyTurnStartCoroutine()
+    {
+        float movementDelay = 1.0f;
+
+        currentRound = currentRound + 1;
         foreach (EnemyUnit enemyUnit in currentEnemyUnits)
         {
             enemyUnit.MoveEnemy();
+            yield return new WaitForSeconds(movementDelay);
         }
-
         SpawnEnemyUnits(currentRound);
         EndEnemyTurn?.Invoke();
     }

@@ -13,7 +13,8 @@ public class EnemyUnit : TileActor
 
     public BasicEnemyStats enemyStats;
 
-    [SerializeField]private int moveSpeed;
+    [SerializeField] protected int moveSpeed;
+    [SerializeField] protected AudioClip movementClip;
 
     void Start()
     {
@@ -47,6 +48,8 @@ public class EnemyUnit : TileActor
         base.SetActorData();
         
         moveSpeed = enemyStats.moveSpeed; // Store move speed
+
+        movementClip = enemyStats.movementClip;
     }
 
     public int GetMoveSpeed()
@@ -124,11 +127,20 @@ public class EnemyUnit : TileActor
 
                     // CHECK IF ENEMY IS STILL IN A TRAP SINCE IT DOESN'T MOVE!
                     // if current tile has a trap, call trap's trigger and attack.
+                    if(currentTile.GetCurrentTrapUnit())
+                    {
+                        currentTile.GetCurrentTrapUnit().Attack(this);
+                    } 
 
                     return; // Stop moving if attacking
                 }
                 else if(actor.GetTileActorType() == TileActorType.Trap)
                 {
+                    if(movementClip)
+                    {
+                        SoundFXManager.instance.PlaySoundFXClip(movementClip, transform, 10f);
+                    }
+
                     MoveToTile(frontTile); // Move onto trap & trigger it
                     Debug.Log("Enemy triggers a trap!");
                     TrapUnit trap = (TrapUnit)actor;
@@ -145,12 +157,32 @@ public class EnemyUnit : TileActor
             if (nextTile == null) break; // Stop if no open tile
 
             MoveToTile(nextTile);
+
+            if (movementClip)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(movementClip, gameObject.transform, 10f);
+            }
+
+            // Once enemy moves to the next tile, see if there's a trap and if there is attack and stop its movement.
+            if (nextTile.GetCurrentTrapUnit())
+            {
+                nextTile.GetCurrentTrapUnit().Attack(this);
+                return;
+            }
+
+            // Notably no check for another structure or anything in here, fine for now but may need to rework this function and throw it all inside the loop
         }
     }
 
     public virtual void AttackBase()
     {
         DamageBase?.Invoke(damage);
+
+        if(attackClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(attackClip, gameObject.transform, 10f);
+        }
+
     }
     public override void ShowStats() {
         base.ShowStats();
@@ -164,6 +196,7 @@ public class EnemyUnit : TileActor
         {
             return;
         }
+        Debug.Log($"Enemy {name} moving from r:{currentTile.GetRingNumber()} l:{currentTile.GetLaneNumber()} -> r:{newTile.GetRingNumber()} l:{newTile.GetLaneNumber()}");
         SetCurrentTile(newTile);
         Vector3 target = new Vector3(newTile.GetTileCenter().x, 0.35f, newTile.GetTileCenter().z);
         float duration = 1.0f;
