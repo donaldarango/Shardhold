@@ -80,15 +80,15 @@ public class Deck : MonoBehaviour
         //add it to hand (non-UI)
         hand[openSlot] = cardLookup[cardID];
         cardsInHand++;
-        Debug.Log("Card drawn: " + cardLookup[cardID].cardName);
+        //Debug.Log("Card drawn: " + cardLookup[cardID].cardName);
         if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
         {
-            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
+            //Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
         }
 
         //add it to hand (UI)
 
-        Debug.Log("Open slot: " + openSlot);
+        //Debug.Log("Open slot: " + openSlot);
         Transform cardUISlot = cardPositions[openSlot];         //get the open slot's transform component
         occupiedSlots[openSlot] = true;                         //mark slot as occupied
         UIHand[openSlot] = CreateCardUI(cardLookup[cardID], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
@@ -180,7 +180,7 @@ public class Deck : MonoBehaviour
 
         //remove from draw pile
         drawPile.RemoveAt(choice);
-        Debug.Log(" Cards left in drawpile: " + drawPile.Count);
+        //Debug.Log(" Cards left in drawpile: " + drawPile.Count);
 
         //ensure non-empty draw pile; MOVED TO START OF DRAW
         /*if (drawPile.Count <= 0)
