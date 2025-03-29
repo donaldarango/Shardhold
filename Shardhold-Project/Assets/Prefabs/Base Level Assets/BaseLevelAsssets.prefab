@@ -2461,7 +2461,6 @@ GameObject:
   - component: {fileID: 6982360222499455515}
   - component: {fileID: 2460665015938730709}
   - component: {fileID: 2948570701698930546}
-  - component: {fileID: 5123306734737508992}
   m_Layer: 5
   m_Name: Quit Button
   m_TagString: Untagged
@@ -2571,10 +2570,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadByIndex
-        m_Mode: 3
+        m_MethodName: LoadMainMenu
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2583,18 +2582,6 @@ MonoBehaviour:
           m_StringArgument: Main-Menu
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5123306734737508992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253354780562320666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35880920b55d004093f9a47b0cd37aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2522695488266769459
 GameObject:
   m_ObjectHideFlags: 0
@@ -10030,7 +10017,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 00c0460bbd6b6f74fbc6ba6ebd86e19d, type: 3}
   m_Resource: {fileID: 8300000, guid: 00c0460bbd6b6f74fbc6ba6ebd86e19d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0
