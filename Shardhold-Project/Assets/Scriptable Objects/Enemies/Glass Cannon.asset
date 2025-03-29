@@ -19,5 +19,10 @@ MonoBehaviour:
   damage: 5
   isShielded: 1
   isPoisoned: 0
+  attackClip: {fileID: 8300000, guid: bb7f6c5fbc162814c8e6d93d90bfb4e9, type: 3}
+  damagedClip: {fileID: 8300000, guid: 9ac3b1dc4c89821499f235b1995acf54, type: 3}
+  deathClip: {fileID: 8300000, guid: bd779682bb4812a40a9106772a8ebed5, type: 3}
+  placementClip: {fileID: 8300000, guid: 5a789614bac84a744b031e95ebc61819, type: 3}
   actorPrefab: {fileID: 0}
   moveSpeed: 1
+  movementClip: {fileID: 8300000, guid: bfc4e07ddcbbed84f8176f515f9bfe0d, type: 3}
