@@ -30,7 +30,6 @@ public class TutorialManager : MonoBehaviour
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
-            throw new System.Exception("An instance of this singleton already exists.");
         }
         else
         {
