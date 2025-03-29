@@ -18,18 +18,20 @@ class Placer : Card
         foreach(var tile in coordSet)
         {
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
-            //if (!target.GetCurrentTileActor())
-            //{
             Debug.Log("placer called, placing " + stats.unitName);
 
+            TrapUnit trap = target.GetCurrentTrapUnit();
             var actor = target.GetCurrentTileActor();
-            if (!actor && !isTrap)
+            if (!actor && !trap)
             {
-                MapManager.Instance.AddStructureToMapTile(tile.Item1, tile.Item2, stats.unitName);
-            }
-            else if (!actor && isTrap)
-            {
-                MapManager.Instance.AddTrapToMapTile(tile.Item1, tile.Item2, stats.unitName);
+                if (!isTrap)
+                {
+                    MapManager.Instance.AddStructureToMapTile(tile.Item1, tile.Item2, stats.unitName);
+                }
+                else
+                {
+                    MapManager.Instance.AddTrapToMapTile(tile.Item1, tile.Item2, stats.unitName);
+                }
             }
         }
     }

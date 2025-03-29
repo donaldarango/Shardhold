@@ -34,8 +34,9 @@ public class TileHover : MonoBehaviour
         
     }
 
-    void OnHover(TileActor ta)
+    void OnHover(int ringNumber, int laneNumber)
     {
+        TileActor ta = MapManager.Instance.DoesTileContainTileActor(ringNumber, laneNumber);
         if (ta != null)
         {
             tileDisplayUI.SetActive(true);

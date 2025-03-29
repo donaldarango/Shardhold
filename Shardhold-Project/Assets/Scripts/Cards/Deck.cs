@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using JetBrains.Annotations;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using static CustomDebug;
 
@@ -72,8 +73,6 @@ public class Deck : MonoBehaviour
 
     public void CreateCard(int cardID)
     {
-        
-
         //find an open slot
         int openSlot = FindFirstOpenUISlot();
 
@@ -92,7 +91,7 @@ public class Deck : MonoBehaviour
         Transform cardUISlot = cardPositions[openSlot];         //get the open slot's transform component
         occupiedSlots[openSlot] = true;                         //mark slot as occupied
         UIHand[openSlot] = CreateCardUI(cardLookup[cardID], cardUISlot); //instantiates the UI for the card and adds the UI card to the list of UI cards
-
+        UIHand[openSlot].GetComponent<CardUI>().cardIndex = openSlot;
     }
 
     public void DeleteCard(int handPosition)
@@ -263,7 +262,7 @@ public class Deck : MonoBehaviour
         discardPile.Add(hand[handPosition].GetId());
         Debug.Log("Card discarded: " + hand[handPosition].cardName);
 
-       DeleteCard(handPosition);
+        DeleteCard(handPosition);
     }
 
     /// <summary>
