@@ -118,6 +118,7 @@ public class EnemyUnit : TileActor
             } 
 
             TileActor actor = frontTile.GetCurrentTileActor();
+            TrapUnit trap = frontTile.GetCurrentTrapUnit();
             if (actor != null)
             {
                 if (actor.GetTileActorType() == TileActorType.Structure)
@@ -134,19 +135,18 @@ public class EnemyUnit : TileActor
 
                     return; // Stop moving if attacking
                 }
-                else if(actor.GetTileActorType() == TileActorType.Trap)
+            }
+            else if (trap != null)
+            {
+                if (movementClip)
                 {
-                    if(movementClip)
-                    {
-                        SoundFXManager.instance.PlaySoundFXClip(movementClip, transform, 10f);
-                    }
-
-                    MoveToTile(frontTile); // Move onto trap & trigger it
-                    Debug.Log("Enemy triggers a trap!");
-                    TrapUnit trap = (TrapUnit)actor;
-                    trap.Attack(this);
-                    return; // Stop moving once trap triggers.
+                    SoundFXManager.instance.PlaySoundFXClip(movementClip, transform, 10f);
                 }
+
+                MoveToTile(frontTile); // Move onto trap & trigger it
+                Debug.Log("Enemy triggers a trap!");
+                trap.Attack(this);
+                return; // Stop moving once trap triggers.
             }
         }
 
