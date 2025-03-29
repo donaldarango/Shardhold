@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Blessing
   m_EditorClassIdentifier: 
   id: 4
+  cardImage: {fileID: 0}
   cardName: Blessing
   targetType: 0
   range: 0
+  description: Bless you!
   damage: 0
+  hp: 0
   heal: 4
   friendlyFire: 0

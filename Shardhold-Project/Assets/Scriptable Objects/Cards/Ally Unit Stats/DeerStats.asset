@@ -9,16 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e78c177a100d0f4198a93cfba190bfe, type: 3}
-  m_Name: LightningBolt
+  m_Script: {fileID: 11500000, guid: 2f4172f0d84194c499c59fcde7a7ffe0, type: 3}
+  m_Name: DeerStats
   m_EditorClassIdentifier: 
-  id: 1
-  cardImage: {fileID: 0}
-  cardName: LightningBolt
-  targetType: 0
-  range: 4
-  description: Zap!
-  damage: 3
-  hp: 0
-  heal: 0
-  friendlyFire: 0
+  unitName: Deer
+  damage: 2
+  maxHealth: 4
