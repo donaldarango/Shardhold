@@ -11,7 +11,7 @@ public class MapGenerator : MonoBehaviour
     public static MapGenerator Instance { get { return _instance; } }
     private static MapGenerator _instance;
 
-    public delegate void HoverEventHandler(TileActor ta);
+    public delegate void HoverEventHandler(int ringNumber, int laneNumber);
     public static event HoverEventHandler HoverTile;
     public static event EventHandler<SelectTileEventArgs> SelectTile;
     public static event EventHandler<SelectTileSetEventArgs> SelectTileSet;
@@ -306,9 +306,8 @@ public class MapGenerator : MonoBehaviour
                     hoveredTile = (r, l);
                     tileMeshes[(r, l)].material.color = hoverColor;
 
-                    // Quadrant check and also debugging messages to check for tileactor
-                    MapTile tile = MapManager.Instance.GetTile(r, l);
-                    HoverTile?.Invoke(tile.GetCurrentTileActor());
+                // Quadrant check and also debugging messages to check for tileactor
+                HoverTile?.Invoke(r, l);
 
 
                     // Handle mouse click

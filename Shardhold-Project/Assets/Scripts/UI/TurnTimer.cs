@@ -5,11 +5,13 @@ public class TurnTimer : MonoBehaviour
 {
     [SerializeField]
     public static float time = 10.0f;
+    public bool isTimerPaused = false;
     public float resetTime; 
     public Gradient gradient;
     public Image RightBar;
     public Image LeftBar;
 
+    public Button timerButton;
     public TMP_Text timeText;
     public Slider sliderRight;
     public Slider sliderLeft;
@@ -22,11 +24,15 @@ public class TurnTimer : MonoBehaviour
     private void OnEnable()
     {
         GameManager.PlayerTurnEnd += OnEnemyTurnStart;
+        UIManager.TurnTimerButtonToggled += OnTurnTimerButtonToggled;
+        UIManager.TurnTimerPaused += OnTurnTimerPaused;
     }
 
     private void OnDisable()
     {
         GameManager.PlayerTurnEnd -= OnEnemyTurnStart;
+        UIManager.TurnTimerButtonToggled -= OnTurnTimerButtonToggled;
+        UIManager.TurnTimerPaused -= OnTurnTimerPaused;
     }
 
     private void Start()
@@ -37,7 +43,7 @@ public class TurnTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.playerTurn == true && time > 0) {
+        if (GameManager.Instance.playerTurn == true && time > 0 && !isTimerPaused) {
             string timerInt = time.ToString("0");
             timeText.text = timerInt;
             time -= Time.deltaTime;
@@ -49,18 +55,22 @@ public class TurnTimer : MonoBehaviour
 
         }
         if (time <= 0 && GameManager.Instance.playerTurn == true) {
-            TurnTimerPressed?.Invoke();
+            TimerButton();
         }
     }
 
     public void TimerButton()
     {
         TurnTimerPressed?.Invoke();
+        ResetTimerValues();
     }
 
     public void ResetTimerValues()
     {
         time = resetTime;
+        timeText.text = resetTime.ToString();
+        RightBar.color = gradient.Evaluate(resetTime);
+        LeftBar.color = gradient.Evaluate(resetTime);
         sliderLeft.maxValue = resetTime;
         sliderRight.maxValue = resetTime;
         sliderLeft.value = resetTime;
@@ -70,5 +80,15 @@ public class TurnTimer : MonoBehaviour
     public void OnEnemyTurnStart()
     {
         ResetTimerValues();
+    }
+
+    public void OnTurnTimerButtonToggled(bool toggled)
+    {
+        timerButton.enabled = toggled;
+    }
+
+    public void OnTurnTimerPaused(bool timerPaused)
+    {
+        isTimerPaused = timerPaused;
     }
 }
