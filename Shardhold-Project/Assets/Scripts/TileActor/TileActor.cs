@@ -28,6 +28,12 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField] protected bool isShielded = false;
     [SerializeField] protected bool isPoisoned = false;
 
+    [Header("Scriptable Object Audio")]
+    [SerializeField] protected AudioClip attackClip;
+    [SerializeField] protected AudioClip damagedClip;
+    [SerializeField] protected AudioClip deathClip;
+    [SerializeField] protected AudioClip placementClip;
+
     [SerializeField] protected TileActorSpriteHandler spriteHandler;
     public abstract void Spawn(MapTile tile);
 
@@ -41,6 +47,12 @@ public abstract class TileActor : MonoBehaviour
         damage = tileActorStats.damage;
         isShielded = tileActorStats.isShielded;
         //isPoisoned should be false by default regardless, so.
+
+        // Audio
+        attackClip = tileActorStats.attackClip;
+        damagedClip = tileActorStats.damagedClip;
+        placementClip = tileActorStats.placementClip;
+        deathClip = tileActorStats.deathClip;
     }
 
     public virtual TileActor DetectEnemyInFront(int tileRange)
@@ -71,6 +83,11 @@ public abstract class TileActor : MonoBehaviour
     public virtual void Attack(TileActor target)
     {
         if (target == null) return; // Invalid target
+
+        if(attackClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(attackClip, gameObject.transform, 10f);
+        }
 
         // Simply call take damage using the damage from the TileActor
         Debug.Log($"{gameObject.name} attacks {target.gameObject.name} for {tileActorStats.damage} damage!");
@@ -150,6 +167,11 @@ public abstract class TileActor : MonoBehaviour
         currentHealth -= damageAmount;
         spriteHandler.SpriteDamageAnimation();
 
+        if(damagedClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, 10f);
+        }
+
         Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining HP: {currentHealth}");
 
         if (currentHealth <= 0)
@@ -168,6 +190,10 @@ public abstract class TileActor : MonoBehaviour
     }
     public virtual void Die()
     {
+        if(deathClip)
+        {
+            SoundFXManager.instance.PlaySoundFXClip(deathClip, gameObject.transform, 10f);
+        }
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
     }

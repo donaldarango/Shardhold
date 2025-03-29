@@ -188,4 +188,16 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
+    public TileActor DoesTileContainTileActor(int ringNumber, int laneNumber)
+    {
+        MapTile tile = GetTile(ringNumber, laneNumber);
+        if (tile.GetCurrentTileActor() != null)
+        {
+            return tile.GetCurrentTileActor();
+        }
+        return null;
+    }
+
+
+
 }
