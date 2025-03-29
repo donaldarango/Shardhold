@@ -91,6 +91,12 @@ public class GameManager : MonoBehaviour
         ChangeLevel?.Invoke(level);
     }
 
+    public void LoadTutorialLevel()
+    {
+        currentLevel = "Tutorial";
+        SceneManager.LoadScene("TutorialLevel");
+    }
+
     public void RestartLevel()
     {
         LoadLevel(currentLevel);
