@@ -139,7 +139,7 @@ public class TileActorManager : MonoBehaviour
 
     private IEnumerator OnEnemyTurnStartCoroutine()
     {
-        float movementDelay = 0.5f;
+        float movementDelay = 1.0f;
 
         currentRound = currentRound + 1;
         foreach (EnemyUnit enemyUnit in currentEnemyUnits)

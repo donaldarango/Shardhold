@@ -2,8 +2,10 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenu;
-    [SerializeField]
-    private bool menuActiveStatus = false;
+    public GameObject settingsMenu;
+    [SerializeField] private bool menuActiveStatus = false;
+    [SerializeField] private bool settingsActive = false;
+    public static bool isPaused = false;
 
 
     void Start()
@@ -19,9 +21,13 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) 
+        if (Input.GetKeyDown(KeyCode.Escape) && settingsActive == false) 
         {
             ToggleMenu();
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && settingsActive == true)
+        {
+            SwapMenu();
         }
         
     }
@@ -37,5 +43,22 @@ public class PauseMenu : MonoBehaviour
         else {
             Time.timeScale = 1;
         }
+
+        isPaused = !isPaused;
+    }
+
+    public void SwapMenu()
+    {
+        if(menuActiveStatus == true && settingsActive == false)
+        {
+            pauseMenu.SetActive(!menuActiveStatus);
+            settingsMenu.SetActive(menuActiveStatus);
+        } else if (menuActiveStatus == true && settingsActive == true)
+        {
+            pauseMenu.SetActive(menuActiveStatus);
+            settingsMenu.SetActive(!menuActiveStatus);
+        }
+
+        settingsActive = !settingsActive;
     }
 }

@@ -12,4 +12,7 @@ public abstract class EnemyStatsAbstract : TileActorStats
 
     [Header("Enemy Unit Stats")]
     public int moveSpeed;
+
+    [Header("Enemy Move Audio")]
+    public AudioClip movementClip;
 }

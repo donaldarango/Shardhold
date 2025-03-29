@@ -14,6 +14,12 @@ public abstract class TileActorStats : ScriptableObject
     public bool isShielded;
     public bool isPoisoned;
 
+    [Header("Tile Actor Audio")]
+    public AudioClip attackClip; // Play when tile actor attacks
+    public AudioClip damagedClip; // Play when tile actor is hit
+    public AudioClip deathClip; // Play when tile actor dies
+    public AudioClip placementClip; // Play when enemy spawns or when structure/trap is placed
+
     [Header("Tile Actor Prefab")]
     public GameObject actorPrefab; // Prefab reference for the actor (enemy, structure, trap)
 }
