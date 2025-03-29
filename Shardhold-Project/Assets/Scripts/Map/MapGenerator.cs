@@ -509,17 +509,17 @@ public class MapGenerator : MonoBehaviour
                     }
                     else // If there isn't a red highlight, this is the first selection.
                     {
-                        Debug.Log("First Target - tile: " + (r, l));
-                        foreach (var tile in targetedTiles)
-                        {
-                            tileMeshes[tile].material.color = clickColor;
-                            clickedTiles.Add(tile);
-                        }
-                        targetedTiles.Clear();
-                        Debug.Log("play card via first target");
-
                         if (selectedCard != null)
                         {
+                            Debug.Log("First Target - tile: " + (r, l));
+                            foreach (var tile in targetedTiles)
+                            {
+                                tileMeshes[tile].material.color = clickColor;
+                                clickedTiles.Add(tile);
+                            }
+                            targetedTiles.Clear();
+                            Debug.Log("play card via first target");
+
                             selectedCard.Play(clickedTiles);
                             if (selectedCard.DiscardAfterPlay() == true) {
                                 Deck.Instance.DiscardCard(selectedHandIndex);
@@ -529,9 +529,34 @@ public class MapGenerator : MonoBehaviour
                         }
                         else if (selectedUnit != null)
                         {
-                            selectedUnit.Play(clickedTiles);
-                            selectedUnit = null;
-                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                            if(selectedUnit.currentAttacks > 0)
+                            {
+                                --selectedUnit.currentAttacks;
+                                Debug.Log("First Target - tile: " + (r, l));
+                                foreach (var tile in targetedTiles)
+                                {
+                                    tileMeshes[tile].material.color = clickColor;
+                                    clickedTiles.Add(tile);
+                                }
+                                targetedTiles.Clear();
+                                Debug.Log("play card via first target");
+
+                                selectedUnit.Play(clickedTiles);
+
+                                if (selectedUnit.currentAttacks <= 0)
+                                {
+                                    Transform background = selectedUnit.transform.Find("CardColor");
+                                    background.GetComponent<UnityEngine.UI.Image>().color = Color.gray;
+                                }
+
+                                if (selectedUnit.DiscardAfterPlay() == true)
+                                {
+                                    Deck.Instance.DiscardCard(selectedHandIndex);
+                                }
+                                selectedUnit = null;
+                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+
+                            }
                         }
                         //PlayCard?.Invoke(clickedTiles);
                     }
@@ -656,18 +681,26 @@ public class MapGenerator : MonoBehaviour
     }
     public void SelectUnit(AllyUnit newUnit)
     {
-        selectedUnit = newUnit != null ? newUnit : null;
-        selectedCard = null;
-
-        clickedTile = null;
-        clickedTiles.Clear();
-        targetedTiles.Clear();
-
-        HandleTargeting(null, newUnit);
-
-        foreach (var tile in tileMeshes)
+        if(newUnit.currentAttacks > 0)
         {
-            ResetTileColor(tile.Key);
+            selectedUnit = newUnit != null ? newUnit : null;
+            selectedCard = null;
+
+            clickedTile = null;
+            clickedTiles.Clear();
+            targetedTiles.Clear();
+
+            HandleTargeting(null, newUnit);
+
+            foreach (var tile in tileMeshes)
+            {
+                ResetTileColor(tile.Key);
+            }
+        }
+        else
+        {
+            selectedCard = null;
+            selectedUnit = null;
         }
     }
 

@@ -5,7 +5,8 @@ using static MapGenerator;
 public class AllyUnit : MonoBehaviour
 {
     public AllyUnitStats stats;
-    int currentHealth;
+    public int currentHealth;
+    public int currentAttacks; //unfinished; for later
 
     public CardType cardType => CardType.Unit;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -33,15 +34,8 @@ public class AllyUnit : MonoBehaviour
                 currentHealth -= actor.tileActorStats.damage;
                 //return to hand
                 Debug.Log("ally unit hp : " + currentHealth);
-                if(currentHealth <= 0)
-                {
-                    Debug.Log("ally unit died, resetting");
-                    //Setup();
-                    //discard self
-                }
             }
         }
-
     }
     public bool DiscardAfterPlay()
     {
