@@ -141,7 +141,6 @@ public class TileActorManager : MonoBehaviour
     {
         float movementDelay = 0.5f;
 
-        UIManager.Instance.DisableTimerButton();
         currentRound = currentRound + 1;
         foreach (EnemyUnit enemyUnit in currentEnemyUnits)
         {
@@ -150,7 +149,6 @@ public class TileActorManager : MonoBehaviour
         }
         SpawnEnemyUnits(currentRound);
         EndEnemyTurn?.Invoke();
-        UIManager.Instance.EnableTimerButton();
     }
 
     public BasicEnemyStats GetEnemyTileActorByName(string unitName)

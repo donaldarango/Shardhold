@@ -3130,7 +3130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669f2ea00d80e804680c849cd50a6307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTimerPaused: 0
+  timerPaused: 0
+  canPressTimer: 1
   resetTime: 30
   gradient:
     serializedVersion: 2
@@ -3705,7 +3706,6 @@ GameObject:
   - component: {fileID: 444055919668078220}
   - component: {fileID: 8054927643532103718}
   - component: {fileID: 8185675897203942478}
-  - component: {fileID: 2543401308531631015}
   m_Layer: 0
   m_Name: UI Manager
   m_TagString: Untagged
@@ -3760,18 +3760,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 7242775753111171673}
   menuActiveStatus: 0
---- !u!114 &2543401308531631015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4326096539085824220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4578707c96815a44871f598836f2390, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4845574536317417979
 GameObject:
   m_ObjectHideFlags: 0
