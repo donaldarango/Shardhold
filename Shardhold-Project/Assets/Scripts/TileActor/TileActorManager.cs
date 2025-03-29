@@ -139,15 +139,23 @@ public class TileActorManager : MonoBehaviour
 
     private IEnumerator OnEnemyTurnStartCoroutine()
     {
-        float movementDelay = 1.0f;
+        float movementDelay = .875f;
         UIManager.Instance.DisableTimerButton();
 
         currentRound++;
-        foreach (EnemyUnit enemyUnit in currentEnemyUnits)
+        for(int i = 0; i < currentEnemyUnits.Count; ++i)
         {
-            enemyUnit.MoveEnemy();
-            yield return new WaitForSeconds(movementDelay);
+            if(currentEnemyUnits[i] != null)
+            {
+                currentEnemyUnits[i].MoveEnemy();
+                yield return new WaitForSeconds(movementDelay);
+            }
         }
+        //foreach (EnemyUnit enemyUnit in currentEnemyUnits)
+        //{
+        //    enemyUnit.MoveEnemy();
+        //    yield return new WaitForSeconds(movementDelay);
+        //}
         SpawnEnemyUnits(currentRound);
         UIManager.Instance.EnableTimerButton();
         EndEnemyTurn?.Invoke();

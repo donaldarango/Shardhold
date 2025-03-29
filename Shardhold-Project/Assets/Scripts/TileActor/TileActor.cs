@@ -192,7 +192,7 @@ public abstract class TileActor : MonoBehaviour
     {
         if(deathClip)
         {
-            SoundFXManager.instance.PlaySoundFXClip(deathClip, gameObject.transform, 10f);
+            SoundFXManager.instance.PlaySoundFXClip(deathClip, gameObject.transform, 5f);
         }
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
