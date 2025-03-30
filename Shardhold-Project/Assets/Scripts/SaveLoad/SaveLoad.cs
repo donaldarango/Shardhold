@@ -26,13 +26,15 @@ public class SaveLoad : MonoBehaviour
     public enum SaveType
     {
         playerSave,
-        levelFile
+        levelFile,
+        misc,
     }
 
     public FileType defaultFileType = FileType.json;
     public string fileToUse = "current_save.json";   //default save file
-    public string saveFolder = "on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go (when the player saves a game)
-    public string levelsFolder = "LevelSettings/";  //from TileActor
+    public string saveFolder = "Assets/Resources/PlayerSaves";   //"on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go (when the player saves a game)
+    public string levelsFolder = "Assets/Resources/LevelSettings";  //from TileActor
+    public string miscFolder = "Assets/Resources/Misc";
 
     public PlayerStats playerStats = null;
     public string playerStatsFile = "player_stats.json";
@@ -40,11 +42,11 @@ public class SaveLoad : MonoBehaviour
     public List<SavedLane> lastLoadedLanes = null;
 
     private string curSaveLoadVersion = "1.00";
-    private string saveFileVersionsFile = "version_record.json";
+    private string saveFileVersionsFile = "file_details.json";
 
     public void Awake()
     {
-        saveFolder = Application.persistentDataPath;
+        //saveFolder = Application.persistentDataPath;
         if(saveLoad == null)
         {
             saveLoad = this;
@@ -70,9 +72,16 @@ public class SaveLoad : MonoBehaviour
     #region Text File I/O
     public void WriteFile(string filename, string fileLocation, string contents)
     {
-        using (StreamWriter writer = new StreamWriter(fileLocation + "/" + filename))
+        try
         {
-            writer.Write(contents);
+            using (StreamWriter writer = new StreamWriter(fileLocation + "/" + filename))
+            {
+                writer.Write(contents);
+            }
+        }
+        catch (ArgumentException e)
+        {
+            Print("An Argument Exception occurred when writing to file. File was: " + fileLocation + "/" + filename + "; the error message is as follows:\n" + e.ToString());
         }
     }
 
@@ -307,15 +316,8 @@ public class SaveLoad : MonoBehaviour
             //convert game data into a json
             string jsonData = ToJson(data, true);
 
-            string saveLocation = "";
-            if (saveType == SaveType.levelFile)
-            {
-                saveLocation = levelsFolder;
-            }
-            else
-            {
-                saveLocation = saveFolder;
-            }
+            string saveLocation = GetSaveLocation(saveType);
+
 
             //save the json string into a file
             WriteFile(filename, saveLocation, jsonData);
@@ -524,15 +526,7 @@ public class SaveLoad : MonoBehaviour
         {
             //read the file into a string
             string jsonData;
-            string saveLocation = "";
-            if (saveType == SaveType.levelFile)
-            {
-                saveLocation = levelsFolder;
-            }
-            else
-            {
-                saveLocation = saveFolder;
-            }
+            string saveLocation = GetSaveLocation(saveType);
             if (ReadFile(filename, saveLocation, out jsonData))
             {
 
@@ -784,7 +778,7 @@ public class SaveLoad : MonoBehaviour
     public string GetVersion(string fileName)
     {
         string jsonVersionFile;
-        if (ReadFile(saveFileVersionsFile, saveFolder, out jsonVersionFile))
+        if (ReadFile(saveFileVersionsFile, GetSaveLocation(SaveType.misc), out jsonVersionFile))
         {
             SaveFileList saveFileList = FromJson<SaveFileList>(jsonVersionFile);
 
@@ -804,7 +798,7 @@ public class SaveLoad : MonoBehaviour
     {
         string jsonVersionFile;
         SaveFileList saveFileList = null;
-        if (ReadFile(saveFileVersionsFile, saveFolder, out jsonVersionFile))
+        if (ReadFile(saveFileVersionsFile, GetSaveLocation(SaveType.misc), out jsonVersionFile))
         {
             saveFileList = FromJson<SaveFileList>(jsonVersionFile);
         }
@@ -819,7 +813,7 @@ public class SaveLoad : MonoBehaviour
 
                     //save the updated list
                     jsonVersionFile = ToJson(saveFileList, true);
-                    WriteFile(saveFileVersionsFile, saveFolder, jsonVersionFile);
+                    WriteFile(saveFileVersionsFile, GetSaveLocation(SaveType.misc), jsonVersionFile);
                     return;
                 }
             }
@@ -836,12 +830,33 @@ public class SaveLoad : MonoBehaviour
 
         //save the updated list
         jsonVersionFile = ToJson(saveFileList, true);
-        WriteFile(saveFileVersionsFile, saveFolder, jsonVersionFile);
+        WriteFile(saveFileVersionsFile, GetSaveLocation(SaveType.misc), jsonVersionFile);
         return;
 
     }
 
     #endregion
+
+    public string GetSaveLocation(SaveType saveType)
+    {
+        if (saveType == SaveType.levelFile)
+        {
+            return levelsFolder;
+        }
+        else if (saveType == SaveType.playerSave)
+        {
+            return saveFolder;
+        }
+        else if (saveType == SaveType.misc)
+        {
+            return miscFolder;
+        }
+        else
+        {
+            Print("Unhandled saveType: " +  saveType.ToString() + "; file will be saved in miscFolder", CustomDebug.DebuggingType.ErrorOnly);
+            return miscFolder;
+        }
+    }
 
 }
 

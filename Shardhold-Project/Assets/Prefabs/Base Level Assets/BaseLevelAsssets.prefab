@@ -976,9 +976,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 3703193026193046294}
-  defaultSaveType: 2
+  defaultFileType: 2
   fileToUse: current_save.json
-  saveFolder: on Awake(), sets to "Application.persistentDataPath"
+  saveFolder: Assets/Resources/PlayerSaves
+  levelsFolder: Assets/Resources/LevelSettings
+  miscFolder: Assets/Resources/Misc
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
@@ -9857,7 +9859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1861864784263037393
 RectTransform:
   m_ObjectHideFlags: 0
