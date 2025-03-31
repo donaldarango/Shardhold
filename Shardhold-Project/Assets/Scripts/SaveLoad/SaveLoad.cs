@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using System.Data;
 using JetBrains.Annotations;
 using System.Linq;
+using TMPro;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -106,20 +107,26 @@ public class SaveLoad : MonoBehaviour
 
 
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
-    public void SaveToDefault(){
+    public void SaveToDefault(TMP_Text saveText){
         FileType fileType = FileType.chooseDefault;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
-        Save(fileToUse, SaveType.playerSave, fileType);
+        if(Save(fileToUse, SaveType.playerSave, fileType) && saveText != null)
+        {
+            saveText.text = "GAME SAVED";
+        }
     }
 
-    public void LoadFromDefault(){
+    public void LoadFromDefault(TMP_Text loadText){
         FileType saveType = FileType.chooseDefault;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
             Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
-        Load(fileToUse, SaveType.playerSave, saveType);
+        if(Load(fileToUse, SaveType.playerSave, saveType) && loadText != null)
+        {
+            loadText.text = "GAME LOADED";
+        }
     }
 
     public bool Save(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault){

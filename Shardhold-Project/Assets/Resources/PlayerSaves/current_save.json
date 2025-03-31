@@ -4,7 +4,7 @@
     "level": -1,
     "sectorCount": 3,
     "maxActualRange": 4,
-    "curTurn": 2,
+    "curTurn": 0,
     "lanes": [
         {
             "terrains": [
@@ -105,74 +105,38 @@
     ],
     "baseHP": 20,
     "baseWeapon": -1,
-    "spawnedTileActors": [
-        {
-            "name": "Basic Melee Enemy",
-            "curHealth": 3,
-            "pos": {
-                "x": 2,
-                "y": 2
-            },
-            "type": 0,
-            "damage": 1,
-            "attackRange": 1,
-            "isShielded": false,
-            "isPoisoned": false
-        },
-        {
-            "name": "Basic Ranged Enemy",
-            "curHealth": 1,
-            "pos": {
-                "x": 2,
-                "y": 5
-            },
-            "type": 0,
-            "damage": 2,
-            "attackRange": 2,
-            "isShielded": false,
-            "isPoisoned": false
-        },
-        {
-            "name": "Basic Melee Enemy",
-            "curHealth": 3,
-            "pos": {
-                "x": 3,
-                "y": 3
-            },
-            "type": 0,
-            "damage": 1,
-            "attackRange": 1,
-            "isShielded": false,
-            "isPoisoned": false
-        },
-        {
-            "name": "Basic Tank Enemy",
-            "curHealth": 4,
-            "pos": {
-                "x": 3,
-                "y": 8
-            },
-            "type": 0,
-            "damage": 1,
-            "attackRange": 1,
-            "isShielded": false,
-            "isPoisoned": false
-        },
-        {
-            "name": "Basic Ranged Enemy",
-            "curHealth": 1,
-            "pos": {
-                "x": 3,
-                "y": 11
-            },
-            "type": 0,
-            "damage": 2,
-            "attackRange": 2,
-            "isShielded": false,
-            "isPoisoned": false
-        }
-    ],
+    "spawnedTileActors": [],
     "spawnList": [
+        {
+            "roundNumber": 1,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 2,
+                    "enemyUnit": "Basic Melee Enemy"
+                },
+                {
+                    "laneNumber": 5,
+                    "enemyUnit": "Basic Ranged Enemy"
+                }
+            ]
+        },
+        {
+            "roundNumber": 2,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 8,
+                    "enemyUnit": "Basic Tank Enemy"
+                },
+                {
+                    "laneNumber": 3,
+                    "enemyUnit": "Basic Melee Enemy"
+                },
+                {
+                    "laneNumber": 11,
+                    "enemyUnit": "Basic Ranged Enemy"
+                }
+            ]
+        },
         {
             "roundNumber": 3,
             "roundSpawnList": [
@@ -235,25 +199,15 @@
     ],
     "trapUnits": [],
     "drawPile": [
+        1,
         2,
         3,
+        0,
         4,
         5,
+        6,
         7
     ],
     "discardPile": [],
-    "hand": [
-        {
-            "cardId": 6,
-            "cardHealth": 4
-        },
-        {
-            "cardId": 0,
-            "cardHealth": 0
-        },
-        {
-            "cardId": 1,
-            "cardHealth": 0
-        }
-    ]
+    "hand": []
 }
