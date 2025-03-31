@@ -7031,7 +7031,7 @@ MonoBehaviour:
   debugging: 3
   runAssertionTesting: 0
   deckDebugging: 1
-  saveLoadDebugging: 3
+  saveLoadDebugging: 1
   cusmtomMathDebugging: 1
 --- !u!1 &6914060364293477628
 GameObject:
