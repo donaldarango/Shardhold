@@ -214,7 +214,7 @@ public class Deck : MonoBehaviour
             default:
                 if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
                 {
-                    Debug.Log("Unhandled DrawChoiceMode");
+                    Debug.LogError("Unhandled DrawChoiceMode");
                 }
                 break;
         }
