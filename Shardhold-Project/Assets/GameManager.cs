@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     {
         if (_instance != null && _instance != this)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
             throw new System.Exception("An instance of this GameManager already exists.");
         }
         else
