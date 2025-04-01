@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     //public static event ChangeLevelHandler ChangeLevel;
 
     private static string currentLevel = "";
+    public string optionalStartLevel = "";
     public bool playerTurn = false;
 
     private void Awake()
@@ -26,6 +27,10 @@ public class GameManager : MonoBehaviour
         {
             DontDestroyOnLoad(this);
             _instance = this;
+            if (optionalStartLevel != string.Empty)
+            {
+                currentLevel = optionalStartLevel;
+            }
         }
     }
 
@@ -33,7 +38,6 @@ public class GameManager : MonoBehaviour
     {
         TileActorManager.EndEnemyTurn += OnStartPlayerTurn;
         TurnTimer.TurnTimerPressed += OnEndPlayerTurn;
-
     }
 
     private void OnDisable()
