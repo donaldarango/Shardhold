@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this.gameObject);
             _instance = this;
             if (optionalStartLevel != string.Empty)
             {
