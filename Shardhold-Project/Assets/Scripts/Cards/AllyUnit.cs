@@ -4,6 +4,9 @@ using static Card;
 using static MapGenerator;
 public class AllyUnit : MonoBehaviour
 {
+    public delegate void PlayAllyUnitHandler(HashSet<(int, int)> tiles, AllyUnit card);
+    public static event PlayAllyUnitHandler PlayAllyUnit;
+
     public AllyUnitStats stats;
     public int currentHealth;
     public int currentAttacks; //unfinished; for later
@@ -24,6 +27,8 @@ public class AllyUnit : MonoBehaviour
 
     public void Play(HashSet<(int, int)> tiles)
     {
+        PlayAllyUnit?.Invoke(tiles, this);
+
         foreach (var tile in tiles)
         {
             MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);

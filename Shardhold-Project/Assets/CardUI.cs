@@ -121,4 +121,14 @@ public class CardUI : MonoBehaviour
 
         }
     }
+
+    public void DisableButton()
+    {
+        cardButton.enabled = false;
+    }
+
+    public void EnableButton()
+    {
+        cardButton.enabled = true;
+    }
 }

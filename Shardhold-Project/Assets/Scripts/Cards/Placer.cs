@@ -14,6 +14,8 @@ class Placer : Card
     public override CardType cardType => CardType.Placer;
     public override void Play(HashSet<(int, int)> tiles)
     {
+        base.Play(tiles);
+
         coordSet = tiles;
         foreach(var tile in coordSet)
         {

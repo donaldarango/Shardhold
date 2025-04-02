@@ -37,7 +37,8 @@ public class TileHoverTutorial : Tutorial
 
     public void OnHoverTile(int r, int l)
     {
-        if (r == ringNumber && l == laneNumber)
+        int currentOrder = TutorialManager.Instance.GetCurrentOrder();
+        if (r == ringNumber && l == laneNumber && currentOrder == order)
         {
             hoveredOver = true;
         }
