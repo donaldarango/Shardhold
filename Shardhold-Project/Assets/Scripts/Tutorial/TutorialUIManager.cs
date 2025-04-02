@@ -11,10 +11,14 @@ public class TutorialUIManager : MonoBehaviour
     public delegate void NextButtonPressedHandler();
     public static event NextButtonPressedHandler NextButtonPressed;
 
-    public Canvas tutorialCanvas;
+    public RectTransform tutorialUITransfom;
+    public Canvas canvas;
     public TMP_Text titleText;
     public TMP_Text explanationText;
     public Button nextButton;
+
+    public Vector2 defaultPosition;
+    public Vector2 cardPosition;
 
     private void Awake()
     {
@@ -41,7 +45,7 @@ public class TutorialUIManager : MonoBehaviour
 
     public void ToggleTutorialUI(bool enabled)
     {
-        tutorialCanvas.enabled = enabled;
+        canvas.enabled = enabled;
     }
 
     public void HideNextButton()
@@ -56,6 +60,23 @@ public class TutorialUIManager : MonoBehaviour
 
     public void NextButton()
     {
+        Debug.Log("Tutorial Next Button Pressed");
         NextButtonPressed?.Invoke();
+    }
+
+    public void SetPosition(TutorialUIPosition tutorialUIPosition)
+    {
+        switch(tutorialUIPosition)
+        {
+            case TutorialUIPosition.Default:
+                tutorialUITransfom.anchoredPosition = new Vector3(defaultPosition.x, defaultPosition.y, 0);
+                break;
+            case TutorialUIPosition.Card:
+                tutorialUITransfom.anchoredPosition = new Vector3(cardPosition.x, cardPosition.y, 0);
+                break;
+            default:
+                Debug.Log("Tutorial UI Position not found");
+                break;
+        }
     }
 }

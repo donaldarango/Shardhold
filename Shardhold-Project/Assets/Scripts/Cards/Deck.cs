@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using static CustomDebug;
 
 public class Deck : MonoBehaviour
@@ -36,6 +37,8 @@ public class Deck : MonoBehaviour
     public ScriptableObject[] hand;
     public GameObject[] UIHand;
     private int cardsInHand = 0;
+
+    private bool deckDisabled;
 
     void Update()
     {
@@ -78,6 +81,59 @@ public class Deck : MonoBehaviour
         }
     }
 
+    public void DisableDeckInteraction()
+    {
+        deckDisabled = true;
+        foreach(GameObject obj in UIHand)
+        {
+            if (!obj)
+                return;
+
+            Button button = obj.GetComponent<Button>();
+            button.enabled = false;
+        }
+    }
+
+    public void EnableDeckInteraction()
+    {
+        deckDisabled = false;
+        foreach (GameObject obj in UIHand)
+        {
+            if (!obj)
+                return;
+
+            Button button = obj.GetComponent<Button>();
+            button.enabled = true;
+        }
+    }
+
+    public void DisableCardInteraction(int index)
+    {
+        GameObject obj = UIHand[index];
+        if (obj != null)
+        {
+            Button button = obj.GetComponent<Button>();
+            button.enabled = false;
+        }
+        else
+        {
+            Debug.Log($"Card not found at index {index} when trying to disable interaction");
+        }
+    }
+
+    public void EnableCardInteraction(int index)
+    {
+        GameObject obj = UIHand[index];
+        if (obj != null)
+        {
+            Button button = obj.GetComponent<Button>();
+            button.enabled = true;
+        }
+        else
+        {
+            Debug.Log($"Card not found at index {index} when trying to enable interaction");
+        }
+    }
 
 
     #endregion
@@ -317,6 +373,10 @@ public class Deck : MonoBehaviour
         if (cardUI != null)
         {
             cardUI.initializeCardUI(card);
+            if (deckDisabled)
+            {
+                cardUI.DisableButton();
+            }
         }
         return cardObject;
     }

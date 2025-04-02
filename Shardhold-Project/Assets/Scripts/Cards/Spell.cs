@@ -35,6 +35,8 @@ class Spell : Card
 
     public override void Play(HashSet<(int, int)> tiles)
     {
+        base.Play(tiles);
+
         coordSet = tiles;
         Debug.Log("play called:");
         if (coordSet == null) { return; }
