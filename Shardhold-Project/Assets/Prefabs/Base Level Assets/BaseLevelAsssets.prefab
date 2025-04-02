@@ -976,9 +976,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 3703193026193046294}
-  defaultSaveType: 2
+  defaultFileType: 2
   fileToUse: current_save.json
-  saveFolder: on Awake(), sets to "Application.persistentDataPath"
+  saveFolder: Assets/Resources/PlayerSaves
+  levelsFolder: Assets/Resources/LevelSettings
+  miscFolder: Assets/Resources/Misc
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
@@ -1108,10 +1110,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1357782079646119529}
         m_TargetAssemblyTypeName: SaveLoad, Assembly-CSharp
         m_MethodName: SaveToDefault
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1512828373492450598}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4774,6 +4776,8 @@ MonoBehaviour:
   settingsMenu: {fileID: 8456728030387809131}
   menuActiveStatus: 0
   settingsActive: 0
+  saveText: {fileID: 1512828373492450598}
+  loadText: {fileID: 1387290852831113391}
 --- !u!114 &1795943090600750878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6544,10 +6548,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1357782079646119529}
         m_TargetAssemblyTypeName: SaveLoad, Assembly-CSharp
         m_MethodName: LoadFromDefault
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1387290852831113391}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7027,7 +7031,7 @@ MonoBehaviour:
   debugging: 3
   runAssertionTesting: 0
   deckDebugging: 1
-  saveLoadDebugging: 3
+  saveLoadDebugging: 1
   cusmtomMathDebugging: 1
 --- !u!1 &6914060364293477628
 GameObject:
@@ -9857,7 +9861,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1861864784263037393
 RectTransform:
   m_ObjectHideFlags: 0
