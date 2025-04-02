@@ -38,7 +38,16 @@ public class Deck : MonoBehaviour
     public GameObject[] UIHand;
     private int cardsInHand = 0;
 
+<<<<<<< HEAD
     private bool deckDisabled;
+=======
+    public enum DrawChoiceMode
+    {
+        Random,
+        InOrder
+    }
+    public DrawChoiceMode drawChoiceMode;
+>>>>>>> main
 
     void Update()
     {
@@ -250,7 +259,24 @@ public class Deck : MonoBehaviour
         }
 
         //choose a card from the draw pile
-        int choice = CustomMath.RandomInt(0, drawPile.Count-1);
+        int choice = 0;
+
+        switch (drawChoiceMode)
+        {
+            case DrawChoiceMode.Random:
+                choice = CustomMath.RandomInt(0, drawPile.Count - 1);
+                break;
+            case DrawChoiceMode.InOrder:
+                choice = 0;
+                break;
+            default:
+                if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
+                {
+                    Debug.LogError("Unhandled DrawChoiceMode");
+                }
+                break;
+        }
+
 
         CreateCard(drawPile[choice]);
 
