@@ -4,26 +4,16 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject go = new GameObject("GameManager");
-                _instance = go.AddComponent<GameManager>();
-            }
-            return _instance;
-        }
-    }
+    public static GameManager Instance { get { return _instance; } }
 
     public delegate void PlayerTurnEndHandler();
     public static event PlayerTurnEndHandler PlayerTurnEnd;
 
-    public delegate void ChangeLevelHandler(string level);
-    public static event ChangeLevelHandler ChangeLevel;
+    //public delegate void ChangeLevelHandler(string level);
+    //public static event ChangeLevelHandler ChangeLevel;
 
-    public string currentLevel = null;
+    private static string currentLevel = "";
+    public string optionalStartLevel = "";
     public bool playerTurn = false;
 
     private void Awake()
@@ -31,19 +21,23 @@ public class GameManager : MonoBehaviour
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
-            throw new System.Exception("An instance of this singleton already exists.");
+            throw new System.Exception("An instance of this GameManager already exists.");
         }
         else
         {
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
+            if (optionalStartLevel != string.Empty)
+            {
+                currentLevel = optionalStartLevel;
+            }
         }
     }
+
     private void OnEnable()
     {
         TileActorManager.EndEnemyTurn += OnStartPlayerTurn;
         TurnTimer.TurnTimerPressed += OnEndPlayerTurn;
-
     }
 
     private void OnDisable()
@@ -88,7 +82,6 @@ public class GameManager : MonoBehaviour
     {
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
-        ChangeLevel?.Invoke(level);
     }
 
     public void LoadTutorialLevel()
@@ -104,9 +97,15 @@ public class GameManager : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        currentLevel = "";
         SceneManager.LoadScene("Main-Menu");
-        currentLevel = null;
+    }
+    #endregion
+
+    public string GetCurrentLevel()
+    {
+        return currentLevel;
     }
 }
 
-#endregion
+

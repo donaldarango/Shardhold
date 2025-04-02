@@ -71,7 +71,7 @@ public class TileActorManager : MonoBehaviour
 
     private void SetLevelJSONFile()
     {
-        string level = GameManager.Instance.currentLevel;
+        string level = GameManager.Instance.GetCurrentLevel();
         string filePath = resourceFilePath + $"Level_{level}_Settings";
         levelSettingsJSON = Resources.Load<TextAsset>(filePath);
     }
