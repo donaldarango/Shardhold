@@ -597,7 +597,7 @@ MonoBehaviour:
   title: Deck and Cards
   explanation: Attack the enemy by selecting the Lightning spell then selecting the
     tile that contains the enemy
-  settings: 
+  settings: 05000000
   position: 1
   cardIndexToPlay: 0
   cardIdToPlay: 1
@@ -5504,6 +5504,8 @@ MonoBehaviour:
   settingsMenu: {fileID: 4368726461017617980}
   menuActiveStatus: 0
   settingsActive: 0
+  saveText: {fileID: 0}
+  loadText: {fileID: 0}
 --- !u!224 &4065117111831932290
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6730,6 +6732,7 @@ MonoBehaviour:
   - {fileID: 0}
   UIHand:
   - {fileID: 0}
+  drawChoiceMode: 0
 --- !u!1 &4851374963380228176
 GameObject:
   m_ObjectHideFlags: 0
@@ -8877,9 +8880,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 8834059882491012673}
-  defaultSaveType: 2
+  defaultFileType: 2
   fileToUse: current_save.json
   saveFolder: on Awake(), sets to "Application.persistentDataPath"
+  levelsFolder: Assets/Resources/LevelSettings
+  miscFolder: Assets/Resources/Misc
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
@@ -10179,9 +10184,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 0}
-  defaultSaveType: 2
+  defaultFileType: 2
   fileToUse: current_save.json
   saveFolder: 
+  levelsFolder: Assets/Resources/LevelSettings
+  miscFolder: Assets/Resources/Misc
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
