@@ -468,10 +468,7 @@ public class MapGenerator : MonoBehaviour
                             {
                                 tileMeshes[tile].material.color = defaultColor;
                             }
-                            //clickedTiles.Clear();
                             targetedTiles.Clear();
-                            //PlayCard?.Invoke(null);
-                            //selectedCard = null;
                         }
                         else //...remove the old red highlight and make a new one since we made a new selection.
                         {
@@ -502,9 +499,6 @@ public class MapGenerator : MonoBehaviour
                                 selectedUnit = null;
                                 StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
-                            //PlayCard?.Invoke(clickedTiles);
-                            //selectedCard = null;
-
                         }
                     }
                     else // If there isn't a red highlight, this is the first selection.
@@ -558,7 +552,6 @@ public class MapGenerator : MonoBehaviour
 
                             }
                         }
-                        //PlayCard?.Invoke(clickedTiles);
                     }
                 }
             }
