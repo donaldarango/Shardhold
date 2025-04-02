@@ -38,16 +38,13 @@ public class Deck : MonoBehaviour
     public GameObject[] UIHand;
     private int cardsInHand = 0;
 
-<<<<<<< HEAD
     private bool deckDisabled;
-=======
     public enum DrawChoiceMode
     {
         Random,
         InOrder
     }
     public DrawChoiceMode drawChoiceMode;
->>>>>>> main
 
     void Update()
     {
