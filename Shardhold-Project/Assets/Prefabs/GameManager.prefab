@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d373f87b28f704f82d549855ad1176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: -1
+  optionalStartLevel: 
   playerTurn: 0
 --- !u!114 &7816380796242172571
 MonoBehaviour:
@@ -60,7 +60,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 0}
-  defaultSaveType: 2
+  defaultFileType: 2
   fileToUse: current_save.json
-  saveFolder: 
+  saveFolder: Assets/Resources/PlayerSaves
+  levelsFolder: Assets/Resources/LevelSettings
+  miscFolder: Assets/Resources/Misc
+  playerStats:
+    nextLevel: 0
+    cardsUnlocked: 
   playerStatsFile: player_stats.json
+  lastLoadedLanes: []
