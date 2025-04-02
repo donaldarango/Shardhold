@@ -3849,6 +3849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTimerPaused: 0
+  isTimerButtonEnabled: 0
   resetTime: 30
   gradient:
     serializedVersion: 2
@@ -4790,6 +4791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4578707c96815a44871f598836f2390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  turnTimer: {fileID: 3670324229399146837}
 --- !u!1 &4333078276383509439
 GameObject:
   m_ObjectHideFlags: 0

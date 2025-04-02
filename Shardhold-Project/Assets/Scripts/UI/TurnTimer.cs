@@ -6,6 +6,7 @@ public class TurnTimer : MonoBehaviour
     [SerializeField]
     public static float time = 10.0f;
     public bool isTimerPaused = false;
+    public bool isTimerButtonEnabled;
     public float resetTime; 
     public Gradient gradient;
     public Image RightBar;

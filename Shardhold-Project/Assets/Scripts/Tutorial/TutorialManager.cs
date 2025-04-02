@@ -54,6 +54,7 @@ public class TutorialManager : MonoBehaviour
 
     public void CompletedTutorial()
     {
+        Debug.Log($"Setting next tutorial to {currentTutorial.order + 1}");
         SetNextTutorial(currentTutorial.order + 1);
     }
 
@@ -74,27 +75,15 @@ public class TutorialManager : MonoBehaviour
             return;
         }
 
-        if (currentTutorial.pausesTimer)
+        foreach(TutorialSetting settings in currentTutorial.settings)
         {
-            UIManager.Instance.PauseTurnTimer();
-        }
-        else
-        {
-            UIManager.Instance.ResumeTurnTimer();
+            ExecuteTutorialSetting(settings);
         }
 
-        if (currentTutorial.disablesTimer)
-        {
-            UIManager.Instance.DisableTimerButton();
-        }
-        else
-        {
-            UIManager.Instance.EnableTimerButton();
-        }
-
-        // Set explanation text in UI
+        // Setup UI for current tutorial
         TutorialUIManager.Instance.SetTitleText(currentTutorial.title);
         TutorialUIManager.Instance.SetExplanationText(currentTutorial.explanation);
+        TutorialUIManager.Instance.SetPosition(currentTutorial.position);
         currentTutorial.TutorialStart();
     }
 
@@ -121,5 +110,30 @@ public class TutorialManager : MonoBehaviour
             return currentTutorial.order;
 
         return -1;
+    }
+
+    public void ExecuteTutorialSetting(TutorialSetting setting)
+    {
+        switch(setting)
+        {
+            case(TutorialSetting.enablesTimer):
+                UIManager.Instance.EnableTimerButton();
+                break;
+            case (TutorialSetting.disablesTimer):
+                UIManager.Instance.DisableTimerButton();
+                break;
+            case (TutorialSetting.pausesTimer):
+                UIManager.Instance.PauseTurnTimer();
+                break;
+            case (TutorialSetting.resumesTimer):
+                UIManager.Instance.ResumeTurnTimer();
+                break;
+            case (TutorialSetting.disablesCards):
+                Deck.Instance.DisableDeckInteraction();
+                break;
+            case (TutorialSetting.enablesCards):
+                Deck.Instance.EnableDeckInteraction();
+                break;
+        }
     }
 }
