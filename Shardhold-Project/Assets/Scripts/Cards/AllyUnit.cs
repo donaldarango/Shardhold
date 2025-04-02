@@ -10,11 +10,13 @@ public class AllyUnit : MonoBehaviour
     public AllyUnitStats stats;
     public int currentHealth;
     public int currentAttacks; //unfinished; for later
+    [SerializeField] private CardUI cardUI;
 
     public CardType cardType => CardType.Unit;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        cardUI = GetComponent<CardUI>();
         Setup();
     }
 
@@ -37,6 +39,7 @@ public class AllyUnit : MonoBehaviour
 
                 actor.TakeDamage(stats.damage);
                 currentHealth -= actor.tileActorStats.damage;
+                cardUI.updateHealth(currentHealth);
                 //return to hand
                 Debug.Log("ally unit hp : " + currentHealth);
             }

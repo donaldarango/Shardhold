@@ -497,7 +497,6 @@ public class MapGenerator : MonoBehaviour
                                 selectedUnit = null;
                                 StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
-
                         }
                     }
                     else // If there isn't a red highlight, this is the first selection.
