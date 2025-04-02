@@ -1,12 +1,31 @@
+using TMPro;
 using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
+    public static PauseMenu Instance { get { return _instance; } }
+    private static PauseMenu _instance;
+
     public GameObject pauseMenu;
     public GameObject settingsMenu;
     [SerializeField] private bool menuActiveStatus = false;
     [SerializeField] private bool settingsActive = false;
     public static bool isPaused = false;
 
+    public TMP_Text saveText;
+    public TMP_Text loadText;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            //Destroy(this.gameObject);
+            //throw new System.Exception("An instance of this singleton already exists.");
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
 
     void Start()
     {
@@ -45,6 +64,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         isPaused = !isPaused;
+        ResetMenuUI();
     }
 
     public void SwapMenu()
@@ -60,5 +80,19 @@ public class PauseMenu : MonoBehaviour
         }
 
         settingsActive = !settingsActive;
+    }
+
+    /// <summary>
+    /// Reset any UI changes that occurred in the pause menu
+    /// </summary>
+    public void ResetMenuUI()
+    {
+        if (saveText != null)
+        {
+            saveText.text = "SAVE";
+        }if (loadText != null)
+        {
+            loadText.text = "LOAD";
+        }
     }
 }
