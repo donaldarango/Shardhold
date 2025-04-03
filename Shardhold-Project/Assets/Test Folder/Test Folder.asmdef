@@ -1,0 +1,6 @@
+{
+    "name": "TestFolder",
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
