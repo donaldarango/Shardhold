@@ -1,0 +1,20 @@
+Test 1: Program Navigation
+	Goal: the player can navigate the game, including menus, accessing levels, and game controls
+	Method: playtesting: initially with team members, then with non-member testers	
+
+Test 2: Balance
+	Goal: the player win rate is appropriate for each level
+	Method: playtesting: initially with team members, then with non-member testers
+
+Test 3: Deck Continuity
+	Goal: the deck at the start of the game is equivalent to the deck at the end (and at all points in between)
+	Method: assertions: saving instances of the deck periodically during playthrough and compare to previous versions; may also use Unity Testing Framework for dedicated, pre-planned and scripted run-throughs
+
+
+Test 4: Save Verification
+	Goal: when the player saves the game, the saved game should accurately describe the state of the game
+	Method: assertions: make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
+
+Test 5: Performance
+	Goal: ensure the game loads and runs at expected rates
+	Method: playtesting: when running the game, perhaps in particular a level with many enemies beyond how many the actual game will have in a level, see if the game "feels" slow; can also use Unity Performance Testing Extension
