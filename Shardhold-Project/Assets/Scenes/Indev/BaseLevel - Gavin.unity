@@ -6101,6 +6101,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 26.137
       objectReference: {fileID: 0}
+    - target: {fileID: 9199075456079192698, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
+      propertyPath: levelSettingsJSON
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6130,9 +6134,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 5331277652572986715}
-  defaultSaveType: 2
+  defaultFileType: 2
   fileToUse: current_save.json
   saveFolder: 
+  levelsFolder: Assets/Resources/LevelSettings
+  miscFolder: Assets/Resources/Misc
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
@@ -6150,7 +6156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d373f87b28f704f82d549855ad1176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 1
+  optionalStartLevel: 
   playerTurn: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

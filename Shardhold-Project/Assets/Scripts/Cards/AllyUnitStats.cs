@@ -17,10 +17,16 @@ public class AllyUnitStats : ScriptableObject
     public int damage;
     public int hp;
     public int attacks;
+    public AudioClip audioClip;
 
     public int GetId()
     {
         return id;
+    }
+
+    public AudioClip GetAudioClip()
+    {
+        return audioClip;
     }
 
     public CardType cardType => CardType.Unit;
