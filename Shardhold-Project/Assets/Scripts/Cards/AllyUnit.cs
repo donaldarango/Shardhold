@@ -10,6 +10,7 @@ public class AllyUnit : MonoBehaviour
     public AllyUnitStats stats;
     public int currentHealth;
     public int currentAttacks; //unfinished; for later
+    public AudioClip audioClip;
     [SerializeField] private CardUI cardUI;
 
     public CardType cardType => CardType.Unit;
@@ -28,6 +29,8 @@ public class AllyUnit : MonoBehaviour
     public void Play(HashSet<(int, int)> tiles)
     {
         PlayAllyUnit?.Invoke(tiles, this);
+
+        SoundFXManager.instance.PlaySoundFXClip(stats.audioClip, gameObject.transform, 10f);
 
         foreach (var tile in tiles)
         {

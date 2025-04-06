@@ -16,6 +16,8 @@ class Placer : Card
     {
         base.Play(tiles);
 
+        SoundFXManager.instance.PlaySoundFXClip(audioClip, SoundFXManager.instance.transform, audioVolume);
+
         coordSet = tiles;
         foreach(var tile in coordSet)
         {
