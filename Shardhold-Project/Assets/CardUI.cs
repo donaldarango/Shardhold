@@ -28,6 +28,9 @@ public class CardUI : MonoBehaviour
         }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void updateHealth(int health){
+        hp.text = health.ToString();
+    }
     public void initializeCardUI (ScriptableObject intermediate) {
         //finds the card color component of the prefab
         if (intermediate is Card)
@@ -117,5 +120,15 @@ public class CardUI : MonoBehaviour
             }
 
         }
+    }
+
+    public void DisableButton()
+    {
+        cardButton.enabled = false;
+    }
+
+    public void EnableButton()
+    {
+        cardButton.enabled = true;
     }
 }

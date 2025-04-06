@@ -12,21 +12,19 @@ public class TextTutorial : Tutorial
         TutorialUIManager.NextButtonPressed -= OnNextButtonPressed;
     }
 
-    //public override void Start()
-    //{
-    //    base.Start();
-    //}
-
-    public override void  TutorialStart()
+    public override void TutorialStart()
     {
         TutorialUIManager.Instance.ShowNextButton();
     }
 
     public void OnNextButtonPressed()
     {
+        //Debug.Log($"OnNextButtonPressed: Tutorial {order}");
         int currentOrder = TutorialManager.Instance.GetCurrentOrder();
         if (order == currentOrder)
         {
+            completed = true;
+            Debug.Log($"Completed tutorial {order}");
             TutorialManager.Instance.CompletedTutorial();
         }
     }

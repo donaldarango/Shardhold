@@ -7,6 +7,9 @@ using static MapGenerator;
 [CreateAssetMenu(fileName = "Card", menuName = "Scriptable Objects/Card")]
 abstract public class Card : ScriptableObject
 {
+    public delegate void PlayCardHandler(HashSet<(int, int)> tiles, Card card);
+    public static event PlayCardHandler PlayCard;
+
     public int id; //the int representation of the card
 
     [Header("Basic Card Information")]
@@ -43,7 +46,7 @@ abstract public class Card : ScriptableObject
         return true;
     }
     #endregion
-    abstract public void Play(HashSet<(int, int)> tiles);
+    virtual public void Play(HashSet<(int, int)> tiles) { PlayCard?.Invoke(tiles, this); }
 }
 
 

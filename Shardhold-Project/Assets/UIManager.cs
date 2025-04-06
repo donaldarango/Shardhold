@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     private static UIManager _instance;
     public static UIManager Instance { get { return _instance; } }
 
+    public TurnTimer turnTimer;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -42,5 +44,10 @@ public class UIManager : MonoBehaviour
     public void ResumeTurnTimer()
     {
         TurnTimerPaused?.Invoke(false);
+    }
+
+    public bool TimerButtonEnabledStatus()
+    {
+        return turnTimer.timerButton.enabled;
     }
 }

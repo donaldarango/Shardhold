@@ -45,8 +45,6 @@ public class MapGenerator : MonoBehaviour
     public Card? selectedCard = null;
     public Card? oldCard = null;
     public int selectedHandIndex = -1;
-    public delegate void PlayCardHandler(HashSet<(int, int)> tiles);
-    public static event PlayCardHandler PlayCard;
 
     // ADD MAP CONFIG (TERRAIN INFO)
 
@@ -182,7 +180,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     // TESTING: even quadrant = default ; odd = mountain
                     
-                    if (q % 2 == 0)
+                    if (true)//q % 2 == 0)
                     {
                         terrain = CreateTerrain(TerrainType.Default);
                     }
@@ -468,10 +466,7 @@ public class MapGenerator : MonoBehaviour
                             {
                                 tileMeshes[tile].material.color = defaultColor;
                             }
-                            //clickedTiles.Clear();
                             targetedTiles.Clear();
-                            //PlayCard?.Invoke(null);
-                            //selectedCard = null;
                         }
                         else //...remove the old red highlight and make a new one since we made a new selection.
                         {
@@ -502,9 +497,6 @@ public class MapGenerator : MonoBehaviour
                                 selectedUnit = null;
                                 StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
-                            //PlayCard?.Invoke(clickedTiles);
-                            //selectedCard = null;
-
                         }
                     }
                     else // If there isn't a red highlight, this is the first selection.
@@ -542,7 +534,7 @@ public class MapGenerator : MonoBehaviour
                                 Debug.Log("play card via first target");
 
                                 selectedUnit.Play(clickedTiles);
-
+                                
                                 if (selectedUnit.currentAttacks <= 0)
                                 {
                                     Transform background = selectedUnit.transform.Find("CardColor");
@@ -558,7 +550,6 @@ public class MapGenerator : MonoBehaviour
 
                             }
                         }
-                        //PlayCard?.Invoke(clickedTiles);
                     }
                 }
             }

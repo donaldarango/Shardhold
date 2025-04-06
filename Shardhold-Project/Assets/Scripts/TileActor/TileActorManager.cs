@@ -140,6 +140,7 @@ public class TileActorManager : MonoBehaviour
     private IEnumerator OnEnemyTurnStartCoroutine()
     {
         float movementDelay = .875f;
+        bool timerPreviouslyEnabled = UIManager.Instance.TimerButtonEnabledStatus(); // check if timer was enabled before enemy turn
         UIManager.Instance.DisableTimerButton();
 
         currentRound++;
@@ -151,13 +152,10 @@ public class TileActorManager : MonoBehaviour
                 yield return new WaitForSeconds(movementDelay);
             }
         }
-        //foreach (EnemyUnit enemyUnit in currentEnemyUnits)
-        //{
-        //    enemyUnit.MoveEnemy();
-        //    yield return new WaitForSeconds(movementDelay);
-        //}
+        
         SpawnEnemyUnits(currentRound);
-        UIManager.Instance.EnableTimerButton();
+        if (timerPreviouslyEnabled == true) // only enable timer if it was enabled prior to enemy turn
+            UIManager.Instance.EnableTimerButton();
         EndEnemyTurn?.Invoke();
     }
 
