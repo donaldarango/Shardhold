@@ -14,24 +14,26 @@ public class CustomDebug : MonoBehaviour
         Verbose = 4     //print as much as possible; ONLY USE WHEN DEBUGGING A PARTICULAR ERROR, PLEASE LEAVE ON SOMETHING ELSE OTHERWISE
     }
 
+    [Header("==Console Output Controls==")]
     public DebuggingType debugging = DebuggingType.Normal;  //sets the maximum debugging prints amount; even if a particular debugging setting would show more, this stops it
-
-    #region Assertion-based Testing
-    public bool runAssertionTesting = false;
-    public bool saveVerificationTesting = false;    //make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
-    public bool saveVerificationTesting_saveOutputToFile = true;
-    //public GameStateData prevData;
-    #endregion
-
-    #region Other Tests
-    bool testRandomInt = false;
-    #endregion
 
     //FOR INTIAL SETTING ONLY; USE GET METHODS
     //per-class debugging bool controls (the respective class will check this, rather than holding its own debugging variable):
     public DebuggingType deckDebugging = DebuggingType.Warnings;
     public DebuggingType saveLoadDebugging = DebuggingType.Warnings;
     public DebuggingType cusmtomMathDebugging = DebuggingType.Warnings;
+
+    #region Assertion-based Testing
+    [Header("==Assertion-Based Testing==")]
+    public bool runAssertionTesting = false;
+    public bool saveTestOutput = true;
+    public bool saveVerificationTesting = false;    //make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
+    //public GameStateData prevData;
+    #endregion
+
+    #region Other Tests
+    bool testRandomInt = false;
+    #endregion
 
     private void Awake()
     {

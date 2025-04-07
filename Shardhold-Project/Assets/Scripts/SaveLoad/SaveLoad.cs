@@ -1139,7 +1139,7 @@ public class SaveLoad : MonoBehaviour
         {
             Debug.Log(log);
         }
-        if (CustomDebug.instance.saveVerificationTesting_saveOutputToFile)
+        if (CustomDebug.instance.saveTestOutput)
         {
             if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
             {
