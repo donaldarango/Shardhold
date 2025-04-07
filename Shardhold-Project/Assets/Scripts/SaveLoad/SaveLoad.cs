@@ -934,17 +934,19 @@ public class SaveLoad : MonoBehaviour
         DateTime compareDate = DateTime.Now;
         bool output = true;
         //Debug.Log(DateTime.Now.ToFileTimeUtc());  //the current time
-        string logFile = "StrictDataCompareOutput" + compareDate.ToFileTimeUtc() + ".txt";
+        string logFile = "StrictDataCompareOutput_" + compareDate.ToFileTimeUtc() + ".txt";
 
         string log = "Strict GameStateData Comparison Results\n";
         log += "Date/Time:" + Tab() + compareDate.ToString("G") + "\n\n";
 
-        string successStr = "passed\n";
-        string failStr = ">>>FAILED<<<\n";
+        log += "PER-SECTION RESULTS:\n";
 
-        int tabShift = 0;
+        string successStr = "   passed   " + Tab();
+        string failStr = "***FAILED***" + Tab();
 
-        log += "initialized:" + Tab(tabShift + 1);
+        //int tabShift = 0;
+
+        //log += "initialized:" + Tab(tabShift + 1);
         if (data1.initialized == data2.initialized)
         {
             log += successStr;
@@ -954,8 +956,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "initialization status\n";
 
-        log += "saveVersion:" + Tab(tabShift + 1);
+        //log += "saveVersion:" + Tab(tabShift + 1);
         if (data1.saveVersion.Equals(data2.saveVersion))
         {
             log += successStr;
@@ -965,8 +968,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "save version\n";
 
-        log += "level:" + Tab(tabShift + 2);
+        //log += "level:" + Tab(tabShift + 2);
         if (data1.level == data2.level)
         {
             log += successStr;
@@ -976,8 +980,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "current level\n";
 
-        log += "sectorCount:" + Tab(tabShift + 1);
+        //log += "sectorCount:" + Tab(tabShift + 1);
         if (data1.sectorCount == data2.sectorCount)
         {
             log += successStr;
@@ -987,8 +992,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "sector count\n";
 
-        log += "maxActualRange:" + Tab(tabShift + 1);
+        //log += "maxActualRange:" + Tab(tabShift + 1);
         if (data1.maxActualRange == data2.maxActualRange)
         {
             log += successStr;
@@ -998,8 +1004,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "max range/rings\n";
 
-        log += "curTurn:" + Tab(tabShift + 1);
+        //log += "curTurn:" + Tab(tabShift + 1);
         if (data1.curTurn == data2.curTurn)
         {
             log += successStr;
@@ -1009,8 +1016,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "current turn\n";
 
-        log += "lanes:" + Tab(tabShift + 2);
+        //log += "lanes:" + Tab(tabShift + 2);
         if (EqualLanes(data1.lanes, data2.lanes, false))
         {
             log += successStr;
@@ -1020,8 +1028,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "terrains\n";
 
-        log += "baseHP:" + Tab(tabShift + 2);
+        //log += "baseHP:" + Tab(tabShift + 2);
         if (data1.baseHP == data2.baseHP)
         {
             log += successStr;
@@ -1031,8 +1040,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "base health\n";
 
-        log += "baseWeapon:" + Tab(tabShift + 1);
+        //log += "baseWeapon:" + Tab(tabShift + 1);
         if (data1.baseWeapon == data2.baseWeapon)
         {
             log += successStr;
@@ -1042,8 +1052,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "base weapon\n";
 
-        log += "tile actors:" + Tab(tabShift + 1);
+        //log += "tile actors:" + Tab(tabShift + 1);
         if (EqualSpawnedTileActors(data1.spawnedTileActors, data2.spawnedTileActors, false))
         {
             log += successStr;
@@ -1053,8 +1064,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "spawned tile actors\n";
 
-        log += "spawnList:" + Tab(tabShift + 1);
+        //log += "spawnList:" + Tab(tabShift + 1);
         if (TileActorManager.RoundSpawnInfo.EqualRoundSpawnInfo(data1.spawnList, data2.spawnList, false))
         {
             log += successStr;
@@ -1064,6 +1076,7 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "spawn list\n";
 
         /*log += "trapUnits:\t";
         if (data1.trapUnits.Equals(data2.trapUnits))
@@ -1076,7 +1089,7 @@ public class SaveLoad : MonoBehaviour
             output = false;
         }*/
 
-        log += "drawPile:" + Tab(tabShift + 1);
+        //log += "drawPile:" + Tab(tabShift + 1);
         if (data1.drawPile.Equals(data2.drawPile))
         {
             log += successStr;
@@ -1086,8 +1099,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "draw pile\n";
 
-        log += "discardPile:" + Tab(tabShift + 1);
+        //log += "discardPile:" + Tab(tabShift + 1);
         if (data1.discardPile.Equals(data2.discardPile))
         {
             log += successStr;
@@ -1097,8 +1111,9 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "discard pile\n";
 
-        log += "hand:" + Tab(tabShift + 2);
+        //log += "hand:" + Tab(tabShift + 2);
         if (EqualSavedCards(data1.hand, data2.hand, false))
         {
             log += successStr;
@@ -1108,6 +1123,7 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
             output = false;
         }
+        log += "hand\n";
 
         log += "\nOVERALL RESULT:\n";
         if (output)
