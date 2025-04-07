@@ -20,5 +20,7 @@ MonoBehaviour:
   description: Places a trap
   damage: 0
   hp: 0
+  audioClip: {fileID: 8300000, guid: dda6dd328384c7c4398a7ba3a35dd56e, type: 3}
+  audioVolume: 10
   stats: {fileID: 11400000, guid: ca3e49442cccefe4b8d43b654fc46471, type: 2}
   isTrap: 1

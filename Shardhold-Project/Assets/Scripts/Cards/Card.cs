@@ -21,6 +21,10 @@ abstract public class Card : ScriptableObject
     public int damage;
     public int hp;
 
+    [Header("Audio Data")]
+    [SerializeField] protected AudioClip audioClip;
+    [SerializeField] protected float audioVolume;
+
     public enum CardType
     {
         Spell,

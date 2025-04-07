@@ -37,12 +37,13 @@ class Spell : Card
     {
         base.Play(tiles);
 
+        SoundFXManager.instance.PlaySoundFXClip(audioClip, SoundFXManager.instance.transform, audioVolume);
+
         coordSet = tiles;
         Debug.Log("play called:");
         if (coordSet == null) { return; }
         if (damage > 0) { damageArea(); }
         if (heal > 0) { healArea(); }
-
     }
 
     public void damageArea()
