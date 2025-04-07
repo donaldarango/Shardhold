@@ -521,33 +521,46 @@ public class MapGenerator : MonoBehaviour
                         }
                         else if (selectedUnit != null)
                         {
-                            if(selectedUnit.currentAttacks > 0)
+                            if (selectedUnit.currentAttacks > 0)
                             {
-                                --selectedUnit.currentAttacks;
-                                Debug.Log("First Target - tile: " + (r, l));
+                                bool isPlayable = false;
+
                                 foreach (var tile in targetedTiles)
                                 {
-                                    tileMeshes[tile].material.color = clickColor;
-                                    clickedTiles.Add(tile);
+                                    MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
+                                    TileActor actor = target.GetCurrentTileActor();
+                                    if (actor)
+                                    {
+                                        isPlayable = true;
+                                    }
                                 }
-                                targetedTiles.Clear();
-                                Debug.Log("play card via first target");
-
-                                selectedUnit.Play(clickedTiles);
-                                
-                                if (selectedUnit.currentAttacks <= 0)
+                                if (isPlayable)
                                 {
-                                    Transform background = selectedUnit.transform.Find("CardColor");
-                                    background.GetComponent<UnityEngine.UI.Image>().color = Color.gray;
-                                }
+                                    --selectedUnit.currentAttacks;
+                                    Debug.Log("First Target - tile: " + (r, l));
+                                    foreach (var tile in targetedTiles)
+                                    {
+                                        tileMeshes[tile].material.color = clickColor;
+                                        clickedTiles.Add(tile);
+                                    }
+                                    targetedTiles.Clear();
+                                    Debug.Log("play card via first target");
 
-                                if (selectedUnit.DiscardAfterPlay() == true)
-                                {
-                                    Deck.Instance.DiscardCard(selectedHandIndex);
-                                }
-                                selectedUnit = null;
-                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                                    selectedUnit.Play(clickedTiles);
 
+                                    if (selectedUnit.currentAttacks <= 0)
+                                    {
+                                        Transform background = selectedUnit.transform.Find("CardColor");
+                                        background.GetComponent<UnityEngine.UI.Image>().color = Color.gray;
+                                    }
+
+                                    if (selectedUnit.DiscardAfterPlay() == true)
+                                    {
+                                        Deck.Instance.DiscardCard(selectedHandIndex);
+                                    }
+                                    selectedUnit = null;
+                                    StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                                }
                             }
                         }
                     }
