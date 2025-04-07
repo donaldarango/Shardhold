@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CustomDebug : MonoBehaviour
@@ -17,6 +18,9 @@ public class CustomDebug : MonoBehaviour
 
     #region Assertion-based Testing
     public bool runAssertionTesting = false;
+    public bool saveVerificationTesting = false;    //make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
+    public bool saveVerificationTesting_saveOutputToFile = true;
+    //public GameStateData prevData;
     #endregion
 
     #region Other Tests
@@ -51,7 +55,7 @@ public class CustomDebug : MonoBehaviour
         #endregion
     }
 
-    public static void RanUnimplementedCode(string descriptor = "<no descriptor>", DebuggingType level=DebuggingType.ErrorOnly)
+    public static void RanUnimplementedCode(string descriptor = "<no descriptor>", DebuggingType level = DebuggingType.ErrorOnly)
     {
         if (Debugging(level))
         {
@@ -89,12 +93,6 @@ public class CustomDebug : MonoBehaviour
     #endregion
 
 
-
-
-
-
-
-
     #region Testing Functions
 
     public static void TestRandomInt(int testsToRun = 1)
@@ -127,4 +125,22 @@ public class CustomDebug : MonoBehaviour
 
     #endregion
 
+    public IEnumerator AutoPlay()
+    {
+        while (!GameManager.Instance.playerTurn)
+        {
+            yield return null;
+        }
+        string log = "Autoplaying level: " + GameManager.Instance.GetCurrentLevel() + "\n";
+    }
+
+    public static string Tab(int count = 1)
+    {
+        string output = "";
+        for (int i = 0; i < count; i++)
+        {
+            output += "\t";
+        }
+        return output;
+    }
 }

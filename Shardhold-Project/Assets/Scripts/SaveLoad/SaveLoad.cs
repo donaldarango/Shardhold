@@ -10,15 +10,19 @@ using System.Data;
 using JetBrains.Annotations;
 using System.Linq;
 using TMPro;
+using NUnit.Framework;
+
+using static CustomDebug;
 
 public class SaveLoad : MonoBehaviour
 {
 
 
     public static SaveLoad saveLoad;
-    public MapGenerator mapGenerator;
+    //public MapGenerator mapGenerator;
 
-    public enum FileType{
+    public enum FileType
+    {
         chooseDefault,
         binary,
         json
@@ -29,6 +33,7 @@ public class SaveLoad : MonoBehaviour
         playerSave,
         levelFile,
         misc,
+        debugging
     }
 
     public FileType defaultFileType = FileType.json;
@@ -36,6 +41,7 @@ public class SaveLoad : MonoBehaviour
     public string saveFolder = "Assets/Resources/PlayerSaves";   //"on Awake(), sets to \"Application.persistentDataPath\"";  //where save files go (when the player saves a game)
     public string levelsFolder = "Assets/Resources/LevelSettings";  //from TileActor
     public string miscFolder = "Assets/Resources/Misc";
+    public string debugFolder = "Assets/Resources/Debug";
 
     public PlayerStats playerStats = null;
     public string playerStatsFile = "player_stats.json";
@@ -45,10 +51,12 @@ public class SaveLoad : MonoBehaviour
     private string curSaveLoadVersion = "1.00";
     private string saveFileVersionsFile = "file_details.json";
 
+    public GameStateData mostRecentLoad = null;
+
     public void Awake()
     {
         //saveFolder = Application.persistentDataPath;
-        if(saveLoad == null)
+        if (saveLoad == null)
         {
             saveLoad = this;
         }
@@ -107,39 +115,88 @@ public class SaveLoad : MonoBehaviour
 
 
     #region Save/Load, see https://www.youtube.com/watch?v=J6FfcJpbPXE
-    public void SaveToDefault(TMP_Text saveText){
+    public void SaveToDefault(TMP_Text saveText)
+    {
         FileType fileType = FileType.chooseDefault;
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+        {
             Debug.Log("Saving game to default file \"" + fileToUse + "\"");
         }
-        if(Save(fileToUse, SaveType.playerSave, fileType) && saveText != null)
+        if (Save(fileToUse, SaveType.playerSave, fileType) && saveText != null)
         {
             saveText.text = "GAME SAVED";
         }
     }
 
-    public void LoadFromDefault(TMP_Text loadText){
+    public void LoadFromDefault(TMP_Text loadText)
+    {
         FileType saveType = FileType.chooseDefault;
-        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+        {
             Debug.Log("Loading game from default file \"" + fileToUse + "\"");
         }
-        if(Load(fileToUse, SaveType.playerSave, saveType) && loadText != null)
+        if (Load(fileToUse, SaveType.playerSave, saveType) && loadText != null)
         {
             loadText.text = "GAME LOADED";
         }
     }
 
-    public bool Save(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault){
-        if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+    public bool Save(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault)
+    {
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
         {
             Debug.Log("Saving game to specified file \"" + fileToUse + "\"");
         }
 
+        GameStateData data = CreateData();
 
+        StoreVersion(filename, data.saveVersion);
+
+        #region Writing to File
+
+        if (fileType == FileType.chooseDefault)
+        {
+            fileType = defaultFileType;
+        }
+        bool output = false;
+        switch (fileType)
+        {
+            case FileType.binary:
+                output = BinarySave(filename, data);
+                break;
+            case FileType.json:
+                output = JsonSave(filename, saveType, data);
+                break;
+            default:
+                if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+                {
+                    Debug.LogError("Unidentified save type!");
+                }
+                output = false;
+                break;
+        }
+
+        #endregion
+
+        if (CustomDebug.instance.runAssertionTesting && CustomDebug.instance.saveVerificationTesting)
+        {
+            //CustomDebug.instance.prevData = data;
+            Load(filename, saveType, fileType);
+            GameStateData verificationData = CreateData();
+            JsonSave("saveVerificationTestData.json", SaveType.misc, verificationData);
+            Assert.IsTrue(StrictDataCompare(data, verificationData));
+        }
+
+        return output;
+    }
+
+    public GameStateData CreateData()
+    {
         GameStateData data = new GameStateData();
+
         #region Copy game state data to GameStateData
 
-        RanUnimplementedCode("Ant effects are not yet saveable (or loadable).");
+        //RanUnimplementedCode("Any effects are not yet saveable (or loadable).");
 
         #region Map Info
 
@@ -192,7 +249,7 @@ public class SaveLoad : MonoBehaviour
         //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
         data.spawnedTileActors = new List<SpawnedTileActor>();
         List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
-        
+
         /*
         data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
         data.ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
@@ -251,7 +308,7 @@ public class SaveLoad : MonoBehaviour
                 SavedCard savedCard = new SavedCard();
                 data.hand.Add(savedCard);
                 ScriptableObject intermediate = Deck.Instance.hand[i];
-                if(intermediate is Card)
+                if (intermediate is Card)
                 {
                     savedCard.cardId = ((Card)intermediate).GetId();
                     savedCard.cardHealth = ((Card)intermediate).hp;
@@ -273,43 +330,30 @@ public class SaveLoad : MonoBehaviour
 
         #endregion
 
-        StoreVersion(filename, data.saveVersion);
-
-        #region Writing to File
-
-        if (fileType == FileType.chooseDefault){
-            fileType = defaultFileType;
-        }
-        switch(fileType){
-            case FileType.binary:
-                return BinarySave(filename, data);
-            case FileType.json:
-                return JsonSave(filename, saveType, data);
-            default:
-                if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
-                    Debug.LogError("Unidentified save type!");
-                }
-                return false;
-        }
-
-        #endregion
+        return data;
     }
 
     //this has been replaced with json file save system
-    private bool BinarySave(string filename, GameStateData data){
-        try{
+    private bool BinarySave(string filename, GameStateData data)
+    {
+        try
+        {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(saveFolder + "/" + filename);
 
             bf.Serialize(file, data);
             file.Close();
 
-            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+            {
                 Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder);
             }
             return true;
-        }catch(Exception e){
-            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
+        }
+        catch (Exception e)
+        {
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+            {
                 Debug.LogError("ERROR WHEN SAVING BINARY: " + e.Message);
             }
             return false;
@@ -332,7 +376,7 @@ public class SaveLoad : MonoBehaviour
             //success, presumably
             if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
             {
-                Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveFolder + "\"");
+                Debug.Log("Current game has been saved to \"" + filename + "\" in folder \"" + saveLocation + "\"");
             }
             return true;
         }
@@ -346,8 +390,10 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-    public bool Load(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault){
-        if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
+    public bool Load(string filename, SaveType saveType = SaveType.playerSave, FileType fileType = FileType.chooseDefault)
+    {
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+        {
             Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
 
@@ -356,10 +402,12 @@ public class SaveLoad : MonoBehaviour
         GameStateData data = new GameStateData();
         bool noProblemLoading = true;   //set to false if there are any issues with the loading process
 
-        if(fileType == FileType.chooseDefault){
+        if (fileType == FileType.chooseDefault)
+        {
             fileType = defaultFileType;
         }
-        switch(fileType){
+        switch (fileType)
+        {
             case FileType.binary:
                 noProblemLoading = BinaryLoad(filename, out data);
                 break;
@@ -368,7 +416,8 @@ public class SaveLoad : MonoBehaviour
                 Print("Json no problem loading: " + noProblemLoading, CustomDebug.DebuggingType.Normal);
                 break;
             default:
-                if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
+                if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+                {
                     Debug.LogError("Unidentified save type!");
                 }
                 noProblemLoading = false;
@@ -382,12 +431,13 @@ public class SaveLoad : MonoBehaviour
         {
             Unload();
             MapManager.Instance.RemoveAllTiles();
+            mostRecentLoad = data;
 
             #region turn the GameStateData object into the actual state of the game
 
             #region Overall Game/Map Info
 
-            RanUnimplementedCode("Any effects are not yet loadable (or savable).");
+            //RanUnimplementedCode("Any effects are not yet loadable (or savable).");
 
             //general map stuff
             setLaneCount(data.sectorCount);
@@ -419,7 +469,7 @@ public class SaveLoad : MonoBehaviour
             #region Spawned TileActors
 
             //iterate over all TileActors, adding all the data for each TileActor before moving on to the next TileActor
-            for (int i = 0;i < data.spawnedTileActors.Count; i++)
+            for (int i = 0; i < data.spawnedTileActors.Count; i++)
             {
                 SpawnedTileActor sta = data.spawnedTileActors[i];
                 TileActor newTA = null;
@@ -454,7 +504,7 @@ public class SaveLoad : MonoBehaviour
                 newTA.SetIsShielded(sta.isShielded);
                 newTA.SetIsPoisoned(sta.isPoisoned);
                 //NOTE: we aren't actually setting the max health
-                
+
 
 
             }
@@ -475,19 +525,23 @@ public class SaveLoad : MonoBehaviour
             #region Cards
 
             Deck.Instance.DeleteAllCardsInHand();
-            Deck.Instance.hand = new Card[Deck.Instance.hand.Length];
+            Deck.Instance.hand = new ScriptableObject[Deck.Instance.hand.Length];
             for (int i = 0; i < data.hand.Count; i++)
             {
                 Deck.Instance.CreateCard(data.hand[i].cardId);
                 ScriptableObject intermediate = Deck.Instance.hand[i];
 
-                if(intermediate is Card)
+                if (intermediate is Card)
                 {
-                    ((Card)intermediate).hp = data.hand[i].cardHealth;
+                    ((Card)intermediate).hp = data.hand[i].cardHealth;  //is this necessary/correct?
                 }
                 else
                 {
-                    ((AllyUnitStats)intermediate).GetComponent<AllyUnit>().currentHealth = data.hand[i].cardHealth;
+
+                    /*AllyUnitStats intermediateAllyUnitStats = (AllyUnitStats)intermediate;*/
+                    GameObject intermediateAllyUnitStatsGameObject = Deck.Instance.UIHand[i];
+                    AllyUnit intermediateAllyUnit = intermediateAllyUnitStatsGameObject.GetComponent<AllyUnit>();
+                    intermediateAllyUnit.currentHealth = data.hand[i].cardHealth;
                 }
             }
 
@@ -504,22 +558,28 @@ public class SaveLoad : MonoBehaviour
     }
 
     //this has also been replaced with json file save system, like the save system
-    private bool BinaryLoad(string filename, out GameStateData data){
+    private bool BinaryLoad(string filename, out GameStateData data)
+    {
         //remove all current stuff from the board in preparation for the new stuff
         //Unload();
-        if(File.Exists(saveFolder + "/" + filename)){
+        if (File.Exists(saveFolder + "/" + filename))
+        {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(saveFolder + "/" + filename, FileMode.Open);
             data = (GameStateData)bf.Deserialize(file);
             file.Close();
 
 
-            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal)){
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
+            {
                 Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder + "\"");
             }
             return true;
-        }else{
-            if(CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly)){
+        }
+        else
+        {
+            if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.ErrorOnly))
+            {
                 Debug.LogError("Error with file; failed to load.");
             }
             data = null;
@@ -527,7 +587,7 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-	private bool JsonLoad(string filename, SaveType saveType, out GameStateData data)
+    private bool JsonLoad(string filename, SaveType saveType, out GameStateData data)
     {
         try
         {
@@ -543,7 +603,7 @@ public class SaveLoad : MonoBehaviour
                 //presumably the operation was successful
                 if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
                 {
-                    Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveFolder);
+                    Debug.Log("Current game has been loaded from \"" + filename + "\" in folder \"" + saveLocation);
                 }
                 return true;
             }
@@ -565,8 +625,8 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
-	private void Unload()
-	{
+    private void Unload()
+    {
         //TODO remove any map effects or similar; don't worry about adjusting base HP or weapon, as these will be set when loading anyways
 
 
@@ -674,7 +734,7 @@ public class SaveLoad : MonoBehaviour
     private int getBaseHPMax()
     {
         //TODO
-        RanUnimplementedCode("getBaseHPMax()");
+        //RanUnimplementedCode("getBaseHPMax()");
         return 100;
     }
 
@@ -682,7 +742,7 @@ public class SaveLoad : MonoBehaviour
     private int getBaseWeapon()
     {
         //TODO
-        RanUnimplementedCode("getBaseWeapon()");
+        //RanUnimplementedCode("getBaseWeapon()");
         return -1;
     }
 
@@ -690,13 +750,13 @@ public class SaveLoad : MonoBehaviour
     private void setBaseWeapon(int amt)
     {
         //TODO
-        RanUnimplementedCode("setBaseWeapon()");
+        //RanUnimplementedCode("setBaseWeapon()");
     }
 
     private int getBaseWeaponMax()
     {
         //TODO
-        RanUnimplementedCode("getBaseWeaponMax()");
+        //RanUnimplementedCode("getBaseWeaponMax()");
         return 100;
     }
 
@@ -760,7 +820,8 @@ public class SaveLoad : MonoBehaviour
         Debug.Log("Wrote testing text to " + saveFolder + "/" + testFileName);
         Debug.Log("Attempting to read that test file...");
         string readString = "";
-        if (ReadFile(testFileName, saveFolder, out readString)) {
+        if (ReadFile(testFileName, saveFolder, out readString))
+        {
             Debug.Log("Successful read, contents are as follows:\n" + readString);
         }
         else
@@ -857,18 +918,392 @@ public class SaveLoad : MonoBehaviour
         else if (saveType == SaveType.misc)
         {
             return miscFolder;
+        }else if (saveType == SaveType.debugging)
+        {
+            return debugFolder;
         }
         else
         {
-            Print("Unhandled saveType: " +  saveType.ToString() + "; file will be saved in miscFolder", CustomDebug.DebuggingType.ErrorOnly);
+            Print("Unhandled saveType: " + saveType.ToString() + "; file will be saved in miscFolder", CustomDebug.DebuggingType.ErrorOnly);
             return miscFolder;
         }
     }
 
+    public bool StrictDataCompare(GameStateData data1, GameStateData data2)
+    {
+        DateTime compareDate = DateTime.Now;
+        bool output = true;
+        //Debug.Log(DateTime.Now.ToFileTimeUtc());  //the current time
+        string logFile = "StrictDataCompareOutput" + compareDate.ToFileTimeUtc() + ".txt";
+
+        string log = "Strict GameStateData Comparison Results\n";
+        log += "Date/Time:" + Tab() + compareDate.ToString("G") + "\n\n";
+
+        string successStr = "passed\n";
+        string failStr = ">>>FAILED<<<\n";
+
+        int tabShift = 0;
+
+        log += "initialized:" + Tab(tabShift + 1);
+        if (data1.initialized == data2.initialized)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "saveVersion:" + Tab(tabShift + 1);
+        if (data1.saveVersion.Equals(data2.saveVersion))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "level:" + Tab(tabShift + 2);
+        if (data1.level == data2.level)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "sectorCount:" + Tab(tabShift + 1);
+        if (data1.sectorCount == data2.sectorCount)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "maxActualRange:" + Tab(tabShift + 1);
+        if (data1.maxActualRange == data2.maxActualRange)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "curTurn:" + Tab(tabShift + 1);
+        if (data1.curTurn == data2.curTurn)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "lanes:" + Tab(tabShift + 2);
+        if (EqualLanes(data1.lanes, data2.lanes, false))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "baseHP:" + Tab(tabShift + 2);
+        if (data1.baseHP == data2.baseHP)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "baseWeapon:" + Tab(tabShift + 1);
+        if (data1.baseWeapon == data2.baseWeapon)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "tile actors:" + Tab(tabShift + 1);
+        if (EqualSpawnedTileActors(data1.spawnedTileActors, data2.spawnedTileActors, false))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "spawnList:" + Tab(tabShift + 1);
+        if (TileActorManager.RoundSpawnInfo.EqualRoundSpawnInfo(data1.spawnList, data2.spawnList, false))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        /*log += "trapUnits:\t";
+        if (data1.trapUnits.Equals(data2.trapUnits))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }*/
+
+        log += "drawPile:" + Tab(tabShift + 1);
+        if (data1.drawPile.Equals(data2.drawPile))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "discardPile:" + Tab(tabShift + 1);
+        if (data1.discardPile.Equals(data2.discardPile))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "hand:" + Tab(tabShift + 2);
+        if (EqualSavedCards(data1.hand, data2.hand, false))
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+
+        log += "\nOVERALL RESULT:\n";
+        if (output)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+        }
+
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
+        {
+            Debug.Log(log);
+        }
+        if (CustomDebug.instance.saveVerificationTesting_saveOutputToFile)
+        {
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+            {
+                Debug.Log("Results saved to log file: " + logFile);
+            }
+            WriteFile(logFile, GetSaveLocation(SaveType.debugging), log);
+        }
+
+        return output;
+    }
+
+    public static bool EqualLanes(List<SavedLane> lanes1, List<SavedLane> lanes2, bool allowNull)
+    {
+        if (lanes1 == null)
+        {
+            return allowNull && lanes2 == null;
+        }
+
+        if (lanes2 == null)
+        {
+            return false;
+        }
+
+        if (lanes1.Count != lanes2.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < lanes1.Count; i++)
+        {
+            if (!EqualLanes(lanes1[i], lanes2[i], allowNull))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool EqualLanes(SavedLane lane1, SavedLane lane2, bool allowNull)
+    {
+        if (lane1 == null)
+        {
+            return allowNull && lane2 == null;
+        }
+
+        if (lane2 == null)
+        {
+            return false;
+        }
+
+        if (lane1.terrains.Count != lane2.terrains.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < lane1.terrains.Count; i++)
+        {
+            if (lane1.terrains[i] != lane2.terrains[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool EqualSpawnedTileActors(List<SpawnedTileActor> lhs, List<SpawnedTileActor> rhs, bool allowNull)
+    {
+        if (lhs == null)
+        {
+            return allowNull && rhs == null;
+        }
+        else if (rhs == null)
+        {
+            return false;
+        }
+
+        if (lhs.Count != rhs.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < lhs.Count; i++)
+        {
+            if (!EqualSpawnedTileActors(lhs[i], rhs[i], allowNull))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool EqualSpawnedTileActors(SpawnedTileActor lhs, SpawnedTileActor rhs, bool allowNull)
+    {
+        if (lhs == null)
+        {
+            return allowNull && rhs == null;
+        }
+        else if (rhs == null)
+        {
+            return false;
+        }
+
+        bool output = true;
+
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 0: " + output); }
+        output = output && lhs.name.Equals(rhs.name);
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 1: " + output); }
+        output = output && lhs.curHealth == rhs.curHealth;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 2: " + output); }
+        output = output && lhs.pos.Equals(rhs.pos);
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 3: " + output); }
+        output = output && lhs.type.Equals(rhs.type);
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 4: " + output); }
+        output = output && lhs.damage == rhs.damage;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 5: " + output); }
+        output = output && lhs.attackRange == rhs.attackRange;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 6: " + output); }
+        output = output && lhs.isShielded == rhs.isShielded;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 7: " + output); }
+        output = output && lhs.isPoisoned == rhs.isPoisoned;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 8: " + output); }
+
+        return output;
+    }
+
+    public static bool EqualSavedCards(List<SavedCard> lhs, List<SavedCard> rhs, bool allowNull)
+    {
+        if (lhs == null)
+        {
+            return allowNull && rhs == null;
+        }
+        else if (rhs == null)
+        {
+            return false;
+        }
+
+        if (lhs.Count != rhs.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < lhs.Count; i++)
+        {
+            if (!EqualSavedCards(lhs[i], rhs[i], allowNull))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool EqualSavedCards(SavedCard lhs, SavedCard rhs, bool allowNull)
+    {
+        if (lhs == null)
+        {
+            return allowNull && rhs == null;
+        }
+        else if (rhs == null)
+        {
+            return false;
+        }
+
+        bool output = true;
+
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 0: " + output); }
+        output = output && lhs.cardId == rhs.cardId;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 1: " + output); }
+        output = output && lhs.cardHealth == rhs.cardHealth;
+        if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 2: " + output); }
+
+        return output;
+    }
 }
 
 [Serializable]
-class GameStateData
+public class GameStateData
 {
 #pragma warning disable 0649
 
@@ -916,7 +1351,7 @@ class GameStateData
     public List<SpawnedTileActor> spawnedTileActors;
     public List<TileActorManager.RoundSpawnInfo> spawnList;
 
-    public List<TrapUnit> trapUnits;
+    //public List<TrapUnit> trapUnits;
 
     //public List<TileActor> actors;
     /*
@@ -944,7 +1379,7 @@ class GameStateData
 }
 
 [Serializable]
-class SpawnedTileActor
+public class SpawnedTileActor
 {
 #pragma warning disable 0649
 
@@ -962,7 +1397,7 @@ class SpawnedTileActor
 }
 
 [Serializable]
-class SpawnedTrap
+public class SpawnedTrap
 {
 #pragma warning disable 0649
     public string name;

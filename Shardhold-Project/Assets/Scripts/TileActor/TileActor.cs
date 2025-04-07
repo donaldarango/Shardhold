@@ -3,6 +3,8 @@ using DG.Tweening;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 
 public abstract class TileActor : MonoBehaviour
 {
@@ -182,7 +184,12 @@ public abstract class TileActor : MonoBehaviour
 
     public virtual void ShowStats()
     {
-        Debug.Log($"Name: {actorName}\nActor Type: {actorType}\nCurrentHP: {currentHealth}\nMaxHP: {maxHealth}\nAtkRange: {attackRange}\nDamage: {damage}");
+        Debug.Log(GetStats());
+    }
+
+    public virtual string GetStats()
+    {
+        return $"Name: {actorName}\nActor Type: {actorType}\nCurrentHP: {currentHealth}\nMaxHP: {maxHealth}\nAtkRange: {attackRange}\nDamage: {damage}";
     }
     
     public Sprite GetSprite() {
@@ -198,4 +205,46 @@ public abstract class TileActor : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public static bool Equals(List<TileActor> taList1, List<TileActor> taList2, bool allowNull)
+    {
+        if(taList1 == null)
+        {
+            return allowNull && taList2 == null;
+        }
+
+        if (taList2 == null)
+        {
+            return false;
+        }
+
+        if (taList1.Count != taList2.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < taList1.Count; i++)
+        {
+            if (!Equals(taList1[i], taList2[i], allowNull))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool Equals(TileActor ta1, TileActor ta2, bool allowNull)
+    {
+        if (ta1 == null)
+        {
+            return allowNull && ta1 == null;
+        }
+
+        if(ta2 == null)
+        {
+            return false;
+        }
+
+        return ta1.GetStats().Equals(ta2.GetStats());
+    }
 }
