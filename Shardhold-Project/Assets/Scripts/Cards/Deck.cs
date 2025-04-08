@@ -33,6 +33,8 @@ public class Deck : MonoBehaviour
     public List<int> discardPile = new List<int>();
     public bool[] occupiedSlots;
 
+    CardUI selectedCardUI;
+
     //uses same rules as drawPile
     public ScriptableObject[] hand;
     public GameObject[] UIHand;
@@ -139,6 +141,19 @@ public class Deck : MonoBehaviour
         {
             Debug.Log($"Card not found at index {index} when trying to enable interaction");
         }
+    }
+
+    public void HandleCardSelection(CardUI newCard)
+    {
+        // deselect old card
+        if (selectedCardUI != null)
+        {
+            selectedCardUI.DeselectCardAnimation();
+        }
+
+        // select new card
+        selectedCardUI = newCard;
+        selectedCardUI.SelectCardAnimation();
     }
 
 
@@ -527,6 +542,7 @@ public class Deck : MonoBehaviour
     {
         return discardPile.Count;
     }
+
     #endregion
 
     #region Events

@@ -30,7 +30,7 @@
                 "RoundNumber": 1,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Glass Cannon",
                         "LaneNumber": 2
                     },
                     {

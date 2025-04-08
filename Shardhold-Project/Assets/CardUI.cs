@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
@@ -12,10 +13,16 @@ public class CardUI : MonoBehaviour
     [SerializeField] private TMP_Text range;
     [SerializeField] private TMP_Text damage;
     [SerializeField] public int cardIndex;
+    public bool isSelected;
+
+    private RectTransform rectTransform;
+    private Vector3 originalScale;
+    private Tween shakeTween;
 
     [SerializeReference] Card card_;
     [SerializeReference] AllyUnitStats unit_;
     [SerializeField]Button cardButton;
+
 
     private void Awake()
     {
@@ -26,7 +33,36 @@ public class CardUI : MonoBehaviour
         {
             cardButton.onClick.AddListener(OnCardSelected);
         }
+
+        rectTransform = GetComponent<RectTransform>();
+        originalScale = rectTransform.localScale;
     }
+
+    public void SelectCardAnimation()
+    {
+        if (isSelected) return;
+        isSelected = true;
+
+        shakeTween = DOTween.Sequence()
+            .Append(rectTransform.DOAnchorPos(rectTransform.anchoredPosition + new Vector2(2f, 2f), 0.1f).SetEase(Ease.InOutSine))
+            .Append(rectTransform.DOAnchorPos(rectTransform.anchoredPosition - new Vector2(4f, 4f), 0.2f).SetEase(Ease.InOutSine))
+            .Append(rectTransform.DOAnchorPos(rectTransform.anchoredPosition + new Vector2(2f, 2f), 0.1f).SetEase(Ease.InOutSine))
+            .SetLoops(-1);
+
+        rectTransform.DOScale(originalScale * 1.1f, 0.5f).SetEase(Ease.OutQuad);
+    }
+
+    public void DeselectCardAnimation()
+    {
+        if (!isSelected) return;
+        isSelected = false;
+
+        shakeTween.Kill(); // Stop shake tween
+        rectTransform.DOKill(); // Stop all tweens on this object
+        rectTransform.DOScale(originalScale, 0.5f).SetEase(Ease.OutQuad);
+        rectTransform.anchoredPosition = Vector2.zero; // Reset position
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void updateHealth(int health){
         hp.text = health.ToString();
@@ -102,6 +138,7 @@ public class CardUI : MonoBehaviour
             Debug.Log("Card selected/clicked: " + cardName.text);
             Debug.Log("Hand Index: " + cardIndex);
             mapGenerator.selectedHandIndex = cardIndex;
+            Deck.Instance.HandleCardSelection(this);
             mapGenerator.SelectCard(card_);
         }
         else if (unit_ != null)
@@ -112,6 +149,7 @@ public class CardUI : MonoBehaviour
                 Debug.Log("Card selected/clicked: " + cardName.text);
                 Debug.Log("Hand Index: " + cardIndex);
                 mapGenerator.selectedHandIndex = cardIndex;
+                Deck.Instance.HandleCardSelection(this);
                 mapGenerator.SelectUnit(instance);
             }
             else
