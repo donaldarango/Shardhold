@@ -482,6 +482,14 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9199075456079192698, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
+      propertyPath: enemyTileActorsStats.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9199075456079192698, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
+      propertyPath: 'enemyTileActorsStats.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 005a43aa89495d44d8925215b39e27ac, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
