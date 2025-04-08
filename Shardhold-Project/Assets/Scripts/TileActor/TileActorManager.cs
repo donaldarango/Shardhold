@@ -113,6 +113,8 @@ public class TileActorManager : MonoBehaviour
     public static event EndEnemyTurnHandler EndEnemyTurn;
     public int currentRound = 0;
 
+    public bool useLevelSettings = true;
+
 
     public static TileActorManager Instance { get { return _instance; } }
     void OnEnable()
@@ -139,8 +141,11 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
-        SetLevelJSONFile();
-        InitializeSpawnData();
+        if (useLevelSettings)
+        {
+            SetLevelJSONFile();
+            InitializeSpawnData();
+        }
     }
 
     private void SetLevelJSONFile()
