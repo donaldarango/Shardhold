@@ -204,6 +204,7 @@ public class SaveLoad : MonoBehaviour
         //data.maxVisibleRange = getRingCount() - 1;
         data.maxActualRange = getRingCount();
         data.curTurn = getCurTurn();
+        data.turnTimer = TurnTimer.time;
 
         //data.terrainArray = new Terrain[4,MapManager.Instance.GetLaneCount() * MapManager.Instance.GetRingCount()];
         data.lanes = new List<SavedLane>();
@@ -445,6 +446,8 @@ public class SaveLoad : MonoBehaviour
             setLaneCount(data.sectorCount);
             setRingCount(data.maxActualRange);
             setCurTurn(data.curTurn);
+
+            TurnTimer.time = data.turnTimer;
 
             //MapManager.Instance.InitializeQuadrants();
 
@@ -1030,6 +1033,20 @@ public class SaveLoad : MonoBehaviour
         }
         log += "current turn\n";
 
+        //log += "turnTimer:" + Tab(tabShift + 0);
+        if (data1.turnTimer == data2.turnTimer)
+        {
+            log += successStr;
+        }
+        else
+        {
+            log += failStr;
+            output = false;
+        }
+        log += "turn time remaining\n";
+
+
+
         //log += "lanes:" + Tab(tabShift + 2);
         if (EqualLanes(data1.lanes, data2.lanes, false))
         {
@@ -1345,6 +1362,7 @@ public class GameStateData
     //public int maxVisibleRange;    //the gameboard as it apears to the player
     public int maxActualRange;     //maxVisibleRange plus the hidden range stuff that is used for spawning and such
     public int curTurn;            //the turn counter's current value
+    public float turnTimer;
     
     //the terrains are stored in a 1D list
     //this will correlate to a spiral starting with the innermost ring and the "northernmost" direction of the map and working its way slowly outward
