@@ -99,10 +99,16 @@ public class EnemyUnit : TileActor
         int currentRing = currentTile.GetRingNumber();
         int currentLane = currentTile.GetLaneNumber();
 
-        if (currentRing == 0)
+        if (currentRing - attackRange < 0)
         {
             Debug.Log("Enemy is attacks base and does not move forwards.");
             AttackBase();
+
+            if (currentTile.GetCurrentTrapUnit())
+            {
+                currentTile.GetCurrentTrapUnit().Attack(this);
+            }
+
             return;
         }
 
