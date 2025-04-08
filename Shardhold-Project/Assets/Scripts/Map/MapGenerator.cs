@@ -360,6 +360,11 @@ public class MapGenerator : MonoBehaviour
     {
         if (PauseMenu.isPaused) { return; }
 
+        if(!Input.GetMouseButtonDown(0) && Input.GetMouseButtonDown(1))
+        {
+            DeselectCard();
+        }
+
         if (card != oldCard) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
         {
             clickedTile = null;
@@ -736,6 +741,22 @@ public class MapGenerator : MonoBehaviour
             selectedCard = null;
             selectedUnit = null;
         }
+    }
+
+    public void DeselectCard()
+    {    
+        selectedCard = null;
+        selectedUnit = null;
+
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+
     }
 
     private void OnRoundResetSelection()
