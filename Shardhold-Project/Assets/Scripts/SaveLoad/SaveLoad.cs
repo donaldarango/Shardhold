@@ -448,6 +448,7 @@ public class SaveLoad : MonoBehaviour
             setCurTurn(data.curTurn);
 
             TurnTimer.time = data.turnTimer;
+            UIManager.Instance.turnTimer.CalibrateSliders();
 
             //MapManager.Instance.InitializeQuadrants();
 
