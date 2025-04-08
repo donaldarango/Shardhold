@@ -167,6 +167,13 @@ public class Deck : MonoBehaviour
         //add it to hand (non-UI)
         ScriptableObject intermediate = cardLookup[cardID];
 
+        if (CustomDebug.DeckDebugging(DebuggingType.Normal))
+        {
+            Debug.Log("cardID for creating a card: " + cardID);
+            Debug.Log("openSlot for creating a card: " + openSlot);
+            Debug.Log("intermediate: " + intermediate + " of type " + intermediate.GetType() + "; to string: " + intermediate.ToString());
+        }
+
         hand[openSlot] = intermediate;
         cardsInHand++;
         if (intermediate is Card)
@@ -429,7 +436,7 @@ public class Deck : MonoBehaviour
             }
         }
     }
-    #region Pile to Unlocked Cards Comparisons
+    #region Pile to Unlocked Cards Comparisons and Other Comparisons
     
     /// <summary>
     /// How many of a given card are unlocked but not yet in the pile
@@ -469,6 +476,7 @@ public class Deck : MonoBehaviour
         }
         return true;
     }
+
 
     #endregion
 

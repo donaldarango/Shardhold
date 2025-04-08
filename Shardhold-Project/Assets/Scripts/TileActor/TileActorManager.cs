@@ -13,6 +13,43 @@ public class TileActorManager : MonoBehaviour
         public int laneNumber;
         //public BasicEnemyStats enemyUnit;
         public String enemyUnit;
+
+        public static bool EqualEnemySpawnInfo(List<EnemySpawnInfo> lhs, List<EnemySpawnInfo> rhs, bool allowNull)
+        {
+            if (lhs == null)
+            {
+                return allowNull && rhs == null;
+            }
+            else if (rhs == null)
+            {
+                return false;
+            }
+
+            if (lhs.Count != rhs.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < lhs.Count; i++)
+            {
+                if (!EqualEnemySpawnInfo(lhs[i], rhs[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool EqualEnemySpawnInfo(EnemySpawnInfo lhs, EnemySpawnInfo rhs)
+        {
+            bool output = true;
+
+            output = output && lhs.laneNumber == rhs.laneNumber;
+            output = output && lhs.enemyUnit.Equals(rhs.enemyUnit);
+
+            return output;
+        }
     }
 
     [Serializable]
@@ -20,6 +57,43 @@ public class TileActorManager : MonoBehaviour
     {
         public int roundNumber;
         public List<EnemySpawnInfo> roundSpawnList;
+
+        public static bool EqualRoundSpawnInfo(List<RoundSpawnInfo> lhs, List<RoundSpawnInfo> rhs, bool allowNull)
+        {
+            if (lhs == null)
+            {
+                return allowNull && rhs == null;
+            }
+            else if (rhs == null)
+            {
+                return false;
+            }
+
+            if (lhs.Count != rhs.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < lhs.Count; i++)
+            {
+                if (!EqualRoundSpawnInfo(lhs[i], rhs[i], allowNull))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool EqualRoundSpawnInfo(RoundSpawnInfo lhs, RoundSpawnInfo rhs, bool allowNull)
+        {
+            bool output = true;
+
+            output = output && lhs.roundNumber == rhs.roundNumber;
+            output = output && EnemySpawnInfo.EqualEnemySpawnInfo(lhs.roundSpawnList, rhs.roundSpawnList, allowNull);
+
+            return output;
+        }
     }
 
     // public delegate void NextRoundHandler();
@@ -38,6 +112,8 @@ public class TileActorManager : MonoBehaviour
     public delegate void EndEnemyTurnHandler();
     public static event EndEnemyTurnHandler EndEnemyTurn;
     public int currentRound = 0;
+
+    public bool useLevelSettings = true;
 
 
     public static TileActorManager Instance { get { return _instance; } }
@@ -65,8 +141,11 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
-        SetLevelJSONFile();
-        InitializeSpawnData();
+        if (useLevelSettings)
+        {
+            SetLevelJSONFile();
+            InitializeSpawnData();
+        }
     }
 
     private void SetLevelJSONFile()

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CustomDebug : MonoBehaviour
@@ -13,21 +14,26 @@ public class CustomDebug : MonoBehaviour
         Verbose = 4     //print as much as possible; ONLY USE WHEN DEBUGGING A PARTICULAR ERROR, PLEASE LEAVE ON SOMETHING ELSE OTHERWISE
     }
 
+    [Header("==Console Output Controls==")]
     public DebuggingType debugging = DebuggingType.Normal;  //sets the maximum debugging prints amount; even if a particular debugging setting would show more, this stops it
-
-    #region Assertion-based Testing
-    public bool runAssertionTesting = false;
-    #endregion
-
-    #region Other Tests
-    bool testRandomInt = false;
-    #endregion
 
     //FOR INTIAL SETTING ONLY; USE GET METHODS
     //per-class debugging bool controls (the respective class will check this, rather than holding its own debugging variable):
     public DebuggingType deckDebugging = DebuggingType.Warnings;
     public DebuggingType saveLoadDebugging = DebuggingType.Warnings;
     public DebuggingType cusmtomMathDebugging = DebuggingType.Warnings;
+
+    #region Assertion-based Testing
+    [Header("==Assertion-Based Testing==")]
+    public bool runAssertionTesting = false;
+    public bool saveTestOutput = true;
+    public bool saveVerificationTesting = false;    //make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
+    //public GameStateData prevData;
+    #endregion
+
+    #region Other Tests
+    bool testRandomInt = false;
+    #endregion
 
     private void Awake()
     {
@@ -51,7 +57,7 @@ public class CustomDebug : MonoBehaviour
         #endregion
     }
 
-    public static void RanUnimplementedCode(string descriptor = "<no descriptor>", DebuggingType level=DebuggingType.ErrorOnly)
+    public static void RanUnimplementedCode(string descriptor = "<no descriptor>", DebuggingType level = DebuggingType.ErrorOnly)
     {
         if (Debugging(level))
         {
@@ -89,12 +95,6 @@ public class CustomDebug : MonoBehaviour
     #endregion
 
 
-
-
-
-
-
-
     #region Testing Functions
 
     public static void TestRandomInt(int testsToRun = 1)
@@ -127,4 +127,22 @@ public class CustomDebug : MonoBehaviour
 
     #endregion
 
+    public IEnumerator AutoPlay()
+    {
+        while (!GameManager.Instance.playerTurn)
+        {
+            yield return null;
+        }
+        string log = "Autoplaying level: " + GameManager.Instance.GetCurrentLevel() + "\n";
+    }
+
+    public static string Tab(int count = 1)
+    {
+        string output = "";
+        for (int i = 0; i < count; i++)
+        {
+            output += "\t";
+        }
+        return output;
+    }
 }

@@ -60,6 +60,12 @@ public class TurnTimer : MonoBehaviour
         }
     }
 
+    public void CalibrateSliders()
+    {
+        sliderRight.value = time;
+        sliderLeft.value = time;
+    }
+
     public void TimerButton()
     {
         TurnTimerPressed?.Invoke();
