@@ -358,6 +358,8 @@ public class MapGenerator : MonoBehaviour
 
     void HandleTargeting(Card? card = null, AllyUnit? unit = null)
     {
+        if (PauseMenu.isPaused) { return; }
+
         if (card != oldCard) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
         {
             clickedTile = null;
@@ -381,6 +383,8 @@ public class MapGenerator : MonoBehaviour
                 string[] parts = tileName.Split('_');
                 int r = int.Parse(parts[1].Substring(1));
                 int l = int.Parse(parts[2].Substring(1));
+
+                HoverTile?.Invoke(r, l);
 
                 // If set of hovered tiles doesn't include this new tile, then we need to make a new highlight
                 if (!targetedTiles.Contains((r, l))) // We can do this because given quadrant locking, each tile is in one unique selection per targeting type
