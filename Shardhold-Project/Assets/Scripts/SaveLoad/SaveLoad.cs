@@ -311,12 +311,14 @@ public class SaveLoad : MonoBehaviour
                 if (intermediate is Card)
                 {
                     savedCard.cardId = ((Card)intermediate).GetId();
-                    savedCard.cardHealth = ((Card)intermediate).hp;
+                    //savedCard.cardHealth = ((Card)intermediate).hp;
                 }
                 else
                 {
                     savedCard.cardId = ((AllyUnitStats)intermediate).GetId();
-                    savedCard.cardHealth = ((AllyUnitStats)intermediate).hp;
+                    AllyUnit curStats = Deck.Instance.UIHand[i].GetComponent<AllyUnit>();
+                    savedCard.cardHealth = curStats.currentHealth;  //not: ((AllyUnitStats)intermediate).hp;
+                    savedCard.uses = curStats.currentAttacks;       //not: ((AllyUnitStats)intermediate).attacks;
                 }
             }
         }
@@ -500,6 +502,7 @@ public class SaveLoad : MonoBehaviour
                 Print("Created new tile actor: " + newTA.name);
 
                 //put in all the other variables for this tileactor
+                newTA.SetActorData();
                 newTA.SetCurrentHealth(sta.curHealth);
                 newTA.SetIsShielded(sta.isShielded);
                 newTA.SetIsPoisoned(sta.isPoisoned);
@@ -541,7 +544,10 @@ public class SaveLoad : MonoBehaviour
                     /*AllyUnitStats intermediateAllyUnitStats = (AllyUnitStats)intermediate;*/
                     GameObject intermediateAllyUnitStatsGameObject = Deck.Instance.UIHand[i];
                     AllyUnit intermediateAllyUnit = intermediateAllyUnitStatsGameObject.GetComponent<AllyUnit>();
+                    intermediateAllyUnit.Setup();
                     intermediateAllyUnit.currentHealth = data.hand[i].cardHealth;
+                    intermediateAllyUnit.currentAttacks = data.hand[i].uses;
+                    intermediateAllyUnit.UpdateUIHealth();
                 }
             }
 
@@ -1439,6 +1445,7 @@ public class SavedCard
 #pragma warning disable 0649
     public int cardId;
     public int cardHealth;
+    public int uses;
 #pragma warning restore 0649
 }
 

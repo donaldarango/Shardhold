@@ -40,6 +40,10 @@ public class EnemyUnit : TileActor
 
     public override void SetActorData()
     {
+        if (actorDataSet)
+        {
+            return;
+        }
         enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
         if (enemyStats == null)
         {
@@ -51,6 +55,8 @@ public class EnemyUnit : TileActor
         moveSpeed = enemyStats.moveSpeed; // Store move speed
 
         movementClip = enemyStats.movementClip;
+
+        actorDataSet = true;    //redundant, as this is also set in base.SetActorData(), but put here in case the code changes to not call the base function
     }
 
     public int GetMoveSpeed()

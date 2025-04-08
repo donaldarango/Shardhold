@@ -37,10 +37,17 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField] protected AudioClip placementClip;
 
     [SerializeField] protected TileActorSpriteHandler spriteHandler;
+
+    protected bool actorDataSet = false;
     public abstract void Spawn(MapTile tile);
 
     public virtual void SetActorData()
     {
+        if (actorDataSet)
+        {
+            return;
+        }
+
         actorName = tileActorStats.unitName;
         actorType = tileActorStats.actorType;
         maxHealth = tileActorStats.maxHealth;
@@ -55,6 +62,8 @@ public abstract class TileActor : MonoBehaviour
         damagedClip = tileActorStats.damagedClip;
         placementClip = tileActorStats.placementClip;
         deathClip = tileActorStats.deathClip;
+        
+        actorDataSet = true;
     }
 
     public virtual TileActor DetectEnemyInFront(int tileRange)
