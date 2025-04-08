@@ -548,6 +548,12 @@ public class SaveLoad : MonoBehaviour
                     intermediateAllyUnit.currentHealth = data.hand[i].cardHealth;
                     intermediateAllyUnit.currentAttacks = data.hand[i].uses;
                     intermediateAllyUnit.UpdateUIHealth();
+
+                    if (intermediateAllyUnit.currentAttacks <= 0)
+                    {
+                        Transform background = intermediateAllyUnit.transform.Find("CardColor");
+                        background.GetComponent<UnityEngine.UI.Image>().color = Color.gray;
+                    }
                 }
             }
 
