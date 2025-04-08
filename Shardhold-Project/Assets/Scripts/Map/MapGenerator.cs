@@ -503,21 +503,47 @@ public class MapGenerator : MonoBehaviour
                     {
                         if (selectedCard != null)
                         {
-                            Debug.Log("First Target - tile: " + (r, l));
-                            foreach (var tile in targetedTiles)
+                            bool isPlayable = selectedCard.cardType != CardType.Placer;
+                            if(!isPlayable)
                             {
-                                tileMeshes[tile].material.color = clickColor;
-                                clickedTiles.Add(tile);
+                                int count = 0;
+                                int full = 0;
+                                foreach (var tile in targetedTiles)
+                                {
+                                    ++count;
+                                    MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
+                                    TileActor actor = target.GetCurrentTileActor();
+                                    if (actor)
+                                    {
+                                        ++full;
+                                    }
+                                }
+                                if(count > full)
+                                {
+                                    isPlayable = true;
+                                }
                             }
-                            targetedTiles.Clear();
-                            Debug.Log("play card via first target");
 
-                            selectedCard.Play(clickedTiles);
-                            if (selectedCard.DiscardAfterPlay() == true) {
-                                Deck.Instance.DiscardCard(selectedHandIndex);
+                            if (isPlayable)
+                            {
+                                Debug.Log("First Target - tile: " + (r, l));
+                                foreach (var tile in targetedTiles)
+                                {
+                                    tileMeshes[tile].material.color = clickColor;
+                                    clickedTiles.Add(tile);
+                                }
+                                targetedTiles.Clear();
+                                Debug.Log("play card via first target");
+
+                                selectedCard.Play(clickedTiles);
+                                if (selectedCard.DiscardAfterPlay() == true)
+                                {
+                                    Deck.Instance.DiscardCard(selectedHandIndex);
+                                }
+                                selectedCard = null;
+                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
-                            selectedCard = null;
-                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                            
                         }
                         else if (selectedUnit != null)
                         {
