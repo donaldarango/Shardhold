@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     public void OnStartPlayerTurn()
     {
         Debug.Log("Player turn started");
+        Deck.Instance.EnableDeckInteraction();
         playerTurn = true;
     }
 
@@ -71,6 +72,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Player turn ended");
         playerTurn = false;
+        Deck.Instance.DisableDeckInteraction();
+        MapGenerator.Instance.DeselectCard();
         PlayerTurnEnd?.Invoke();
     }
 
