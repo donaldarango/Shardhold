@@ -139,7 +139,7 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
-        if (GameManager.Instance.useLevelSettings) {
+        if (GameManager.Instance.levelType == GameManager.LevelType.LevelSettingsFile) {
             if (CustomDebug.Debugging(CustomDebug.DebuggingType.Warnings))
             {
                 Debug.Log("running SetLevelJSONFile");
@@ -155,19 +155,26 @@ public class TileActorManager : MonoBehaviour
             SetLevelSaveFile();
         }
         InitializeSpawnData();
-        if (!GameManager.Instance.useLevelSettings)
+        if (GameManager.Instance.levelType == GameManager.LevelType.LevelSaveFile)
         {
             if (CustomDebug.Debugging(CustomDebug.DebuggingType.Warnings))
             {
                 Debug.Log($"running Loading of level Level_{GameManager.Instance.GetCurrentLevel()}_Save.json");
             }
             SaveLoad.saveLoad.Load($"Level_{GameManager.Instance.GetCurrentLevel()}_Save.json", SaveLoad.SaveType.levelFile);
+        }else if(GameManager.Instance.levelType == GameManager.LevelType.PlayerSaveFile)
+        {
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Warnings))
+            {
+                Debug.Log($"loading of player's last save");
+            }
+            SaveLoad.saveLoad.LoadFromDefault(null);
         }
     }
 
     private void SetLevelSaveFile()
     {
-        string level = GameManager.Instance.GetCurrentLevel();
+        //string level = GameManager.Instance.GetCurrentLevel();
         levelSettingsJSON = Resources.Load<TextAsset>(resourceFilePath + $"Level_Empty_Settings");
         //SaveLoad.saveLoad.Load($"Level_{level}_Save.json", SaveLoad.SaveType.levelFile);
     }

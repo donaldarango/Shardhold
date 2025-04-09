@@ -41,6 +41,9 @@ public class Deck : MonoBehaviour
     private int cardsInHand = 0;
 
     private bool deckDisabled;
+
+    public List<int> prevDeckContents = new List<int>();
+
     public enum DrawChoiceMode
     {
         Random,
@@ -476,6 +479,8 @@ public class Deck : MonoBehaviour
         }
         return true;
     }
+
+    
 
 
     #endregion

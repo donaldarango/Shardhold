@@ -93,7 +93,7 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap(bool forceGeneration = false)
     {
-        if(!forceGeneration && !GameManager.Instance.useLevelSettings)
+        if(!forceGeneration && !(GameManager.Instance.levelType == GameManager.LevelType.LevelSettingsFile))
         { return; }
 
         // Always set map at 0,0,0

@@ -16,7 +16,14 @@ public class GameManager : MonoBehaviour
     public string optionalStartLevel = "";
     public bool playerTurn = false;
 
-    public bool useLevelSettings = true;
+    public enum LevelType
+    {
+        LevelSettingsFile,
+        LevelSaveFile,
+        PlayerSaveFile
+    }
+
+    public LevelType levelType = LevelType.LevelSettingsFile;
 
     private void Awake()
     {
@@ -83,7 +90,7 @@ public class GameManager : MonoBehaviour
     public void LoadLevel(string level)
     {
         Debug.Log($"running LoadLevel: {level}");
-        Instance.useLevelSettings = true;
+        Instance.levelType = LevelType.LevelSettingsFile;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
     }
@@ -91,9 +98,20 @@ public class GameManager : MonoBehaviour
     public void LoadLevelFromSaveFile(string level)
     {
         Debug.Log($"running LoadLevelFromSaveFile: {level}");
-        Instance.useLevelSettings = false;
+        Instance.levelType = LevelType.LevelSaveFile;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
+        Base.Instance.Setup();
+    }
+
+
+    public void LoadLastSave()
+    {
+        Debug.Log($"running LoadLastSave");
+        Instance.levelType = LevelType.PlayerSaveFile;
+        currentLevel = "";
+        SceneManager.LoadScene("BaseLevel");
+        Base.Instance.Setup();
     }
 
     public void LoadTutorialLevel()
