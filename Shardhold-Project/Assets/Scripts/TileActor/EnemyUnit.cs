@@ -106,13 +106,6 @@ public class EnemyUnit : TileActor
         int currentRing = currentTile.GetRingNumber();
         int currentLane = currentTile.GetLaneNumber();
 
-        if (currentRing == 0)
-        {
-            Debug.Log("Enemy is attacks base and does not move forwards.");
-            AttackBase();
-            return;
-        }
-
         // Check tiles in front within the enemy's attack range
         for (int i = 1; i <= enemyStats.attackRange; i++)
         {
@@ -154,6 +147,19 @@ public class EnemyUnit : TileActor
                 Debug.Log("Enemy triggers a trap!");
                 trap.Attack(this);
                 return; // Stop moving once trap triggers.
+            }
+
+            if (currentRing - attackRange < 0)
+            {
+                Debug.Log("Enemy is attacks base and does not move forwards.");
+                AttackBase();
+
+                if (currentTile.GetCurrentTrapUnit())
+                {
+                    currentTile.GetCurrentTrapUnit().Attack(this);
+                }
+
+                return;
             }
         }
 
