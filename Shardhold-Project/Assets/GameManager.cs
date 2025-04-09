@@ -84,10 +84,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("BaseLevel");
     }
 
-    public void LoadTutorialLevel()
+    public void LoadTutorialLevel(int levelNumber)
     {
-        currentLevel = "Tutorial";
-        SceneManager.LoadScene("TutorialLevel");
+        currentLevel = "Tutorial_" + levelNumber;
+        SceneManager.LoadScene("Tutorial Level " + levelNumber);
     }
 
     public void RestartLevel()
