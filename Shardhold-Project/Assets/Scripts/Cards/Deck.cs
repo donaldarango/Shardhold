@@ -33,7 +33,7 @@ public class Deck : MonoBehaviour
     public List<int> discardPile = new List<int>();
     public bool[] occupiedSlots;
 
-    CardUI selectedCardUI;
+    public CardUI selectedCardUI;
 
     //uses same rules as drawPile
     public ScriptableObject[] hand;
@@ -41,6 +41,9 @@ public class Deck : MonoBehaviour
     private int cardsInHand = 0;
 
     private bool deckDisabled;
+
+    public GameObject discardButton;
+
     public enum DrawChoiceMode
     {
         Random,
@@ -76,8 +79,9 @@ public class Deck : MonoBehaviour
     public void NextTurn()
     {
         DrawCardsUntilFull();
+        RefreshDiscardButton();
 
-        foreach(GameObject obj in UIHand)
+        foreach (GameObject obj in UIHand)
         {
             AllyUnit unit = obj.GetComponent<AllyUnit>();
             if(unit != null)
@@ -100,6 +104,7 @@ public class Deck : MonoBehaviour
             Button button = obj.GetComponent<Button>();
             button.enabled = false;
         }
+        selectedCardUI.DeselectCardAnimation();
     }
 
     public void EnableDeckInteraction()
@@ -412,6 +417,7 @@ public class Deck : MonoBehaviour
         {
             AllyUnit unit = cardObject.AddComponent<AllyUnit>();
             unit.stats = (AllyUnitStats)card;
+            unit.currentAttacks = unit.stats.attacks;
         }
 
         CardUI cardUI = cardObject.GetComponent<CardUI>();
@@ -436,6 +442,32 @@ public class Deck : MonoBehaviour
             }
         }
     }
+
+    public void RefreshDiscardButton()
+    {
+        if (discardButton)
+        {
+            var image = discardButton.GetComponent<Image>();
+            image.color = Color.yellow;
+
+            var button = discardButton.GetComponent<Button>();
+            button.enabled = true;
+        }
+    }
+
+    public void MulliganCard()
+    {
+        DiscardCard(MapGenerator.Instance.selectedHandIndex);
+        DrawCard();
+
+        var image = discardButton.GetComponent<Image>();
+        image.color = Color.gray;
+
+        var button = discardButton.GetComponent<Button>();
+        button.enabled = false;
+    }
+
+
     #region Pile to Unlocked Cards Comparisons and Other Comparisons
     
     /// <summary>
