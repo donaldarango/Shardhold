@@ -975,7 +975,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b566b9f09578d8d4986a465cdf7718dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapGenerator: {fileID: 3703193026193046294}
   defaultFileType: 2
   fileToUse: current_save.json
   saveFolder: Assets/Resources/PlayerSaves
@@ -986,6 +985,21 @@ MonoBehaviour:
     cardsUnlocked: 
   playerStatsFile: player_stats.json
   lastLoadedLanes: []
+  mostRecentLoad:
+    initialized: 0
+    saveVersion: 1.00
+    level: -1
+    sectorCount: 0
+    maxActualRange: 0
+    curTurn: 0
+    lanes: []
+    baseHP: 0
+    baseWeapon: 0
+    spawnedTileActors: []
+    spawnList: []
+    drawPile: 
+    discardPile: 
+    hand: []
 --- !u!1 &1066579232098203590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2808,6 +2822,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  drawChoiceMode: 0
 --- !u!1 &2795686074879779644
 GameObject:
   m_ObjectHideFlags: 0
@@ -7333,6 +7348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugging: 3
   runAssertionTesting: 0
+  saveVerificationTesting: 1
   deckDebugging: 1
   saveLoadDebugging: 1
   cusmtomMathDebugging: 1

@@ -24,7 +24,7 @@ public class EnemyUnit : TileActor
             return;
         }
 
-        enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
+        
         SetActorData();
     }
 
@@ -40,7 +40,12 @@ public class EnemyUnit : TileActor
 
     public override void SetActorData()
     {
-        if(enemyStats == null)
+        if (actorDataSet)
+        {
+            return;
+        }
+        enemyStats = tileActorStats as BasicEnemyStats; // Convert to EnemyStats to access move speed.
+        if (enemyStats == null)
         {
             Debug.LogError("Attempted to set EnemyData with null reference.");
             return;
@@ -50,6 +55,8 @@ public class EnemyUnit : TileActor
         moveSpeed = enemyStats.moveSpeed; // Store move speed
 
         movementClip = enemyStats.movementClip;
+
+        actorDataSet = true;    //redundant, as this is also set in base.SetActorData(), but put here in case the code changes to not call the base function
     }
 
     public int GetMoveSpeed()
@@ -190,10 +197,10 @@ public class EnemyUnit : TileActor
         }
 
     }
-    public override void ShowStats() {
-        base.ShowStats();
-        Debug.Log(currentHealth);
-        Debug.Log($"FROM EnemyUnit.CS MoveSpeed: {moveSpeed}, CurrentHP: {currentHealth}");
+
+    public override string GetStats()
+    {
+        return base.GetStats() + ($"\nFROM EnemyUnit.CS MoveSpeed: {moveSpeed}, CurrentHP: {currentHealth}");
     }
 
     private void MoveToTile(MapTile newTile)

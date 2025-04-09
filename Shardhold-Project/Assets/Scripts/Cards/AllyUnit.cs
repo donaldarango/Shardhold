@@ -12,18 +12,24 @@ public class AllyUnit : MonoBehaviour
     public int currentAttacks; //unfinished; for later
     public AudioClip audioClip;
     [SerializeField] private CardUI cardUI;
+    private bool setupComplete = false;
 
     public CardType cardType => CardType.Unit;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        cardUI = GetComponent<CardUI>();
         Setup();
     }
 
     public void Setup()
     {
+        if (setupComplete)
+        {
+            return;
+        }
+        cardUI = GetComponent<CardUI>();
         currentHealth = stats.hp;
+        setupComplete = true;
     }
 
     public void Play(HashSet<(int, int)> tiles)
@@ -42,12 +48,18 @@ public class AllyUnit : MonoBehaviour
 
                 actor.TakeDamage(stats.damage);
                 currentHealth -= actor.tileActorStats.damage;
-                cardUI.updateHealth(currentHealth);
+                UpdateUIHealth();
                 //return to hand
                 Debug.Log("ally unit hp : " + currentHealth);
             }
         }
     }
+
+    public void UpdateUIHealth()
+    {
+        cardUI.updateHealth(currentHealth);
+    }
+
     public bool DiscardAfterPlay()
     {
         if (currentHealth <= 0) {
