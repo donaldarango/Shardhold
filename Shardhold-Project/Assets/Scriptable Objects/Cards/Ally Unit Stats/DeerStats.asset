@@ -21,3 +21,4 @@ MonoBehaviour:
   damage: 2
   hp: 4
   attacks: 1
+  audioClip: {fileID: 8300000, guid: 1ce1f8b36a605684fa9dba11175eb96b, type: 3}

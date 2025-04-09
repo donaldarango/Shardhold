@@ -33,6 +33,8 @@ public class Deck : MonoBehaviour
     public List<int> discardPile = new List<int>();
     public bool[] occupiedSlots;
 
+    CardUI selectedCardUI;
+
     //uses same rules as drawPile
     public ScriptableObject[] hand;
     public GameObject[] UIHand;
@@ -141,6 +143,19 @@ public class Deck : MonoBehaviour
         }
     }
 
+    public void HandleCardSelection(CardUI newCard)
+    {
+        // deselect old card
+        if (selectedCardUI != null)
+        {
+            selectedCardUI.DeselectCardAnimation();
+        }
+
+        // select new card
+        selectedCardUI = newCard;
+        selectedCardUI.SelectCardAnimation();
+    }
+
 
     #endregion
 
@@ -151,6 +166,13 @@ public class Deck : MonoBehaviour
 
         //add it to hand (non-UI)
         ScriptableObject intermediate = cardLookup[cardID];
+
+        if (CustomDebug.DeckDebugging(DebuggingType.Normal))
+        {
+            Debug.Log("cardID for creating a card: " + cardID);
+            Debug.Log("openSlot for creating a card: " + openSlot);
+            Debug.Log("intermediate: " + intermediate + " of type " + intermediate.GetType() + "; to string: " + intermediate.ToString());
+        }
 
         hand[openSlot] = intermediate;
         cardsInHand++;
@@ -414,7 +436,7 @@ public class Deck : MonoBehaviour
             }
         }
     }
-    #region Pile to Unlocked Cards Comparisons
+    #region Pile to Unlocked Cards Comparisons and Other Comparisons
     
     /// <summary>
     /// How many of a given card are unlocked but not yet in the pile
@@ -454,6 +476,7 @@ public class Deck : MonoBehaviour
         }
         return true;
     }
+
 
     #endregion
 
@@ -519,6 +542,7 @@ public class Deck : MonoBehaviour
     {
         return discardPile.Count;
     }
+
     #endregion
 
     #region Events

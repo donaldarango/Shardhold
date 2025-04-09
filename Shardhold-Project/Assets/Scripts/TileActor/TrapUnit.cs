@@ -38,6 +38,8 @@ public class TrapUnit : TileActor
         Debug.Log($"{gameObject.name} triggered by {target.gameObject.name}!");
         base.Attack(target);
 
+        SoundFXManager.instance.PlaySoundFXClip(attackClip, transform, 10f);
+
         TakeDamage(1);
     }
 

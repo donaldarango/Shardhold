@@ -20,5 +20,7 @@ MonoBehaviour:
   description: Zap!
   damage: 3
   hp: 0
+  audioClip: {fileID: 8300000, guid: 2dd5dbd6b8e98ec4880197d8d6fbd21d, type: 3}
+  audioVolume: 10
   heal: 0
   friendlyFire: 0

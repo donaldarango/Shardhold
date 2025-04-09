@@ -20,4 +20,7 @@ MonoBehaviour:
   description: This is a wall
   damage: 0
   hp: 0
+  audioClip: {fileID: 8300000, guid: 99c6308b1ad5c0848a42ab03ac376dc8, type: 3}
+  audioVolume: 10
   stats: {fileID: 11400000, guid: 25fc881dc5819a448bfd315a8d4cedc3, type: 2}
+  isTrap: 0

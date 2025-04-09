@@ -83,6 +83,7 @@ public class MapManager : MonoBehaviour
         TrapUnit trapUnit = trapUnitPrefab.GetComponent<TrapUnit>();
         trapUnit.Spawn(tile);
         tile.SetCurrentTrap(trapUnit);
+        trapUnit.SetActorData();
         return trapUnit;
     }
 
@@ -96,6 +97,7 @@ public class MapManager : MonoBehaviour
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
         structureUnit.Spawn(tile);
         tile.SetCurrentTileActor(structureUnit);
+        structureUnit.SetActorData();
         return structureUnit;
     }
 
@@ -110,6 +112,7 @@ public class MapManager : MonoBehaviour
         enemyUnit.Spawn(tile);
         tile.SetCurrentTileActor(enemyUnit);
         TileActorManager.Instance.AddEnemyToCurrentEnemyList(enemyUnit);
+        enemyUnit.SetActorData();
         return enemyUnit;
     }
 
