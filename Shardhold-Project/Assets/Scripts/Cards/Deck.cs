@@ -457,14 +457,17 @@ public class Deck : MonoBehaviour
 
     public void MulliganCard()
     {
-        DiscardCard(MapGenerator.Instance.selectedHandIndex);
-        DrawCard();
+        if (MapGenerator.Instance.selectedHandIndex != -1 && (MapGenerator.Instance.selectedCard || MapGenerator.Instance.selectedUnit))
+        {
+            DiscardCard(MapGenerator.Instance.selectedHandIndex);
+            DrawCard();
 
-        var image = discardButton.GetComponent<Image>();
-        image.color = Color.gray;
+            var image = discardButton.GetComponent<Image>();
+            image.color = Color.gray;
 
-        var button = discardButton.GetComponent<Button>();
-        button.enabled = false;
+            var button = discardButton.GetComponent<Button>();
+            button.enabled = false;
+        }
     }
 
 

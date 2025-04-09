@@ -744,7 +744,11 @@ public class MapGenerator : MonoBehaviour
     }
 
     public void DeselectCard()
-    {    
+    {
+        if((selectedCard || selectedUnit) && Deck.Instance.selectedCardUI != null)
+        {
+            Deck.Instance.selectedCardUI.DeselectCardAnimation();
+        }
         selectedCard = null;
         selectedUnit = null;
 
@@ -764,6 +768,14 @@ public class MapGenerator : MonoBehaviour
         clickedTile = null;
         clickedTiles.Clear();
         targetedTiles.Clear();
+
+        if ((selectedCard || selectedUnit) && Deck.Instance.selectedCardUI != null)
+        {
+            Deck.Instance.selectedCardUI.DeselectCardAnimation();
+            selectedCard = null;
+            selectedUnit = null;
+
+        }
 
         foreach (var tile in tileMeshes)
         {
