@@ -21,6 +21,6 @@ MonoBehaviour:
   damage: 0
   hp: 0
   audioClip: {fileID: 8300000, guid: 7a22a3c7fef604142be8c84fad2c1556, type: 3}
-  audioVolume: 10
+  audioVolume: 0.2
   heal: 4
   friendlyFire: 0
