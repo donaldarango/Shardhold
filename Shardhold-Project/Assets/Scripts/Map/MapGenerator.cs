@@ -91,8 +91,11 @@ public class MapGenerator : MonoBehaviour
         GenerateMap();
     }
 
-    public void GenerateMap()
+    public void GenerateMap(bool forceGeneration = false)
     {
+        if(!forceGeneration && !GameManager.Instance.useLevelSettings)
+        { return; }
+
         // Always set map at 0,0,0
         transform.position = Vector3.zero;
 

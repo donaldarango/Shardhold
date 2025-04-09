@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public string optionalStartLevel = "";
     public bool playerTurn = false;
 
+    public bool useLevelSettings = true;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -80,6 +82,16 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(string level)
     {
+        Debug.Log($"running LoadLevel: {level}");
+        Instance.useLevelSettings = true;
+        currentLevel = level;
+        SceneManager.LoadScene("BaseLevel");
+    }
+
+    public void LoadLevelFromSaveFile(string level)
+    {
+        Debug.Log($"running LoadLevelFromSaveFile: {level}");
+        Instance.useLevelSettings = false;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
     }
@@ -92,6 +104,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        Debug.Log("Restarted Level");
         LoadLevel(currentLevel);
     }
 

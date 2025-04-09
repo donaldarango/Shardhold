@@ -980,6 +980,7 @@ MonoBehaviour:
   saveFolder: Assets/Resources/PlayerSaves
   levelsFolder: Assets/Resources/LevelSettings
   miscFolder: Assets/Resources/Misc
+  debugFolder: Assets/Resources/Debug
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
@@ -992,6 +993,7 @@ MonoBehaviour:
     sectorCount: 0
     maxActualRange: 0
     curTurn: 0
+    turnTimer: 0
     lanes: []
     baseHP: 0
     baseWeapon: 0
@@ -7347,11 +7349,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugging: 3
-  runAssertionTesting: 0
-  saveVerificationTesting: 1
   deckDebugging: 1
-  saveLoadDebugging: 1
+  saveLoadDebugging: 3
   cusmtomMathDebugging: 1
+  runAssertionTesting: 0
+  saveTestOutput: 1
+  saveVerificationTesting: 1
 --- !u!1 &6914060364293477628
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ Test 3: Deck Continuity
 	Method: assertions: saving instances of the deck periodically during playthrough and compare to previous versions; may also use Unity Testing Framework for dedicated, pre-planned and scripted run-throughs
 
 
-Test 4: Save Verification
+Test 4: Save Verification - DONE
 	Goal: when the player saves the game, the saved game should accurately describe the state of the game
 	Method: assertions: make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
 
