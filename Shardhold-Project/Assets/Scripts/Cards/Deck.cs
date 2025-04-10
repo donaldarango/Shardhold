@@ -185,17 +185,20 @@ public class Deck : MonoBehaviour
 
         hand[openSlot] = intermediate;
         cardsInHand++;
-        if (intermediate is Card)
+        if (CustomDebug.DeckDebugging(CustomDebug.DebuggingType.Verbose))
         {
-            Debug.Log("Card drawn: " + ((Card)intermediate).cardName);
+            if (intermediate is Card)
+            {
+                Debug.Log("Card drawn: " + ((Card)intermediate).cardName);
+            }
+            else
+            {
+                Debug.Log("Card drawn: " + ((AllyUnitStats)intermediate).cardName);
+            }
         }
-        else
+        if (CustomDebug.DeckDebugging(DebuggingType.Verbose))
         {
-            Debug.Log("Card drawn: " + ((AllyUnitStats)intermediate).cardName);
-        }
-        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
-        {
-            //Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
+            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
         }
 
         //add it to hand (UI)

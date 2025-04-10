@@ -96,7 +96,10 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(string level)
     {
-        Debug.Log($"running LoadLevel: {level}");
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadLevel: {level}");
+        }
         Instance.baseStartHealth = -1;
         Instance.levelType = LevelType.LevelSettingsFile;
         currentLevel = level;
@@ -105,7 +108,10 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevelFromSaveFile(string level)
     {
-        Debug.Log($"running LoadLevelFromSaveFile: {level}");
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadLevelFromSaveFile: {level}");
+        }
         if(!SaveLoad.saveLoad.CheckIfFileExists($"Level_{level}_Save.json", SaveLoad.SaveType.levelFile))
         {
             if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
@@ -124,7 +130,10 @@ public class GameManager : MonoBehaviour
 
     public void LoadLastSave()
     {
-        Debug.Log($"running LoadLastSave");
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadLastSave");
+        }
         Instance.baseStartHealth = -1;
         Instance.levelType = LevelType.PlayerSaveFile;
         currentLevel = "";

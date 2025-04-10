@@ -83,8 +83,10 @@ public class EnemyUnit : TileActor
         // 2. Is there another enemy? If so, move around them if possible.
         // 3. Is there a free space? If so, move up.
 
-        Debug.Log($"MoveEnemy() for enemy {actorName} at {currentTile.GetRingNumber()}, {currentTile.GetLaneNumber()}");
-
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Verbose))
+        {
+            Debug.Log($"MoveEnemy() for enemy {actorName} at {currentTile.GetRingNumber()}, {currentTile.GetLaneNumber()}");
+        }
         if (enemyStats == null)
         {
             Debug.LogError("EnemyStats is not set!");
@@ -108,15 +110,24 @@ public class EnemyUnit : TileActor
         int currentRing = currentTile.GetRingNumber();
         int currentLane = currentTile.GetLaneNumber();
 
-        Debug.Log("For loop starting");
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Verbose))
+        {
+            Debug.Log("For loop starting");
+        }
 
         // Check tiles in front within the enemy's attack range
         for (int i = 1; i <= enemyStats.attackRange; i++)
         {
-            Debug.Log($"for loop iteration {i}");
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Verbose))
+            {
+                Debug.Log($"for loop iteration {i}");
+            }
 
             int targetRing = currentRing - i;
-            Debug.Log($"currentRing: {currentRing}, i: {i}, targetRing: {targetRing}");
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Verbose))
+            {
+                Debug.Log($"currentRing: {currentRing}, i: {i}, targetRing: {targetRing}");
+            }
             if (currentRing - enemyStats.attackRange < 0)//targetRing < 0)// Prevent index underflow
             {
                 AttackBase();
@@ -130,7 +141,10 @@ public class EnemyUnit : TileActor
 
             MapTile frontTile = MapManager.Instance.GetTile(targetRing, currentLane);
             if (frontTile == null) {
-                Debug.Log($"No tile at {targetRing}, {currentLane}");
+                if (CustomDebug.Debugging(CustomDebug.DebuggingType.Verbose))
+                {
+                    Debug.Log($"No tile at {targetRing}, {currentLane}");
+                }
                 continue;
             } 
 
@@ -140,7 +154,10 @@ public class EnemyUnit : TileActor
             {
                 if (actor.GetTileActorType() == TileActorType.Structure)
                 {
-                    Debug.Log("Enemy attacks structure!");
+                    if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+                    {
+                        Debug.Log("Enemy attacks structure!");
+                    }
                     Attack((StructureUnit)actor);
 
                     // CHECK IF ENEMY IS STILL IN A TRAP SINCE IT DOESN'T MOVE!
@@ -161,7 +178,10 @@ public class EnemyUnit : TileActor
                 }
 
                 MoveToTile(frontTile); // Move onto trap & trigger it
-                Debug.Log("Enemy triggers a trap!");
+                if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+                {
+                    Debug.Log("Enemy triggers a trap!");
+                }
                 trap.Attack(this);
                 return; // Stop moving once trap triggers.
             }
