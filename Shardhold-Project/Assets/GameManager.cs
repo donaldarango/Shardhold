@@ -106,6 +106,14 @@ public class GameManager : MonoBehaviour
     public void LoadLevelFromSaveFile(string level)
     {
         Debug.Log($"running LoadLevelFromSaveFile: {level}");
+        if(!SaveLoad.saveLoad.CheckIfFileExists($"Level_{level}_Save.json", SaveLoad.SaveType.levelFile))
+        {
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
+            {
+                Debug.Log($"Cannot load non-existant save file: Level_{level}_Save.json");
+            }
+            return;
+        }
         Instance.baseStartHealth = -1;
         Instance.levelType = LevelType.LevelSaveFile;
         currentLevel = level;
