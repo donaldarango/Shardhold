@@ -117,7 +117,16 @@ public class EnemyUnit : TileActor
 
             int targetRing = currentRing - i;
             Debug.Log($"currentRing: {currentRing}, i: {i}, targetRing: {targetRing}");
-            if (targetRing < 0) break; // Prevent index underflow
+            if (currentRing - enemyStats.attackRange < 0)//targetRing < 0)// Prevent index underflow
+            {
+                AttackBase();
+                if (currentTile.GetCurrentTrapUnit())
+                {
+                    currentTile.GetCurrentTrapUnit().Attack(this);
+                }
+                return;
+            }
+            
 
             MapTile frontTile = MapManager.Instance.GetTile(targetRing, currentLane);
             if (frontTile == null) {
@@ -157,7 +166,7 @@ public class EnemyUnit : TileActor
                 return; // Stop moving once trap triggers.
             }
 
-            if (currentRing - attackRange < 0)
+            /*if (currentRing - attackRange < 0)
             {
                 Debug.Log("Enemy is attacks base and does not move forwards.");
                 AttackBase();
@@ -172,7 +181,7 @@ public class EnemyUnit : TileActor
             else
             {
                 Debug.Log($"currentRing: {currentRing}, attackRange: {attackRange}");
-            }
+            }*/
         }
 
         // Move forward up to moveSpeed tiles if no obstruction - WHAT TO DO IF MOVESPEED > 1, CAN THEY ATTACK AND MOVE
