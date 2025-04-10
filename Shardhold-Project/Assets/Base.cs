@@ -51,6 +51,10 @@ public class Base : MonoBehaviour
         if (!setupComplete)
         {
             currentHealth = maxHealth;
+            if(GameManager.Instance.baseStartHealth != -1)
+            {
+                currentHealth = GameManager.Instance.baseStartHealth;
+            }
             if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
             {
                 Debug.Log("Base setup ran.");

@@ -83,6 +83,8 @@ public class EnemyUnit : TileActor
         // 2. Is there another enemy? If so, move around them if possible.
         // 3. Is there a free space? If so, move up.
 
+        Debug.Log($"MoveEnemy() for enemy {actorName} at {currentTile.GetRingNumber()}, {currentTile.GetLaneNumber()}");
+
         if (enemyStats == null)
         {
             Debug.LogError("EnemyStats is not set!");
@@ -106,14 +108,20 @@ public class EnemyUnit : TileActor
         int currentRing = currentTile.GetRingNumber();
         int currentLane = currentTile.GetLaneNumber();
 
+        Debug.Log("For loop starting");
+
         // Check tiles in front within the enemy's attack range
         for (int i = 1; i <= enemyStats.attackRange; i++)
         {
+            Debug.Log($"for loop iteration {i}");
+
             int targetRing = currentRing - i;
+            Debug.Log($"currentRing: {currentRing}, i: {i}, targetRing: {targetRing}");
             if (targetRing < 0) break; // Prevent index underflow
 
             MapTile frontTile = MapManager.Instance.GetTile(targetRing, currentLane);
             if (frontTile == null) {
+                Debug.Log($"No tile at {targetRing}, {currentLane}");
                 continue;
             } 
 
@@ -160,6 +168,10 @@ public class EnemyUnit : TileActor
                 }
 
                 return;
+            }
+            else
+            {
+                Debug.Log($"currentRing: {currentRing}, attackRange: {attackRange}");
             }
         }
 

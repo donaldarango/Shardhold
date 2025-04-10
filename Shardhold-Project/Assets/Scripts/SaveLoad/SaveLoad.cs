@@ -474,6 +474,7 @@ public class SaveLoad : MonoBehaviour
 
             #region Base
             setBaseHP(data.baseHP);
+            GameManager.Instance.baseStartHealth = data.baseHP;
             setBaseWeapon(data.baseWeapon);
             //TODO: include active base defenses/effects here
             #endregion
@@ -511,7 +512,7 @@ public class SaveLoad : MonoBehaviour
 
                 }
 
-                Print("Created new tile actor: " + newTA.name);
+                Print("Created new tile actor: " + newTA.name, CustomDebug.DebuggingType.Verbose);
 
                 //put in all the other variables for this tileactor
                 newTA.SetActorData();

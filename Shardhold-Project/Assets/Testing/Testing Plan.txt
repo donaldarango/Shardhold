@@ -18,3 +18,8 @@ Test 4: Save Verification - DONE
 Test 5: Performance
 	Goal: ensure the game loads and runs at expected rates
 	Method: playtesting: when running the game, perhaps in particular a level with many enemies beyond how many the actual game will have in a level, see if the game "feels" slow; can also use Unity Performance Testing Extension
+
+
+
+
+Also I'm not sure if this is something that needs fixing. In front of an enemy is a row with 2 enemies and 1 wall. Directly in front is an enemy. They do not attack the wall.

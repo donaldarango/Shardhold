@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public string optionalStartLevel = "";
     public bool playerTurn = false;
 
+    public int baseStartHealth = -1;
+
     public enum LevelType
     {
         LevelSettingsFile,
@@ -88,11 +90,13 @@ public class GameManager : MonoBehaviour
     public void LoadByIndex(int index)
     {
         SceneManager.LoadScene(index);
+        Instance.baseStartHealth = -1;
     }
 
     public void LoadLevel(string level)
     {
         Debug.Log($"running LoadLevel: {level}");
+        Instance.baseStartHealth = -1;
         Instance.levelType = LevelType.LevelSettingsFile;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
@@ -101,24 +105,27 @@ public class GameManager : MonoBehaviour
     public void LoadLevelFromSaveFile(string level)
     {
         Debug.Log($"running LoadLevelFromSaveFile: {level}");
+        Instance.baseStartHealth = -1;
         Instance.levelType = LevelType.LevelSaveFile;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
-        Base.Instance.Setup();
+        //Base.Instance.Setup();
     }
 
 
     public void LoadLastSave()
     {
         Debug.Log($"running LoadLastSave");
+        Instance.baseStartHealth = -1;
         Instance.levelType = LevelType.PlayerSaveFile;
         currentLevel = "";
         SceneManager.LoadScene("BaseLevel");
-        Base.Instance.Setup();
+        //Base.Instance.Setup();
     }
 
     public void LoadTutorialLevel()
     {
+        Instance.baseStartHealth = -1;
         currentLevel = "Tutorial";
         SceneManager.LoadScene("TutorialLevel");
     }

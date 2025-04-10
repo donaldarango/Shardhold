@@ -105,7 +105,10 @@ public class Deck : MonoBehaviour
             Button button = obj.GetComponent<Button>();
             button.enabled = false;
         }
-        selectedCardUI.DeselectCardAnimation();
+        if (selectedCardUI != null)
+        {
+            selectedCardUI.DeselectCardAnimation();
+        }
     }
 
     public void EnableDeckInteraction()
