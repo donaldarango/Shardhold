@@ -111,6 +111,26 @@ public class SaveLoad : MonoBehaviour
             return false;
         }
     }
+
+    public bool CheckIfFileExists(string absoluteFile)
+    {
+        return File.Exists(absoluteFile);
+    }
+
+    public bool CheckIfFileExists(string filename, string fileLocation)
+    {
+        return CheckIfFileExists(fileLocation + "/" + filename);
+    }
+
+    public bool CheckIfFileExists(string filename, SaveType saveType)
+    {
+        return CheckIfFileExists(filename, GetSaveLocation(saveType));
+    }
+
+    public bool CheckIfDefaultSaveExists()
+    {
+        return CheckIfFileExists(fileToUse, SaveType.playerSave);
+    }
     #endregion
 
 

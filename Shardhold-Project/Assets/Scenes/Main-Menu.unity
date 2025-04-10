@@ -449,6 +449,8 @@ MonoBehaviour:
   selectLevel: 0
   menu: {fileID: 87919088}
   levelSelector: {fileID: 1091879294}
+  continueButton: {fileID: 69684169}
+  debugLevels: {fileID: 2118048264}
 --- !u!1 &117409137
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
     public string optionalStartLevel = "";
     public bool playerTurn = false;
 
-    public int baseStartHealth = -1;
+    public int baseStartHealth = -1;    //if not -1, then Base should use this value for the starting health rather than the usual maximum
+    public bool showDebugLevelsInMenu = false;
 
     public enum LevelType
     {
