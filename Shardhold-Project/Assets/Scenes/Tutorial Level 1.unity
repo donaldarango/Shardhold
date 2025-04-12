@@ -6943,7 +6943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &4597857735567307823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7339,10 +7339,12 @@ MonoBehaviour:
   drawPile: 01000000
   discardPile: 
   occupiedSlots: 000000
+  selectedCardUI: {fileID: 0}
   hand:
   - {fileID: 0}
   UIHand:
   - {fileID: 0}
+  discardButton: {fileID: 0}
   drawChoiceMode: 0
 --- !u!1 &4851374963380228176
 GameObject:
