@@ -569,7 +569,10 @@ public class MapGenerator : MonoBehaviour
                                     TileActor actor = target.GetCurrentTileActor();
                                     if (actor)
                                     {
-                                        isPlayable = true;
+                                        if(actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit)
+                                        {
+                                            isPlayable = true;
+                                        }
                                     }
                                 }
                                 if (isPlayable)
