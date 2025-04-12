@@ -7622,7 +7622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugging: 3
   deckDebugging: 1
-  saveLoadDebugging: 1
+  saveLoadDebugging: 3
   cusmtomMathDebugging: 1
   runAssertionTesting: 0
   saveTestOutput: 1

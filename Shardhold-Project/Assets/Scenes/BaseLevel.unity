@@ -409,7 +409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &5331277652572986711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -474,17 +474,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3703193026193046294, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
-      propertyPath: flashColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3703193026193046294, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
-      propertyPath: flashColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3703193026193046294, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
-      propertyPath: flashColor.r
-      value: 1
+    - target: {fileID: 2948570701698930546, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
+    - target: {fileID: 2948570701698930546, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadMainMenu
       objectReference: {fileID: 0}
     - target: {fileID: 5025132763076048636, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
       propertyPath: m_AnchorMax.x
@@ -564,6 +560,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   optionalStartLevel: 1
   playerTurn: 0
+  baseStartHealth: -1
+  showDebugLevelsInMenu: 0
+  levelType: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

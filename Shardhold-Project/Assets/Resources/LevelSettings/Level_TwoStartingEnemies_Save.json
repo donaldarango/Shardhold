@@ -1,0 +1,175 @@
+{
+    "initialized": true,
+    "saveVersion": "1.00",
+    "level": -1,
+    "sectorCount": 3,
+    "maxActualRange": 4,
+    "curTurn": 1,
+    "turnTimer": 40,
+    "lanes": [
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "baseHP": 500,
+    "baseWeapon": -1,
+    "spawnedTileActors": [
+        {
+            "name": "Basic Melee Enemy",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Basic Melee Enemy",
+            "curHealth": 3,
+            "pos": {
+                "x": 1,
+                "y": 1
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        }
+    ],
+    "spawnList": [
+        {
+            "roundNumber": 2,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 10,
+                    "enemyUnit": "Basic Tank Enemy"
+                }
+            ]
+        }
+    ],
+    "drawPile": [
+        2,
+        5,
+        0,
+        6,
+        7,
+        4,
+        1
+    ],
+    "discardPile": [],
+    "hand": [
+        {
+            "cardId": 3,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 3,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 5,
+            "cardHealth": 0,
+            "uses": 0
+        }
+    ]
+}
