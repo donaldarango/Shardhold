@@ -567,12 +567,9 @@ public class MapGenerator : MonoBehaviour
                                 {
                                     MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
                                     TileActor actor = target.GetCurrentTileActor();
-                                    if (actor)
+                                    if (actor && actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit)
                                     {
-                                        if(actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit)
-                                        {
-                                            isPlayable = true;
-                                        }
+                                        isPlayable = true;
                                     }
                                 }
                                 if (isPlayable)
