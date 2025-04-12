@@ -1,39 +1,34 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class DamageIndicator : MonoBehaviour
 {
-    public float floatSpeed = 1f;
-    public float duration = 1f;
-    public Vector3 floatDirection = Vector3.up;
+    public TextMeshProUGUI uiText; // Or TextMeshPro if you're using world space
 
-    private TextMeshProUGUI text;
-    private Color originalColor;
-    private float timer = 0f;
-
-    void Start()
+    public void SetDamage(int amount, bool isHealing)
     {
-        text = GetComponent<TextMeshProUGUI>();
-        originalColor = text.color;
+        uiText.text = (isHealing ? "+" : "-") + amount.ToString();
+        uiText.color = isHealing ? Color.green : Color.red;
+
+        StartCoroutine(AnimateAndDestroy());
     }
 
-    public void SetDamage(int damage)
+    IEnumerator AnimateAndDestroy()
     {
-        text.text = damage.ToString();
-    }
+        float duration = 1f;
+        Vector3 offset = Vector3.up * 1f;
+        Vector3 start = transform.position;
+        Vector3 end = start + offset;
 
-    void Update()
-    {
-        transform.position += floatDirection * floatSpeed * Time.deltaTime;
-        timer += Time.deltaTime;
-
-        // Fade out
-        float alpha = Mathf.Lerp(originalColor.a, 0, timer / duration);
-        text.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-
-        if (timer >= duration)
+        float t = 0;
+        while (t < duration)
         {
-            Destroy(gameObject);
+            t += Time.deltaTime;
+            transform.position = Vector3.Lerp(start, end, t / duration);
+            yield return null;
         }
+
+        Destroy(gameObject);
     }
 }

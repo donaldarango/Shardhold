@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1679024186758992702}
   - component: {fileID: 4414813976446030565}
   - component: {fileID: -2630621960536227670}
+  - component: {fileID: 5014932153307674420}
   m_Layer: 5
   m_Name: Damage Indicator
   m_TagString: Untagged
@@ -149,6 +150,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6856fe88c79b834d9604b0500614460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatSpeed: 1
+  uiText: {fileID: 4414813976446030565}
+--- !u!114 &5014932153307674420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7567642599611975315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e71a3f4bcb2784c88cfb7578c91465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floatSpeed: 40
   duration: 1
-  floatDirection: {x: 0, y: 1, z: 0}
+  floatDirection: {x: 0, y: -1, z: 0}
+  fadeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
