@@ -33,7 +33,7 @@ public class Deck : MonoBehaviour
     public List<int> discardPile = new List<int>();
     public bool[] occupiedSlots;
 
-    CardUI selectedCardUI;
+    public CardUI selectedCardUI;
 
     //uses same rules as drawPile
     public ScriptableObject[] hand;
@@ -41,6 +41,10 @@ public class Deck : MonoBehaviour
     private int cardsInHand = 0;
 
     private bool deckDisabled;
+
+    public List<int> prevDeckContents = new List<int>();
+    public GameObject discardButton;
+
     public enum DrawChoiceMode
     {
         Random,
@@ -76,8 +80,9 @@ public class Deck : MonoBehaviour
     public void NextTurn()
     {
         DrawCardsUntilFull();
+        RefreshDiscardButton();
 
-        foreach(GameObject obj in UIHand)
+        foreach (GameObject obj in UIHand)
         {
             AllyUnit unit = obj.GetComponent<AllyUnit>();
             if(unit != null)
@@ -99,6 +104,10 @@ public class Deck : MonoBehaviour
 
             Button button = obj.GetComponent<Button>();
             button.enabled = false;
+        }
+        if (selectedCardUI != null)
+        {
+            selectedCardUI.DeselectCardAnimation();
         }
     }
 
@@ -176,17 +185,20 @@ public class Deck : MonoBehaviour
 
         hand[openSlot] = intermediate;
         cardsInHand++;
-        if (intermediate is Card)
+        if (CustomDebug.DeckDebugging(CustomDebug.DebuggingType.Verbose))
         {
-            Debug.Log("Card drawn: " + ((Card)intermediate).cardName);
+            if (intermediate is Card)
+            {
+                Debug.Log("Card drawn: " + ((Card)intermediate).cardName);
+            }
+            else
+            {
+                Debug.Log("Card drawn: " + ((AllyUnitStats)intermediate).cardName);
+            }
         }
-        else
+        if (CustomDebug.DeckDebugging(DebuggingType.Verbose))
         {
-            Debug.Log("Card drawn: " + ((AllyUnitStats)intermediate).cardName);
-        }
-        if (CustomDebug.DeckDebugging(DebuggingType.ErrorOnly))
-        {
-            //Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
+            Debug.Log("There are now " + CountCardsInHand() + " cards in the hand after drawing one.");
         }
 
         //add it to hand (UI)
@@ -412,6 +424,7 @@ public class Deck : MonoBehaviour
         {
             AllyUnit unit = cardObject.AddComponent<AllyUnit>();
             unit.stats = (AllyUnitStats)card;
+            unit.currentAttacks = unit.stats.attacks;
         }
 
         CardUI cardUI = cardObject.GetComponent<CardUI>();
@@ -436,6 +449,35 @@ public class Deck : MonoBehaviour
             }
         }
     }
+
+    public void RefreshDiscardButton()
+    {
+        if (discardButton)
+        {
+            var image = discardButton.GetComponent<Image>();
+            image.color = Color.yellow;
+
+            var button = discardButton.GetComponent<Button>();
+            button.enabled = true;
+        }
+    }
+
+    public void MulliganCard()
+    {
+        if (MapGenerator.Instance.selectedHandIndex != -1 && (MapGenerator.Instance.selectedCard || MapGenerator.Instance.selectedUnit))
+        {
+            DiscardCard(MapGenerator.Instance.selectedHandIndex);
+            DrawCard();
+
+            var image = discardButton.GetComponent<Image>();
+            image.color = Color.gray;
+
+            var button = discardButton.GetComponent<Button>();
+            button.enabled = false;
+        }
+    }
+
+
     #region Pile to Unlocked Cards Comparisons and Other Comparisons
     
     /// <summary>
@@ -476,6 +518,8 @@ public class Deck : MonoBehaviour
         }
         return true;
     }
+
+    
 
 
     #endregion

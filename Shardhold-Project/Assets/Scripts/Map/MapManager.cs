@@ -139,6 +139,11 @@ public class MapManager : MonoBehaviour
 
     public List<TileActor> GetTileActorList(bool includeTraps = false)
     {
+        if(quadrantData.Count == 0)
+        {
+            return null;
+        }
+
         List<TileActor> tileActors = new List<TileActor>();
         for (int i = 0; i < 4; i++) // for each quadrant
         {
