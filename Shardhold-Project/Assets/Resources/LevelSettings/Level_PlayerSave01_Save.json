@@ -1,0 +1,407 @@
+{
+    "initialized": true,
+    "saveVersion": "1.00",
+    "level": -1,
+    "sectorCount": 3,
+    "maxActualRange": 4,
+    "curTurn": 1,
+    "turnTimer": 40,
+    "lanes": [
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "baseHP": 20,
+    "baseWeapon": -1,
+    "spawnedTileActors": [
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 1
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 2
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 3
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 4
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 5
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 6
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 7
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 8
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 9
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 10
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Wall Unit",
+            "curHealth": 5,
+            "pos": {
+                "x": 0,
+                "y": 11
+            },
+            "type": 1,
+            "damage": 0,
+            "attackRange": 0,
+            "isShielded": true,
+            "isPoisoned": false
+        },
+        {
+            "name": "Basic Melee Enemy",
+            "curHealth": 3,
+            "pos": {
+                "x": 1,
+                "y": 1
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Basic Melee Enemy",
+            "curHealth": 3,
+            "pos": {
+                "x": 1,
+                "y": 4
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Basic Melee Enemy",
+            "curHealth": 3,
+            "pos": {
+                "x": 2,
+                "y": 7
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Basic Melee Enemy",
+            "curHealth": 3,
+            "pos": {
+                "x": 2,
+                "y": 10
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        }
+    ],
+    "spawnList": [
+        {
+            "roundNumber": 3,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 4,
+                    "enemyUnit": "Basic Melee Enemy"
+                },
+                {
+                    "laneNumber": 10,
+                    "enemyUnit": "Basic Tank Enemy"
+                }
+            ]
+        },
+        {
+            "roundNumber": 4,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 1,
+                    "enemyUnit": "Basic Ranged Enemy"
+                },
+                {
+                    "laneNumber": 7,
+                    "enemyUnit": "Basic Melee Enemy"
+                },
+                {
+                    "laneNumber": 9,
+                    "enemyUnit": "Basic Ranged Enemy"
+                }
+            ]
+        },
+        {
+            "roundNumber": 5,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 0,
+                    "enemyUnit": "Basic Melee Enemy"
+                },
+                {
+                    "laneNumber": 3,
+                    "enemyUnit": "Basic Ranged Enemy"
+                },
+                {
+                    "laneNumber": 6,
+                    "enemyUnit": "Basic Tank Enemy"
+                },
+                {
+                    "laneNumber": 8,
+                    "enemyUnit": "Basic Melee Enemy"
+                },
+                {
+                    "laneNumber": 10,
+                    "enemyUnit": "Basic Ranged Enemy"
+                },
+                {
+                    "laneNumber": 11,
+                    "enemyUnit": "Basic Tank Enemy"
+                }
+            ]
+        }
+    ],
+    "drawPile": [
+        2,
+        3,
+        0,
+        6,
+        7,
+        4,
+        1
+    ],
+    "discardPile": [],
+    "hand": [
+        {
+            "cardId": 5,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 5,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 5,
+            "cardHealth": 0,
+            "uses": 0
+        }
+    ]
+}

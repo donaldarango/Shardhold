@@ -16,6 +16,18 @@ public class GameManager : MonoBehaviour
     public string optionalStartLevel = "";
     public bool playerTurn = false;
 
+    public int baseStartHealth = -1;    //if not -1, then Base should use this value for the starting health rather than the usual maximum
+    public bool showDebugLevelsInMenu = false;
+
+    public enum LevelType
+    {
+        LevelSettingsFile,
+        LevelSaveFile,
+        PlayerSaveFile
+    }
+
+    public LevelType levelType = LevelType.LevelSettingsFile;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -79,22 +91,66 @@ public class GameManager : MonoBehaviour
     public void LoadByIndex(int index)
     {
         SceneManager.LoadScene(index);
+        Instance.baseStartHealth = -1;
     }
 
     public void LoadLevel(string level)
     {
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadLevel: {level}");
+        }
+        Instance.baseStartHealth = -1;
+        Instance.levelType = LevelType.LevelSettingsFile;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
     }
 
+    public void LoadLevelFromSaveFile(string level)
+    {
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadLevelFromSaveFile: {level}");
+        }
+        if(!SaveLoad.saveLoad.CheckIfFileExists($"Level_{level}_Save.json", SaveLoad.SaveType.levelFile))
+        {
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
+            {
+                Debug.Log($"Cannot load non-existant save file: Level_{level}_Save.json");
+            }
+            return;
+        }
+        Instance.baseStartHealth = -1;
+        Instance.levelType = LevelType.LevelSaveFile;
+        currentLevel = level;
+        SceneManager.LoadScene("BaseLevel");
+        //Base.Instance.Setup();
+    }
+
+
+    public void LoadLastSave()
+    {
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadLastSave");
+        }
+        Instance.baseStartHealth = -1;
+        Instance.levelType = LevelType.PlayerSaveFile;
+        currentLevel = "";
+        SceneManager.LoadScene("BaseLevel");
+        //Base.Instance.Setup();
+    }
+
     public void LoadTutorialLevel()
     {
+        Instance.baseStartHealth = -1;
         currentLevel = "Tutorial";
         SceneManager.LoadScene("TutorialLevel");
     }
 
     public void RestartLevel()
     {
+        Debug.Log("Restarted Level");
         LoadLevel(currentLevel);
     }
 
