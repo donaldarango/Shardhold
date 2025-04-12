@@ -113,6 +113,8 @@ public class TileActorManager : MonoBehaviour
     public static event EndEnemyTurnHandler EndEnemyTurn;
     public int currentRound = 0;
 
+    public bool useLevelSettings = true;
+
 
     public static TileActorManager Instance { get { return _instance; } }
     void OnEnable()
@@ -139,44 +141,11 @@ public class TileActorManager : MonoBehaviour
 
     void Start()
     {
-        if (GameManager.Instance.levelType == GameManager.LevelType.LevelSettingsFile) {
-            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
-            {
-                Debug.Log("running SetLevelJSONFile");
-            }
+        if (useLevelSettings)
+        {
             SetLevelJSONFile();
+            InitializeSpawnData();
         }
-        else
-        {
-            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
-            {
-                Debug.Log("running SetLevelSaveFile");
-            }
-            SetLevelSaveFile();
-        }
-        InitializeSpawnData();
-        if (GameManager.Instance.levelType == GameManager.LevelType.LevelSaveFile)
-        {
-            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
-            {
-                Debug.Log($"running Loading of level Level_{GameManager.Instance.GetCurrentLevel()}_Save.json");
-            }
-            SaveLoad.saveLoad.Load($"Level_{GameManager.Instance.GetCurrentLevel()}_Save.json", SaveLoad.SaveType.levelFile);
-        }else if(GameManager.Instance.levelType == GameManager.LevelType.PlayerSaveFile)
-        {
-            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
-            {
-                Debug.Log($"loading of player's last save");
-            }
-            SaveLoad.saveLoad.LoadFromDefault(null);
-        }
-    }
-
-    private void SetLevelSaveFile()
-    {
-        //string level = GameManager.Instance.GetCurrentLevel();
-        levelSettingsJSON = Resources.Load<TextAsset>(resourceFilePath + $"Level_Empty_Settings");
-        //SaveLoad.saveLoad.Load($"Level_{level}_Save.json", SaveLoad.SaveType.levelFile);
     }
 
     private void SetLevelJSONFile()

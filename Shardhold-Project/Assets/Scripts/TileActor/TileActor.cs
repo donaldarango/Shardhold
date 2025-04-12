@@ -180,7 +180,7 @@ public abstract class TileActor : MonoBehaviour
 
         if(damagedClip)
         {
-            SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, .8f);
+            SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, 10f);
         }
 
         Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining HP: {currentHealth}");

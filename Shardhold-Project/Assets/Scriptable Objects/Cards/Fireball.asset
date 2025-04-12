@@ -20,7 +20,7 @@ MonoBehaviour:
   description: Fireball!
   damage: 2
   hp: 0
-  audioClip: {fileID: 8300000, guid: f2665a19f3fe30b4598752934ef56314, type: 3}
+  audioClip: {fileID: 8300000, guid: 01b126fda434cd748b70f26a11f61e94, type: 3}
   audioVolume: 10
   heal: 0
   friendlyFire: 1

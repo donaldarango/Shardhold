@@ -111,26 +111,6 @@ public class SaveLoad : MonoBehaviour
             return false;
         }
     }
-
-    public bool CheckIfFileExists(string absoluteFile)
-    {
-        return File.Exists(absoluteFile);
-    }
-
-    public bool CheckIfFileExists(string filename, string fileLocation)
-    {
-        return CheckIfFileExists(fileLocation + "/" + filename);
-    }
-
-    public bool CheckIfFileExists(string filename, SaveType saveType)
-    {
-        return CheckIfFileExists(filename, GetSaveLocation(saveType));
-    }
-
-    public bool CheckIfDefaultSaveExists()
-    {
-        return CheckIfFileExists(fileToUse, SaveType.playerSave);
-    }
     #endregion
 
 
@@ -165,7 +145,7 @@ public class SaveLoad : MonoBehaviour
     {
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
         {
-            Debug.Log("Saving game to specified file \"" + filename + "\"");
+            Debug.Log("Saving game to specified file \"" + fileToUse + "\"");
         }
 
         GameStateData data = CreateData();
@@ -271,14 +251,6 @@ public class SaveLoad : MonoBehaviour
         data.spawnedTileActors = new List<SpawnedTileActor>();
         List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
 
-        if(actors == null)
-        {
-            if (CustomDebug.SaveLoadDebugging(DebuggingType.ErrorOnly))
-            {
-                Debug.LogError("Null actors list");
-            }
-        }
-
         /*
         data.ta_maxHealth = new List<int>();       //the max possible health for this TileActor; generally the health that the TileActor spawns with
         data.ta_curHealth = new List<int>();       //the current health of the TileActor; generally maxHealth - damageTaken
@@ -299,8 +271,8 @@ public class SaveLoad : MonoBehaviour
             sta.curHealth = actors[i].GetCurrentHealth();
             MapTile mapTile = actors[i].GetCurrentTile();
             sta.pos = new Vector2Int(mapTile.GetRingNumber(), mapTile.GetLaneNumber());
-            //sta.attackRange = actors[i].GetAttackRange();
-            //sta.damage = actors[i].GetAttackDamage();
+            sta.attackRange = actors[i].GetAttackRange();
+            sta.damage = actors[i].GetAttackDamage();
             sta.isShielded = actors[i].GetIsShielded();
             sta.isPoisoned = actors[i].GetIsPoisoned();
 
@@ -425,7 +397,7 @@ public class SaveLoad : MonoBehaviour
     {
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Normal))
         {
-            Debug.Log("Loading game from specified file \"" + filename + "\"");
+            Debug.Log("Loading game from specified file \"" + fileToUse + "\"");
         }
 
         #region Reading File
@@ -488,13 +460,12 @@ public class SaveLoad : MonoBehaviour
                 lastLoadedLanes.Add(data.lanes[i]);
             }
 
-            MapGenerator.Instance.GenerateMap(true);
+            MapGenerator.Instance.GenerateMap();
 
             #endregion
 
             #region Base
             setBaseHP(data.baseHP);
-            GameManager.Instance.baseStartHealth = data.baseHP;
             setBaseWeapon(data.baseWeapon);
             //TODO: include active base defenses/effects here
             #endregion
@@ -532,7 +503,7 @@ public class SaveLoad : MonoBehaviour
 
                 }
 
-                Print("Created new tile actor: " + newTA.name, CustomDebug.DebuggingType.Verbose);
+                Print("Created new tile actor: " + newTA.name);
 
                 //put in all the other variables for this tileactor
                 newTA.SetActorData();
@@ -544,8 +515,6 @@ public class SaveLoad : MonoBehaviour
 
 
             }
-
-            Print("Loaded " + data.spawnedTileActors.Count + " tileActors.", DebuggingType.Normal);
 
             #endregion
 
@@ -680,7 +649,7 @@ public class SaveLoad : MonoBehaviour
 
         List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
 
-        for (int i = 0; actors != null && i < actors.Count; i++)
+        for (int i = 0; i < actors.Count; i++)
         {
             actors[i].Die();
         }
@@ -1317,9 +1286,9 @@ public class SaveLoad : MonoBehaviour
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 3: " + output); }
         output = output && lhs.type.Equals(rhs.type);
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 4: " + output); }
-        //output = output && lhs.damage == rhs.damage;
+        output = output && lhs.damage == rhs.damage;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 5: " + output); }
-        //output = output && lhs.attackRange == rhs.attackRange;
+        output = output && lhs.attackRange == rhs.attackRange;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 6: " + output); }
         output = output && lhs.isShielded == rhs.isShielded;
         if (CustomDebug.SaveLoadDebugging(CustomDebug.DebuggingType.Verbose)) { Debug.Log("State 7: " + output); }
@@ -1466,8 +1435,8 @@ public class SpawnedTileActor
     public int curHealth;
     public Vector2Int pos;
     public TileActor.TileActorType type;
-    //public int damage;
-    //public int attackRange;
+    public int damage;
+    public int attackRange;
     public bool isShielded;
     public bool isPoisoned;
 

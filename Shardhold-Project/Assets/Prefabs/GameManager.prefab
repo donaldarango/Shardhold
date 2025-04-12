@@ -47,9 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   optionalStartLevel: 
   playerTurn: 0
-  baseStartHealth: -1
-  showDebugLevelsInMenu: 1
-  levelType: 0
 --- !u!114 &7816380796242172571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,30 +59,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b566b9f09578d8d4986a465cdf7718dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapGenerator: {fileID: 0}
   defaultFileType: 2
   fileToUse: current_save.json
   saveFolder: Assets/Resources/PlayerSaves
   levelsFolder: Assets/Resources/LevelSettings
   miscFolder: Assets/Resources/Misc
-  debugFolder: Assets/Resources/Debug
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
   playerStatsFile: player_stats.json
   lastLoadedLanes: []
-  mostRecentLoad:
-    initialized: 0
-    saveVersion: 1.00
-    level: -1
-    sectorCount: 0
-    maxActualRange: 0
-    curTurn: 0
-    turnTimer: 0
-    lanes: []
-    baseHP: 0
-    baseWeapon: 0
-    spawnedTileActors: []
-    spawnList: []
-    drawPile: 
-    discardPile: 
-    hand: []
