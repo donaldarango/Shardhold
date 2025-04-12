@@ -12,6 +12,7 @@ class Spell : Card
     [Header("Spell Stats")]
     public int heal;
     public bool friendlyFire;
+    public bool unincludeUnits;
 
     public override CardType cardType => CardType.Spell;
 
@@ -79,6 +80,26 @@ class Spell : Card
                 if (actor && actor.GetTileActorType() != TileActor.TileActorType.Trap && (actor.GetTileActorType() != TileActor.TileActorType.EnemyUnit || friendlyFire))
                 {
                     actor.SetCurrentHealth(Math.Min(actor.tileActorStats.maxHealth, actor.GetCurrentHealth() + heal)); //no overheal. heal enemy units if friendly fire is enabled 
+                }
+            }
+        }
+
+        if (!unincludeUnits)
+        {
+            foreach(GameObject uicard in Deck.Instance.UIHand)
+            {
+                if(uicard != null)
+                {
+                    var unit = uicard.GetComponent<AllyUnit>();
+                    if (unit)
+                    {
+                        unit.currentHealth = Mathf.Min(unit.stats.hp, unit.currentHealth + heal);
+                        var ui = unit.GetComponent<CardUI>();
+                        if (ui)
+                        {
+                            ui.updateHealth(unit.currentHealth);
+                        }
+                    }
                 }
             }
         }
