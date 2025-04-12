@@ -9,6 +9,8 @@ public class Base : MonoBehaviour
     [SerializeField] private int currentHealth;
     public GameObject gameOverScreen;
 
+    bool setupComplete = false;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -34,7 +36,7 @@ public class Base : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
+        Setup();
         if (gameOverScreen!= null) 
         {
             gameOverScreen.SetActive(false);
@@ -42,6 +44,23 @@ public class Base : MonoBehaviour
                 Time.timeScale = 1;
             }
         }
+    }
+
+    public void Setup()
+    {
+        if (!setupComplete)
+        {
+            currentHealth = maxHealth;
+            if(GameManager.Instance.baseStartHealth != -1)
+            {
+                currentHealth = GameManager.Instance.baseStartHealth;
+            }
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+            {
+                Debug.Log("Base setup ran.");
+            }
+        }
+        setupComplete = true;
     }
 
     public void OnTakeDamage(int amount)

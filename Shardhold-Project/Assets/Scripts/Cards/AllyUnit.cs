@@ -50,6 +50,7 @@ public class AllyUnit : MonoBehaviour
                 currentHealth -= actor.tileActorStats.damage;
                 UpdateUIHealth();
                 //return to hand
+                Deck.Instance.selectedCardUI.DeselectCardAnimation();
                 Debug.Log("ally unit hp : " + currentHealth);
             }
         }

@@ -91,8 +91,11 @@ public class MapGenerator : MonoBehaviour
         GenerateMap();
     }
 
-    public void GenerateMap()
+    public void GenerateMap(bool forceGeneration = false)
     {
+        if(!forceGeneration && !(GameManager.Instance.levelType == GameManager.LevelType.LevelSettingsFile))
+        { return; }
+
         // Always set map at 0,0,0
         transform.position = Vector3.zero;
 
@@ -358,6 +361,13 @@ public class MapGenerator : MonoBehaviour
 
     void HandleTargeting(Card? card = null, AllyUnit? unit = null)
     {
+        if (PauseMenu.isPaused) { return; }
+
+        if(!Input.GetMouseButtonDown(0) && Input.GetMouseButtonDown(1))
+        {
+            DeselectCard();
+        }
+
         if (card != oldCard) // If a new selection type was just picked, clear the board for highlights and clicks. This would happen on swapping cards.
         {
             clickedTile = null;
@@ -381,6 +391,8 @@ public class MapGenerator : MonoBehaviour
                 string[] parts = tileName.Split('_');
                 int r = int.Parse(parts[1].Substring(1));
                 int l = int.Parse(parts[2].Substring(1));
+
+                HoverTile?.Invoke(r, l);
 
                 // If set of hovered tiles doesn't include this new tile, then we need to make a new highlight
                 if (!targetedTiles.Contains((r, l))) // We can do this because given quadrant locking, each tile is in one unique selection per targeting type
@@ -503,21 +515,47 @@ public class MapGenerator : MonoBehaviour
                     {
                         if (selectedCard != null)
                         {
-                            Debug.Log("First Target - tile: " + (r, l));
-                            foreach (var tile in targetedTiles)
+                            bool isPlayable = selectedCard.cardType != CardType.Placer;
+                            if(!isPlayable)
                             {
-                                tileMeshes[tile].material.color = clickColor;
-                                clickedTiles.Add(tile);
+                                int count = 0;
+                                int full = 0;
+                                foreach (var tile in targetedTiles)
+                                {
+                                    ++count;
+                                    MapTile target = MapManager.Instance.GetTile(tile.Item1, tile.Item2);
+                                    TileActor actor = target.GetCurrentTileActor();
+                                    if (actor)
+                                    {
+                                        ++full;
+                                    }
+                                }
+                                if(count > full)
+                                {
+                                    isPlayable = true;
+                                }
                             }
-                            targetedTiles.Clear();
-                            Debug.Log("play card via first target");
 
-                            selectedCard.Play(clickedTiles);
-                            if (selectedCard.DiscardAfterPlay() == true) {
-                                Deck.Instance.DiscardCard(selectedHandIndex);
+                            if (isPlayable)
+                            {
+                                Debug.Log("First Target - tile: " + (r, l));
+                                foreach (var tile in targetedTiles)
+                                {
+                                    tileMeshes[tile].material.color = clickColor;
+                                    clickedTiles.Add(tile);
+                                }
+                                targetedTiles.Clear();
+                                Debug.Log("play card via first target");
+
+                                selectedCard.Play(clickedTiles);
+                                if (selectedCard.DiscardAfterPlay() == true)
+                                {
+                                    Deck.Instance.DiscardCard(selectedHandIndex);
+                                }
+                                selectedCard = null;
+                                StartCoroutine(RemoveHighlightDelayed(clickedTiles));
                             }
-                            selectedCard = null;
-                            StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                            
                         }
                         else if (selectedUnit != null)
                         {
@@ -708,11 +746,39 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    public void DeselectCard()
+    {
+        if((selectedCard || selectedUnit) && Deck.Instance.selectedCardUI != null)
+        {
+            Deck.Instance.selectedCardUI.DeselectCardAnimation();
+        }
+        selectedCard = null;
+        selectedUnit = null;
+
+        clickedTile = null;
+        clickedTiles.Clear();
+        targetedTiles.Clear();
+
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);
+        }
+
+    }
+
     private void OnRoundResetSelection()
     {
         clickedTile = null;
         clickedTiles.Clear();
         targetedTiles.Clear();
+
+        if ((selectedCard || selectedUnit) && Deck.Instance.selectedCardUI != null)
+        {
+            Deck.Instance.selectedCardUI.DeselectCardAnimation();
+            selectedCard = null;
+            selectedUnit = null;
+
+        }
 
         foreach (var tile in tileMeshes)
         {
