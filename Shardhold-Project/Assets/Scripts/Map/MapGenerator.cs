@@ -177,22 +177,10 @@ public class MapGenerator : MonoBehaviour
                 float z = Mathf.Sin(centerRad);
                 Vector3 tileCenter = new Vector3(x, 0.0f, z) * centerDist;
 
-                // Determine Terrain Type and update materials
-                // TODO: read in map terrain info
-
                 Terrain terrain;
                 if (SaveLoad.saveLoad.lastLoadedLanes == null || SaveLoad.saveLoad.lastLoadedLanes.Count < totalLaneCount || SaveLoad.saveLoad.lastLoadedLanes[0].terrains.Count < ringCount)
                 {
-                    // TESTING: even quadrant = default ; odd = mountain
-                    
-                    if (true)//q % 2 == 0)
-                    {
-                        terrain = CreateTerrain(TerrainType.Default);
-                    }
-                    else
-                    {
-                        terrain = CreateTerrain(TerrainType.Mountain);
-                    }
+                    terrain = CreateTerrain(TerrainType.Default);
                 }
                 else
                 {
@@ -204,6 +192,69 @@ public class MapGenerator : MonoBehaviour
                 MapManager.Instance.AddTileToQuadrant(q, mapTile);
             }
         }
+
+        // Generate central circle for Base
+        GameObject centerTile = new GameObject("Tile_R-1_L-1");
+        centerTile.transform.position = new Vector3(0, 0, 0); // Center of grid
+
+        MeshFilter centerMeshFilter = centerTile.AddComponent<MeshFilter>();
+        MeshRenderer centermeshRenderer = centerTile.AddComponent<MeshRenderer>();
+        centerMeshFilter.mesh = GenerateCircleMesh(1.2f, 64); // radius and smoothness
+
+        Terrain centerTerrain = CreateTerrain(TerrainType.Default);
+        SetMeshRendererTerrainMaterial(centerTerrain, centermeshRenderer);
+
+        MeshCollider centerMeshCollider = centerTile.AddComponent<MeshCollider>();
+        centerMeshCollider.sharedMesh = centerMeshFilter.mesh;
+        centerMeshCollider.convex = false;
+
+        centerTile.transform.parent = this.transform;
+
+        tileMeshes[(-1, -1)] = centermeshRenderer;
+    }
+
+    public static Mesh GenerateCircleMesh(float radius, int segments)
+    {
+        Mesh mesh = new Mesh();
+        Vector3[] vertices = new Vector3[segments + 1];
+        int[] triangles = new int[segments * 3];
+        Vector2[] uvs = new Vector2[vertices.Length];
+
+        // Center vertex
+        vertices[0] = Vector3.zero;
+        uvs[0] = new Vector2(0.5f, 0.5f); // center of UV space
+
+        float angleStep = 360.0f / segments;
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = Mathf.Deg2Rad * angleStep * i;
+            float x = Mathf.Cos(angle) * radius;
+            float z = Mathf.Sin(angle) * radius;
+            vertices[i] = new Vector3(x, 0, z);
+
+            // Normalize x and z to [0,1] UV space with origin at (0.5, 0.5)
+            float u = (x / (2 * radius)) + 0.5f;
+            float v = (z / (2 * radius)) + 0.5f;
+            uvs[i] = new Vector2(u, v);
+        }
+
+        for (int i = 0; i < segments; i++)
+        {
+            int current = i + 1;
+            int next = (i + 1) % segments + 1;
+
+            triangles[i * 3] = 0;        // center
+            triangles[i * 3 + 1] = next;
+            triangles[i * 3 + 2] = current;
+        }
+
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.uv = uvs;
+        mesh.RecalculateNormals();
+
+        return mesh;
     }
 
     Mesh CreateCurvedTileMesh(float innerRadius, float outerRadius, float startAngle, float endAngle)
@@ -313,9 +364,9 @@ public class MapGenerator : MonoBehaviour
                     hoveredTile = (r, l);
                     tileMeshes[(r, l)].material.color = hoverColor;
 
-                // Quadrant check and also debugging messages to check for tileactor
-                HoverTile?.Invoke(r, l);
-
+                    // Quadrant check and also debugging messages to check for tileactor
+                    HoverTile?.Invoke(r, l);
+                    Debug.Log($"Hovering over ring:{r} lane{l}");
 
                     // Handle mouse click
                     if (Input.GetMouseButtonDown(0)) // Left click

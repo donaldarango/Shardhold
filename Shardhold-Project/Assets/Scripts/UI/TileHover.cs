@@ -50,6 +50,9 @@ public class TileHover : MonoBehaviour
 
     void OnHover(int ringNumber, int laneNumber)
     {
+        if (ringNumber == -1 && ringNumber == -1)
+            return;
+
         TileActor ta = MapManager.Instance.DoesTileContainTileActor(ringNumber, laneNumber);
         TrapUnit trap = MapManager.Instance.GetTile(ringNumber, laneNumber).GetCurrentTrapUnit();
         // Debug.Log(ta.name);
