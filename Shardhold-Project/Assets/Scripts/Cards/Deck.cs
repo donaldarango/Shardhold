@@ -42,7 +42,7 @@ public class Deck : MonoBehaviour
 
     private bool deckDisabled;
 
-    public List<int> prevDeckContents = new List<int>();
+    public List<int> prevDeckContents = new List<int>();    //use the same format as cardsUnlocked
     public GameObject discardButton;
 
     public enum DrawChoiceMode
@@ -519,7 +519,49 @@ public class Deck : MonoBehaviour
         return true;
     }
 
-    
+    public void GenerateDeckContentList()
+    {
+        prevDeckContents.Clear();
+
+        //start with draw pile
+        for (int i = 0; i < drawPile.Count; i++)
+        {
+            AddCardToDeckContentList(drawPile[i]);
+        }
+
+        //now discard pile
+        for (int i = 0; i < discardPile.Count; i++)
+        {
+            AddCardToDeckContentList(discardPile[i]);
+        }
+
+        //now hand
+        for (int i = 0; i < hand.Length; i++)
+        {
+            if (hand[i] != null)
+            {
+                int id = -1;
+                if (hand[i] is Card)
+                {
+                    id = ((Card)hand[i]).GetId();
+                }
+                else if (hand[i] is AllyUnitStats)
+                {
+                    id = ((AllyUnitStats)hand[i]).GetId();
+                }
+                AddCardToDeckContentList(id);
+            }
+        }
+    }
+
+    private void AddCardToDeckContentList(int cardId)
+    {
+        while(prevDeckContents.Count <= cardId)
+        {
+            prevDeckContents.Add(0);
+        }
+        prevDeckContents[cardId]++;
+    }
 
 
     #endregion
