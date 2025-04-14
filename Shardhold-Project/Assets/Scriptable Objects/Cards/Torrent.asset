@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 2
   cardImage: {fileID: 0}
   cardName: Torrent
-  targetType: 1
+  targetType: 4
   range: 3
   description: Splash . . .
   damage: 1
