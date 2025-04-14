@@ -52,8 +52,6 @@ public class TileHover : MonoBehaviour
     {
         TileActor ta = MapManager.Instance.DoesTileContainTileActor(ringNumber, laneNumber);
         TrapUnit trap = MapManager.Instance.GetTile(ringNumber, laneNumber).GetCurrentTrapUnit();
-        // Debug.Log(ta.name);
-        // Debug.Log(trap.name);
         if (ta != null && trap != null) {
             tileDisplayUI.transform.position = display1.transform.position;
             tileDisplayUI.SetActive(true);
@@ -66,11 +64,13 @@ public class TileHover : MonoBehaviour
         {
             tileDisplayUI.transform.position = display1.transform.position;
             tileDisplayUI.SetActive(true);
+            trapDisplayUI.SetActive(false);
             ShowStats(ta);
         }
         else if (trap != null && ta == null) {
             trapDisplayUI.transform.position = display1.transform.position;
             trapDisplayUI.SetActive(true);
+            tileDisplayUI.SetActive(false);
             ShowTrapStats(trap);
         }
         else {
