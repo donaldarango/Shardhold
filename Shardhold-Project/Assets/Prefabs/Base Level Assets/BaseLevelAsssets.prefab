@@ -4918,6 +4918,7 @@ MonoBehaviour:
   hoverColor: {r: 0, g: 0.12460327, b: 1, a: 0.7058824}
   clickColor: {r: 1, g: 0, b: 0, a: 0.7058824}
   farColor: {r: 0.2, g: 0.6, b: 0.5, a: 1}
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
   terrainConfigs:
   - {fileID: 11400000, guid: 1c1e56264cd89274a846b75e8282d12d, type: 2}
   - {fileID: 11400000, guid: eaa45c9ce077eb145b47511fc924131c, type: 2}
@@ -6453,6 +6454,7 @@ GameObject:
   - component: {fileID: 8054927643532103718}
   - component: {fileID: 8185675897203942478}
   - component: {fileID: 1795943090600750878}
+  - component: {fileID: 4947263059259248746}
   m_Layer: 0
   m_Name: UI Manager
   m_TagString: Untagged
@@ -6531,6 +6533,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnTimer: {fileID: 3670324229399146837}
+--- !u!114 &4947263059259248746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4326096539085824220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6d6dd8b56a116b4fa5e6986dffe6b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCanvas: {fileID: 1369154497886057471}
 --- !u!1 &4333078276383509439
 GameObject:
   m_ObjectHideFlags: 0
