@@ -56,7 +56,6 @@ MonoBehaviour:
     terrain:
       rid: -2
     currentTileActor: {fileID: 0}
-    currentTrapUnit: {fileID: 0}
   actorName: 
   actorType: 0
   maxHealth: 0
@@ -65,17 +64,11 @@ MonoBehaviour:
   actorPrefab: 0
   isShielded: 0
   isPoisoned: 0
-  attackClip: {fileID: 0}
-  damagedClip: {fileID: 0}
-  deathClip: {fileID: 0}
-  placementClip: {fileID: 0}
   spriteHandler: {fileID: 0}
-  damageIndicatorPrefab: {fileID: 7567642599611975315, guid: 21d7a78cb384cd84fa89233cd3a6dacb, type: 3}
   turnSpawned: -1
   terrainType: 0
   enemyStats: {fileID: 0}
   moveSpeed: 0
-  movementClip: {fileID: 0}
   references:
     version: 2
     RefIds:
