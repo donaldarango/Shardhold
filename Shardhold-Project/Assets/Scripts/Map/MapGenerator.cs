@@ -366,7 +366,6 @@ public class MapGenerator : MonoBehaviour
 
                     // Quadrant check and also debugging messages to check for tileactor
                     HoverTile?.Invoke(r, l);
-                    Debug.Log($"Hovering over ring:{r} lane{l}");
 
                     // Handle mouse click
                     if (Input.GetMouseButtonDown(0)) // Left click
