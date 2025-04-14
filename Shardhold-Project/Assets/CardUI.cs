@@ -60,7 +60,10 @@ public class CardUI : MonoBehaviour
         shakeTween.Kill(); // Stop shake tween
         rectTransform.DOKill(); // Stop all tweens on this object
         rectTransform.DOScale(originalScale, 0.5f).SetEase(Ease.OutQuad);
-        rectTransform.anchoredPosition = Vector2.zero; // Reset position
+        if (rectTransform != null)
+        {
+            rectTransform.anchoredPosition = Vector2.zero; // Reset position
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
