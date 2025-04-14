@@ -26,6 +26,7 @@ public class MapGenerator : MonoBehaviour
     public Color hoverColor = new Color(1f, 1f, 0.5f, 0.6f); // Yellowish hover effect
     public Color clickColor = new Color(0.8f, 0.3f, 0.3f, 0.6f); // Red when clicked
     public Color farColor = new Color(0.2f, 0.6f, 0.5f); //Bluish color when out of range
+    public Color flashColor = Color.red;
     public List<TerrainSO> terrainConfigs = new List<TerrainSO>();
 
     public List<GameObject> tileGameObjects = new List<GameObject>();
@@ -59,6 +60,7 @@ public class MapGenerator : MonoBehaviour
 
     private static HashSet<(int, int)> targetedTiles = null;
     private static HashSet<(int, int)> clickedTiles = null;
+    private Dictionary<(int, int), Coroutine> flashingTiles = new Dictionary<(int, int), Coroutine>();
 
     private void OnEnable()
     {
@@ -746,6 +748,61 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+
+    private IEnumerator FlashTileLoop((int, int) tile, float frequency)
+    {
+        if (!tileMeshes.ContainsKey(tile)) yield break;
+
+        MeshRenderer renderer = tileMeshes[tile];
+        Color originalColor = renderer.material.color;
+
+        while (true)
+        {
+            float lerp = Mathf.PingPong(Time.time * frequency, 1f);
+            renderer.material.color = Color.Lerp(originalColor, flashColor, lerp);
+            yield return null;
+        }
+    }
+
+    public void StartFlashingTiles(HashSet<(int, int)> tiles, float frequency = 3f)
+    {
+        foreach (var tile in tiles)
+        {
+            if (tileMeshes.ContainsKey(tile))
+            {
+                // Stop any existing coroutine
+                if (flashingTiles.TryGetValue(tile, out Coroutine existingCoroutine))
+                {
+                    StopCoroutine(existingCoroutine);
+                    flashingTiles.Remove(tile);
+                }
+
+                Coroutine coroutine = StartCoroutine(FlashTileLoop(tile, frequency));
+                flashingTiles[tile] = coroutine;
+            }
+        }
+    }
+
+    public void StopFlashingTiles(HashSet<(int, int)> tiles)
+    {
+        foreach (var tile in tiles)
+        {
+            if (flashingTiles.TryGetValue(tile, out Coroutine coroutine))
+            {
+                StopCoroutine(coroutine);
+                flashingTiles.Remove(tile);
+
+                if (tileMeshes.ContainsKey(tile))
+                {
+                    // Reset to original color or your desired base color
+                    tileMeshes[tile].material.color = defaultColor;
+                }
+            }
+        }
+    }
+
+
+
     public void DeselectCard()
     {
         if((selectedCard || selectedUnit) && Deck.Instance.selectedCardUI != null)
@@ -765,6 +822,7 @@ public class MapGenerator : MonoBehaviour
         }
 
     }
+
 
     private void OnRoundResetSelection()
     {

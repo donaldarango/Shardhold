@@ -467,6 +467,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseLevelAsssets
       objectReference: {fileID: 0}
+    - target: {fileID: 967523223376756264, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
+      propertyPath: runAssertionTesting
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1757930636539802593, guid: 514bac5ca37e70c41ae08c095a59b6f1, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

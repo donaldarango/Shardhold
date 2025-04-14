@@ -141,11 +141,11 @@ public class GameManager : MonoBehaviour
         //Base.Instance.Setup();
     }
 
-    public void LoadTutorialLevel()
+    public void LoadTutorialLevel(int levelNumber)
     {
         Instance.baseStartHealth = -1;
-        currentLevel = "Tutorial";
-        SceneManager.LoadScene("TutorialLevel");
+        currentLevel = "Tutorial_" + levelNumber;
+        SceneManager.LoadScene("Tutorial Level " + levelNumber);
     }
 
     public void RestartLevel()
