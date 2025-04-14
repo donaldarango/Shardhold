@@ -39,7 +39,8 @@ public class MapGenerator : MonoBehaviour
         Quadrant,
         Ring,
         Board,
-        Invalid
+        Invalid,
+        Special
     }
     
     public AllyUnit? selectedUnit = null; 
@@ -461,11 +462,18 @@ public class MapGenerator : MonoBehaviour
                     return;
                 }
 
+                var targetType = card != null ? card.targetType : (unit != null ? unit.stats.targetType : TargetType.Invalid);
+                if (r == -1 && l == -1 && targetType != TargetType.Special)
+                {
+                    return;
+                }
+
+
                 int offset = Mathf.FloorToInt(l / 3) * 3; // Cull targeting into either 0, 3, 6, or 9 so quadrants are respected
                 switch (card != null ? card.targetType : (unit != null ? unit.stats.targetType : TargetType.Invalid))
                 {
+                    case TargetType.Special:
                     case TargetType.Tile: // Single tile, like the prior implementation
-
                         AppendTile((r, l));
                         break;
 
@@ -517,12 +525,28 @@ public class MapGenerator : MonoBehaviour
 
                 }
 
+
                 // Handle mouse click
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    if(clickedTiles.Count > 0) // If there are already some tiles clicked,
+                    if (selectedCard != null && selectedCard.targetType == TargetType.Special)
                     {
-                        if (clickedTiles.Contains((r, l))){ //...remove the red highlight since we reselected the same section.
+                        foreach (var tile in targetedTiles)
+                        {
+                            tileMeshes[tile].material.color = clickColor;
+                            clickedTiles.Add(tile);
+                        }
+                        selectedCard.Play(clickedTiles);
+                        Debug.Log(selectedCard);
+                        Deck.Instance.DiscardCard(selectedHandIndex);
+                        selectedCard = null;
+                        StartCoroutine(RemoveHighlightDelayed(clickedTiles));
+                    }
+
+
+                    if (clickedTiles.Count > 0) // If there are already some tiles clicked,
+                    {
+                        if (clickedTiles.Contains((r, l))){ //...remove  the red highlight since we reselected the same section.
                             Debug.Log("Delete Target");
                             var temp = clickedTiles;
                             clickedTiles.Clear();
@@ -656,22 +680,6 @@ public class MapGenerator : MonoBehaviour
                     }
                 }
             }
-            else if (tileName.Contains("Base"))
-            {
-                if (Input.GetMouseButtonDown(0)) // Left click
-                {
-                    if (card != null && selectedCard != null && card.targetType == TargetType.Tile && card.cardType == CardType.Spell)
-                    {
-                        HashSet<(int, int)> set = new HashSet<(int, int)>();
-                        set.Add((-1, -1));
-                        selectedCard.Play(set);
-                        Debug.Log(selectedCard);
-                        Deck.Instance.DiscardCard(selectedHandIndex);
-                        selectedCard = null;
-                        StartCoroutine(RemoveHighlightDelayed(clickedTiles));
-                    }
-                }
-            }
         }
         else
         {
@@ -705,7 +713,13 @@ public class MapGenerator : MonoBehaviour
         tileMeshes[tile].material.color = hoverColor;
         targetedTiles.Add(tile);
     }
-
+    public void ResetAllTileColors()
+    {
+        foreach (var tile in tileMeshes)
+        {
+            ResetTileColor(tile.Key);// tile.Value.material.color = defaultColor;
+        }
+    }
 
     void ResetTileColor((int, int) tile)
     {
@@ -725,7 +739,15 @@ public class MapGenerator : MonoBehaviour
             // Reset other tile to default color
             tileMeshes[tile].material.color = defaultColor;
         }
-    
+
+        tileMeshes[(-1, -1)].material.color = farColor;
+
+        if((selectedCard != null && selectedCard.targetType == TargetType.Special) || (selectedCard == null && selectedUnit == null))
+        {
+            tileMeshes[(-1, -1)].material.color = defaultColor;
+        }
+
+
     }
 
     public Terrain CreateTerrain(TerrainType terrainType)
