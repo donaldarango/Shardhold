@@ -157,6 +157,13 @@ public class GameManager : MonoBehaviour
     public void LoadMainMenu()
     {
         currentLevel = "";
+
+        if(PauseMenu.isPaused)
+        {
+            PauseMenu.isPaused = false;
+            Time.timeScale = 1f;
+        }
+
         SceneManager.LoadScene("Main-Menu");
     }
     #endregion

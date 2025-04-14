@@ -1,10 +1,7 @@
-using System;
-using DG.Tweening;
-using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using TMPro;
 
 public abstract class TileActor : MonoBehaviour
 {
@@ -37,6 +34,7 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField] protected AudioClip placementClip;
 
     [SerializeField] protected TileActorSpriteHandler spriteHandler;
+    [SerializeField] protected GameObject damageIndicatorPrefab;
 
     protected bool actorDataSet = false;
     public abstract void Spawn(MapTile tile);
@@ -170,12 +168,14 @@ public abstract class TileActor : MonoBehaviour
         if(isShielded)
         {
             isShielded = false;
+            ShowDamageIndicator(0, false);
             Debug.Log($"{gameObject.name}'s shield took the blow and shattered!");
             return;
         }
 
         // Damage amount is a variable, special cases like Traps will pass in a low number like 1 to reduce usage number.
         currentHealth -= damageAmount;
+        ShowDamageIndicator(damageAmount, false);
         spriteHandler.SpriteDamageAnimation();
 
         if(damagedClip)
@@ -190,6 +190,33 @@ public abstract class TileActor : MonoBehaviour
             Die();
         }
     }
+
+    public void ShowDamageIndicator(int amount, bool isHealing)
+    {
+        if (IndicatorUIManager.Instance == null || IndicatorUIManager.Instance.damageCanvas == null)
+        {
+            Debug.LogError("UIManager or DamageCanvas not set!");
+            return;
+        }
+
+        Vector3 offset = new Vector3(UnityEngine.Random.Range(-0.7f, 0.7f), 0.0f, 0); // world-space offset to left & slightly up
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + offset);
+        GameObject indicator = Instantiate(damageIndicatorPrefab, IndicatorUIManager.Instance.damageCanvas.transform);
+        indicator.transform.position = screenPos;
+
+        TMP_Text text = indicator.GetComponent<TMP_Text>();
+
+        // Set text and color
+        text.text = (isHealing ? "+" : "-") + Mathf.Abs(amount).ToString();
+        text.color = isHealing ? Color.green : Color.red;
+
+        float scaleFactor = Mathf.Clamp01((float)amount / 5); // between 0 and 1
+        float baseScale = 1f;
+        float extraScale = 0.5f;
+
+        indicator.transform.localScale = Vector3.one * (baseScale + scaleFactor * extraScale);
+    }
+
 
     public virtual void ShowStats()
     {
