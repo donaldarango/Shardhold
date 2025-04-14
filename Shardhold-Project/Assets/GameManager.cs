@@ -141,11 +141,11 @@ public class GameManager : MonoBehaviour
         //Base.Instance.Setup();
     }
 
-    public void LoadTutorialLevel()
+    public void LoadTutorialLevel(int levelNumber)
     {
         Instance.baseStartHealth = -1;
-        currentLevel = "Tutorial";
-        SceneManager.LoadScene("TutorialLevel");
+        currentLevel = "Tutorial_" + levelNumber;
+        SceneManager.LoadScene("Tutorial Level " + levelNumber);
     }
 
     public void RestartLevel()
@@ -157,6 +157,13 @@ public class GameManager : MonoBehaviour
     public void LoadMainMenu()
     {
         currentLevel = "";
+
+        if(PauseMenu.isPaused)
+        {
+            PauseMenu.isPaused = false;
+            Time.timeScale = 1f;
+        }
+
         SceneManager.LoadScene("Main-Menu");
     }
     #endregion
