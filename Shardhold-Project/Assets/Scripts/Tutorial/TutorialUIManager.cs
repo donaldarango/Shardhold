@@ -12,7 +12,8 @@ public class TutorialUIManager : MonoBehaviour
     public static event NextButtonPressedHandler NextButtonPressed;
 
     public RectTransform tutorialUITransfom;
-    public Canvas canvas;
+    public GameObject tutorialUI;
+    public GameObject finishTutorialUI;
     public TMP_Text titleText;
     public TMP_Text explanationText;
     public Button nextButton;
@@ -45,7 +46,12 @@ public class TutorialUIManager : MonoBehaviour
 
     public void ToggleTutorialUI(bool enabled)
     {
-        canvas.enabled = enabled;
+        tutorialUI.SetActive(enabled);
+    }
+
+    public void ToggleFinishTutorialUI(bool enabled)
+    {
+        finishTutorialUI.SetActive(enabled);
     }
 
     public void HideNextButton()
