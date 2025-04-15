@@ -108,7 +108,7 @@
     "baseWeapon": -1,
     "spawnedTileActors": [
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -121,7 +121,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -133,7 +133,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -146,7 +146,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -159,7 +159,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -171,7 +171,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -184,7 +184,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -197,7 +197,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -209,7 +209,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -222,7 +222,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -235,7 +235,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -248,7 +248,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -261,7 +261,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -274,7 +274,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -286,7 +286,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -299,7 +299,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -312,7 +312,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -324,7 +324,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -337,7 +337,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -350,7 +350,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -362,7 +362,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -375,7 +375,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -388,7 +388,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -401,7 +401,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -414,7 +414,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -427,7 +427,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -439,7 +439,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -452,7 +452,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -465,7 +465,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -477,7 +477,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -490,7 +490,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -503,7 +503,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -515,7 +515,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -528,7 +528,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -541,7 +541,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -554,7 +554,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 2,
@@ -567,7 +567,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -580,7 +580,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -592,7 +592,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -605,7 +605,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -618,7 +618,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -630,7 +630,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -643,7 +643,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -656,7 +656,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -668,7 +668,7 @@
             "isShielded": false,
             "isPoisoned": false
         },        {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -681,7 +681,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -694,7 +694,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -707,7 +707,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 3,
@@ -726,11 +726,11 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 4,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 10,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 }
             ]
         },
@@ -739,15 +739,15 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 1,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 },
                 {
                     "laneNumber": 7,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 9,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 }
             ]
         },
@@ -756,27 +756,27 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 0,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 3,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 },
                 {
                     "laneNumber": 6,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 },
                 {
                     "laneNumber": 8,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 10,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 },
                 {
                     "laneNumber": 11,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 }
             ]
         }

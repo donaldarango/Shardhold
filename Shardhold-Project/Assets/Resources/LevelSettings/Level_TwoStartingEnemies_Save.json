@@ -108,7 +108,7 @@
     "baseWeapon": -1,
     "spawnedTileActors": [
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 0,
@@ -121,7 +121,7 @@
             "isPoisoned": false
         },
         {
-            "name": "Basic Melee Enemy",
+            "name": "Brawler",
             "curHealth": 3,
             "pos": {
                 "x": 1,
@@ -140,7 +140,7 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 10,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 }
             ]
         }

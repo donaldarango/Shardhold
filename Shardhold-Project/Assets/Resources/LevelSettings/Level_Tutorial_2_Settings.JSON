@@ -30,7 +30,7 @@
                 "RoundNumber": 1,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 0
                     }
                 ]
@@ -39,7 +39,7 @@
                 "RoundNumber": 2,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Brawler",
                         "LaneNumber": 1
                     }
                 ]

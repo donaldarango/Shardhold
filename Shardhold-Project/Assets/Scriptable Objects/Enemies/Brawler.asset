@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac647accb1740cd468efb8e82c126426, type: 3}
-  m_Name: Basic Tank Enemy
+  m_Name: Brawler
   m_EditorClassIdentifier: 
-  unitName: Basic Tank Enemy
+  unitName: Brawler
   actorType: 0
-  maxHealth: 4
+  maxHealth: 3
   attackRange: 1
   damage: 1
   isShielded: 0
@@ -23,6 +23,6 @@ MonoBehaviour:
   damagedClip: {fileID: 8300000, guid: 9ac3b1dc4c89821499f235b1995acf54, type: 3}
   deathClip: {fileID: 8300000, guid: bd779682bb4812a40a9106772a8ebed5, type: 3}
   placementClip: {fileID: 8300000, guid: 5a789614bac84a744b031e95ebc61819, type: 3}
-  actorPrefab: {fileID: 9028454918137198027, guid: 5e388f65e12e800469962a03516cb8be, type: 3}
+  actorPrefab: {fileID: 9028454918137198027, guid: 741a4d89f5d8c1548932293583ecac33, type: 3}
   moveSpeed: 1
   movementClip: {fileID: 8300000, guid: bfc4e07ddcbbed84f8176f515f9bfe0d, type: 3}
