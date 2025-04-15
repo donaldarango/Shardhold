@@ -17,7 +17,7 @@ MonoBehaviour:
   cardName: Torrent
   targetType: 4
   range: 3
-  description: Splash . . .
+  description: 
   damage: 2
   hp: 0
   audioClip: {fileID: 8300000, guid: cec2feb2cacdb004db2c4ce6b3bf4e91, type: 3}

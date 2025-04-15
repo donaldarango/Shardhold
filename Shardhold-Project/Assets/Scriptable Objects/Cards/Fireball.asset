@@ -17,7 +17,7 @@ MonoBehaviour:
   cardName: Fireball
   targetType: 3
   range: 2
-  description: Fireball!
+  description: 
   damage: 2
   hp: 0
   audioClip: {fileID: 8300000, guid: f2665a19f3fe30b4598752934ef56314, type: 3}
