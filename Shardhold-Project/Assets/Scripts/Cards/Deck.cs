@@ -490,6 +490,10 @@ public class Deck : MonoBehaviour
 
             var button = discardButton.GetComponent<Button>();
             button.enabled = false;
+
+            MapGenerator.Instance.selectedCard = null;
+            MapGenerator.Instance.selectedUnit = null;
+            MapGenerator.Instance.ResetAllTileColors();
         }
     }
 

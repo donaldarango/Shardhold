@@ -66,11 +66,8 @@ public class TutorialManager : MonoBehaviour
         {
             TutorialUIManager.Instance.ToggleTutorialUI(false);
 
-            // Resume and Enable Turn Timer
-            UIManager.Instance.ResumeTurnTimer();
-            UIManager.Instance.EnableTimerButton();
-
             // Add tutorial completion text
+            TutorialUIManager.Instance.ToggleFinishTutorialUI(true);
 
             return;
         }
