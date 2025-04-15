@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 54951693251145052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.69945, y: 0.69945, z: 0.69945}
+  m_LocalScale: {x: 0.99209994, y: 0.99209994, z: 0.99209994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4756148451919905981}
@@ -58,14 +58,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.06132078, b: 0.06132078, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 378e25d9450250749a17968b95fbe985, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -574,7 +574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.42138356, g: 0.42138356, b: 0.42138356, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1099,6 +1099,7 @@ RectTransform:
   m_Children:
   - {fileID: 7326497886481251623}
   - {fileID: 125871045528373036}
+  - {fileID: 7358709570549406709}
   - {fileID: 4756148451919905981}
   - {fileID: 8950709292609220770}
   - {fileID: 4460736474571755128}
@@ -1127,7 +1128,10 @@ MonoBehaviour:
   hp: {fileID: 8639849292249527257}
   range: {fileID: 8779954771177651963}
   damage: {fileID: 6404841501900843566}
+  cardIndex: 0
+  isSelected: 0
   card_: {fileID: 0}
+  unit_: {fileID: 0}
   cardButton: {fileID: 0}
 --- !u!114 &1932474694199154152
 MonoBehaviour:
@@ -1421,7 +1425,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7812805566085043476
 CanvasRenderer:
@@ -1562,16 +1566,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8027409302702729207}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0916, y: 0.969141, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 125871045528373036}
+  m_Father: {fileID: 4811998012526666034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.3, y: 19.4}
+  m_AnchoredPosition: {x: 0.3275065, y: -48}
   m_SizeDelta: {x: 125, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1359053215176045185
@@ -1629,8 +1633,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1667,7 +1671,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: -10.781982}
+  m_margin: {x: -6.1582336, y: 0, z: -4.704262, w: -12.313076}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1777,17 +1781,16 @@ RectTransform:
   m_GameObject: {fileID: 8978541848724568144}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5.2654295, y: 5.4761353, z: 4.7064}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6278092501055070158}
-  - {fileID: 7358709570549406709}
   m_Father: {fileID: 4811998012526666034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -75}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2418174950485040983
 CanvasRenderer:
