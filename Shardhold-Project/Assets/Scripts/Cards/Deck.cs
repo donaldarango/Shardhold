@@ -665,9 +665,12 @@ public class Deck : MonoBehaviour
             Debug.Log($"deckContinuityFolder: {deckContinuityFolder}");
         }
 
-        if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
+        if (CustomDebug.instance.saveTestOutput)
         {
-            SavePrevDeck(folderDate);
+            if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
+            {
+                SavePrevDeck(folderDate);
+            }
         }
 
     }
