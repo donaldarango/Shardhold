@@ -718,7 +718,7 @@ public class SaveLoad : MonoBehaviour
     {
         //TODO remove any map effects or similar; don't worry about adjusting base HP or weapon, as these will be set when loading anyways
 
-
+        Deck.Instance.deckContinuityFolder = "";
 
         List<TileActor> actors = MapManager.Instance.GetTileActorList(true);
 

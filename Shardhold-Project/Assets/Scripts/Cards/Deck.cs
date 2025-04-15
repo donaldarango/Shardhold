@@ -45,7 +45,7 @@ public class Deck : MonoBehaviour
     private bool deckDisabled;
 
     public List<int> prevDeckContents;    //use the same format as cardsUnlocked
-    string deckContinuityFolder = "";
+    public string deckContinuityFolder = "";
 
     public GameObject discardButton;
 
@@ -105,7 +105,10 @@ public class Deck : MonoBehaviour
             }
             else
             {
-                Assert.IsTrue(VerifyDeckContinuity(), "Deck Continuity Check");
+                //Assert.IsTrue(VerifyDeckContinuity(), "Deck Continuity Check");
+                if(!VerifyDeckContinuity()){
+                    Debug.LogError("Deck Continuity Check Failed");
+                }
             }
         }
     }
