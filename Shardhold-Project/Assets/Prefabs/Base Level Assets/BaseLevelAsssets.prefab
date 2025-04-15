@@ -10014,9 +10014,10 @@ MonoBehaviour:
   deckDebugging: 1
   saveLoadDebugging: 3
   cusmtomMathDebugging: 1
-  runAssertionTesting: 0
+  runAssertionTesting: 1
   saveTestOutput: 1
   saveVerificationTesting: 1
+  deckContinuityTesting: 1
 --- !u!1 &6844251887469120612
 GameObject:
   m_ObjectHideFlags: 0
