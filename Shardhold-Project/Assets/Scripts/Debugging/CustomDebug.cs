@@ -28,6 +28,7 @@ public class CustomDebug : MonoBehaviour
     public bool runAssertionTesting = false;
     public bool saveTestOutput = true;
     public bool saveVerificationTesting = false;    //make a save, but keep the GameStateData object; then, load the save and make another GameStateData object and compare it to the first (requires making an .equals() function for GameStateData)
+    public bool deckContinuityTesting = false;      //check that the contents of the player's deck do not change from turn to turn
     //public GameStateData prevData;
     #endregion
 
@@ -123,6 +124,27 @@ public class CustomDebug : MonoBehaviour
                 Debug.Log("TEST NUMBER " + testNum + "\nExpected frequency: " + (100 * expectedFrequency) + "%" + output);
             }
         }
+    }
+
+    public static void FinishTest(string log, string logFile, string saveLocation)
+    {
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
+        {
+            Debug.Log(log);
+        }
+        if (CustomDebug.instance.saveTestOutput)
+        {
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+            {
+                Debug.Log("Results saved to log file: " + logFile);
+            }
+            SaveLoad.saveLoad.WriteFile(logFile, saveLocation, log);
+        }
+    }
+
+    public static void FinishTest(string log, string logFile, SaveLoad.SaveType saveType)
+    {
+        FinishTest(log, logFile, SaveLoad.saveLoad.GetSaveLocation(saveType));
     }
 
     #endregion
