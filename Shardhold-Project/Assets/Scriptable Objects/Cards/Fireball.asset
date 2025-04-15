@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   id: 0
-  cardImage: {fileID: 21300000, guid: c712d3133c8a2954a84637cff867d5a1, type: 3}
+  cardImage: {fileID: 21300000, guid: 19ed62b8ca9f4cc4986e244edad2b13e, type: 3}
   cardName: Fireball
   targetType: 3
   range: 2
@@ -24,3 +24,4 @@ MonoBehaviour:
   audioVolume: 10
   heal: 0
   friendlyFire: 1
+  unincludeUnits: 0
