@@ -34,7 +34,7 @@
                         "LaneNumber": 2
                     },
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 5
                     }
                 ]
@@ -43,15 +43,15 @@
                 "RoundNumber": 2,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Tank Enemy",
+                        "EnemyUnit": "Bulwark",
                         "LaneNumber": 8
                     },
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Brawler",
                         "LaneNumber": 3
                     },
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 11
                     }
                 ]
@@ -60,11 +60,11 @@
                 "RoundNumber": 3,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Brawler",
                         "LaneNumber": 4
                     },
                     {
-                        "EnemyUnit": "Basic Tank Enemy",
+                        "EnemyUnit": "Bulwark",
                         "LaneNumber": 10
                     }
                 ]
@@ -73,15 +73,15 @@
                 "RoundNumber": 4,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 1
                     },
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Brawler",
                         "LaneNumber": 7
                     },
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 9
                     }
                 ]
@@ -90,27 +90,27 @@
                 "RoundNumber": 5,
                 "RoundSpawnList": [
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Brawler",
                         "LaneNumber": 0
                     },
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 3
                     },
                     {
-                        "EnemyUnit": "Basic Tank Enemy",
+                        "EnemyUnit": "Bulwark",
                         "LaneNumber": 6
                     },
                     {
-                        "EnemyUnit": "Basic Melee Enemy",
+                        "EnemyUnit": "Brawler",
                         "LaneNumber": 8
                     },
                     {
-                        "EnemyUnit": "Basic Ranged Enemy",
+                        "EnemyUnit": "Ranger",
                         "LaneNumber": 10
                     },
                     {
-                        "EnemyUnit": "Basic Tank Enemy",
+                        "EnemyUnit": "Bulwark",
                         "LaneNumber": 11
                     }
                 ]

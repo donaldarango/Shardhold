@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3813313640588697007}
   - component: {fileID: 4173426550529552452}
   m_Layer: 0
-  m_Name: BasicTankEnemy
+  m_Name: BrawlerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d92131bc801c944a01ca6f5f87d2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileActorStats: {fileID: 11400000, guid: 3bf19a004edbf0d4aa9c2693f4e957e3, type: 2}
+  tileActorStats: {fileID: 11400000, guid: 8aed781e7f73ade4cb33eea5c87353bc, type: 2}
   currentHealth: 0
   currentTile:
     name: 'Ring: 3, Lane: 11'
@@ -54,7 +54,7 @@ MonoBehaviour:
     ringNumber: 3
     laneNumber: 11
     terrain:
-      rid: 5115033019048526655
+      rid: 7230171311504098155
     currentTileActor: {fileID: 2386779281966005913}
     currentTrapUnit: {fileID: 0}
   actorName: 
@@ -79,7 +79,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5115033019048526655
+    - rid: 7230171311504098155
       type: {class: MountainTerrain, ns: , asm: Assembly-CSharp}
       data:
         terrainType: 3
@@ -142,7 +142,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1841409477, guid: ac20a41f9af720b4dbcf5c4adb50821f, type: 3}
+  m_Sprite: {fileID: 1941158673, guid: ac20a41f9af720b4dbcf5c4adb50821f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -180,7 +180,7 @@ public abstract class TileActor : MonoBehaviour
 
         if(damagedClip)
         {
-            SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, .8f);
+            SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, .3f);
         }
 
         Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining HP: {currentHealth}");
@@ -235,7 +235,7 @@ public abstract class TileActor : MonoBehaviour
     {
         if(deathClip)
         {
-            SoundFXManager.instance.PlaySoundFXClip(deathClip, gameObject.transform, 5f);
+            SoundFXManager.instance.PlaySoundFXClip(deathClip, gameObject.transform, 0.5f);
         }
         // Remove Enemy from grid if necessary.
         Destroy(gameObject);
