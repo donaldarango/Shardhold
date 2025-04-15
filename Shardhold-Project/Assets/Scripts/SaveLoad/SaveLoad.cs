@@ -13,6 +13,7 @@ using TMPro;
 using NUnit.Framework;
 
 using static CustomDebug;
+using UnityEditor;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -79,6 +80,47 @@ public class SaveLoad : MonoBehaviour
     }
 
     #region Text File I/O
+
+    /*public bool CreateFolder(string path)
+    {
+        try
+        {
+            AssetDatabase.CreateFolder(path);
+        }
+        catch (Exception e)
+        {
+            if (CustomDebug.Debugging(DebuggingType.ErrorOnly))
+            {
+                Debug.LogError("ERROR when trying to create folder \"" + path + "\", see message: " + e.Message);
+            }
+            return false;
+        }
+        return true;
+    }*/
+
+    public bool CreateFolder(string folder, string folderLocation)
+    {
+
+        try
+        {
+            AssetDatabase.CreateFolder(folderLocation, folder);
+        }
+        catch (Exception e)
+        {
+            if (CustomDebug.Debugging(DebuggingType.ErrorOnly))
+            {
+                Debug.LogError("ERROR when trying to create folder \"" + folder + "\" at location \"" + folderLocation + "\""  + "\", see message: " + e.Message);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public bool CreateFolder(string folder, SaveType saveType)
+    {
+        return CreateFolder(folder, GetSaveLocation(saveType));
+    }
+
     public void WriteFile(string filename, string fileLocation, string contents)
     {
         try
@@ -204,7 +246,7 @@ public class SaveLoad : MonoBehaviour
             Load(filename, saveType, fileType);
             GameStateData verificationData = CreateData();
             JsonSave("saveVerificationTestData.json", SaveType.misc, verificationData);
-            Assert.IsTrue(StrictDataCompare(data, verificationData));
+            Assert.IsTrue(StrictDataCompare(data, verificationData), "Save Verification");
         }
 
         return output;
@@ -976,6 +1018,8 @@ public class SaveLoad : MonoBehaviour
         }
     }
 
+    #region Strict Data Compare
+
     public bool StrictDataCompare(GameStateData data1, GameStateData data2)
     {
         DateTime compareDate = DateTime.Now;
@@ -983,7 +1027,7 @@ public class SaveLoad : MonoBehaviour
         //Debug.Log(DateTime.Now.ToFileTimeUtc());  //the current time
         string logFile = "StrictDataCompareOutput_" + compareDate.ToFileTimeUtc() + ".txt";
 
-        string log = "Strict GameStateData Comparison Results\n";
+        string log = "Strict GameStateData Comparison - Results\n";
         log += "Date/Time:" + Tab() + compareDate.ToString("G") + "\n\n";
 
         log += "PER-SECTION RESULTS:\n";
@@ -1196,18 +1240,7 @@ public class SaveLoad : MonoBehaviour
             log += failStr;
         }
 
-        if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
-        {
-            Debug.Log(log);
-        }
-        if (CustomDebug.instance.saveTestOutput)
-        {
-            if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
-            {
-                Debug.Log("Results saved to log file: " + logFile);
-            }
-            WriteFile(logFile, GetSaveLocation(SaveType.debugging), log);
-        }
+        FinishTest(log, logFile, SaveType.debugging);
 
         return output;
     }
@@ -1377,6 +1410,8 @@ public class SaveLoad : MonoBehaviour
 
         return output;
     }
+
+    #endregion
 }
 
 [Serializable]
