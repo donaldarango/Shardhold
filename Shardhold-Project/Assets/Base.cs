@@ -81,6 +81,7 @@ public class Base : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+        Debug.Log("Base healed by " + amount + ", now at " + currentHealth);
     }
 
     void GameOver()

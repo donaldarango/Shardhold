@@ -18,9 +18,10 @@ MonoBehaviour:
   targetType: 4
   range: 3
   description: Splash . . .
-  damage: 1
+  damage: 2
   hp: 0
   audioClip: {fileID: 8300000, guid: cec2feb2cacdb004db2c4ce6b3bf4e91, type: 3}
   audioVolume: 10
   heal: 0
   friendlyFire: 0
+  unincludeUnits: 0
