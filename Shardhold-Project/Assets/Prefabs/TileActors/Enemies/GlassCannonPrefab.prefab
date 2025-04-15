@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6807926158276113094}
   - component: {fileID: 2034121029856621942}
   m_Layer: 0
-  m_Name: Glass Cannon
+  m_Name: GlassCannonPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
