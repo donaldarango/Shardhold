@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Prank
   m_EditorClassIdentifier: 
   id: 5
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: 8f1e53c816a4eab4ba7e16a37f71f4c6, type: 3}
   cardName: Prank
   targetType: 0
   range: 3
