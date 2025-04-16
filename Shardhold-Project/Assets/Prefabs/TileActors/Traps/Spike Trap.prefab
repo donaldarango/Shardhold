@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114578275618366385}
   - component: {fileID: 2591245851390577235}
   - component: {fileID: 6890492159453199993}
+  - component: {fileID: 6097373265154647225}
   m_Layer: 0
   m_Name: Spike Trap
   m_TagString: Untagged
@@ -90,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b938d522b7ef3a04abf07f51cf1e6994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipSprite: 0
 --- !u!212 &6890492159453199993
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -145,3 +147,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6097373265154647225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4056473965733300984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9a446af6aaa8d48a10eba03bdcca10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

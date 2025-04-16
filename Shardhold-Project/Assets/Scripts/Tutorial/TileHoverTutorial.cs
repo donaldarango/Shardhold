@@ -24,6 +24,7 @@ public class TileHoverTutorial : Tutorial
 
     public override void TutorialStart()
     {
+        base.TutorialStart();
         TutorialUIManager.Instance.HideNextButton();
     }
 
