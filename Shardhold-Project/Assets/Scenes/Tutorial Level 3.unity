@@ -897,6 +897,7 @@ MonoBehaviour:
     your hand with any remaining hp.
   settings: 02000000
   position: 1
+  highlightTiles: []
 --- !u!114 &708266800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,11 +916,11 @@ MonoBehaviour:
   explanation: Play the 'Bird' card and attack the enemy!
   settings: 
   position: 1
-  cardIndexToPlay: 0
-  cardIdToPlay: 7
-  playableTiles:
+  highlightTiles:
   - ringNumber: 3
     laneNumber: 0
+  cardIndexToPlay: 0
+  cardIdToPlay: 7
 --- !u!114 &708266801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -940,6 +941,7 @@ MonoBehaviour:
     enemies in different tiles.
   settings: 
   position: 1
+  highlightTiles: []
 --- !u!114 &708266802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -958,6 +960,7 @@ MonoBehaviour:
   explanation: The 'Bird' card has returned to your hand with 1 hp.
   settings: 04000000
   position: 1
+  highlightTiles: []
 --- !u!114 &708266803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,11 +979,11 @@ MonoBehaviour:
   explanation: Play the 'Bird' card again and attack the enemy!
   settings: 04000000
   position: 1
-  cardIndexToPlay: 0
-  cardIdToPlay: 7
-  playableTiles:
+  highlightTiles:
   - ringNumber: 3
     laneNumber: 0
+  cardIndexToPlay: 0
+  cardIdToPlay: 7
 --- !u!1 &810129240
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,6 +1483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorials: []
   currentTutorial: {fileID: 0}
+  currentTutorialIndex: 0
 --- !u!1 &1686557803
 GameObject:
   m_ObjectHideFlags: 0
@@ -2048,9 +2052,7 @@ MonoBehaviour:
     tiles, dealing 1 damage to each enemy in its range.
   settings: 0500000002000000
   position: 1
-  cardIndexToPlay: 0
-  cardIdToPlay: 2
-  playableTiles:
+  highlightTiles:
   - ringNumber: 2
     laneNumber: 0
   - ringNumber: 2
@@ -2075,6 +2077,8 @@ MonoBehaviour:
     laneNumber: 10
   - ringNumber: 2
     laneNumber: 11
+  cardIndexToPlay: 0
+  cardIdToPlay: 2
 --- !u!114 &2089000476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2095,6 +2099,7 @@ MonoBehaviour:
     first wave of enemies.
   settings: 0000000004000000
   position: 0
+  highlightTiles: []
 --- !u!114 &2089000477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2115,6 +2120,7 @@ MonoBehaviour:
     Press the turn timer to continue.
   settings: 0400000003000000
   position: 0
+  highlightTiles: []
 --- !u!222 &10476308680558123
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3449,7 +3455,9 @@ MonoBehaviour:
   - {fileID: 0}
   UIHand:
   - {fileID: 0}
+  deckDisabled: 0
   prevDeckContents: 
+  deckContinuityFolder: 
   discardButton: {fileID: 379988527919245828}
   drawChoiceMode: 1
 --- !u!1 &796184970734670247
@@ -3689,6 +3697,7 @@ MonoBehaviour:
   runAssertionTesting: 0
   saveTestOutput: 1
   saveVerificationTesting: 1
+  deckContinuityTesting: 0
 --- !u!114 &973552034377159088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14332,6 +14341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b938d522b7ef3a04abf07f51cf1e6994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipSprite: 0
 --- !u!114 &8054927644104766730
 MonoBehaviour:
   m_ObjectHideFlags: 0

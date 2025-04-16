@@ -1339,6 +1339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorials: []
   currentTutorial: {fileID: 0}
+  currentTutorialIndex: 0
 --- !u!1 &1686557803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1911,15 +1912,15 @@ MonoBehaviour:
     they are destroyed. '
   settings: 05000000
   position: 1
-  cardIndexToPlay: 0
-  cardIdToPlay: 3
-  playableTiles:
+  highlightTiles:
   - ringNumber: 1
     laneNumber: 0
   - ringNumber: 1
     laneNumber: 1
   - ringNumber: 1
     laneNumber: 2
+  cardIndexToPlay: 0
+  cardIdToPlay: 3
 --- !u!114 &2089000476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1940,6 +1941,7 @@ MonoBehaviour:
     the first wave of enemies.
   settings: 00000000
   position: 0
+  highlightTiles: []
 --- !u!114 &2089000477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1960,6 +1962,7 @@ MonoBehaviour:
     from 2 tiles away
   settings: 04000000
   position: 0
+  highlightTiles: []
 --- !u!114 &2089000478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1979,11 +1982,11 @@ MonoBehaviour:
     on the highlighted tile to damage them when they move to that tile. '
   settings: 05000000
   position: 1
-  cardIndexToPlay: 0
-  cardIdToPlay: 5
-  playableTiles:
+  highlightTiles:
   - ringNumber: 2
     laneNumber: 1
+  cardIndexToPlay: 0
+  cardIdToPlay: 5
 --- !u!114 &2089000479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2005,6 +2008,7 @@ MonoBehaviour:
     with lots of health.
   settings: 02000000
   position: 0
+  highlightTiles: []
 --- !u!114 &2089000480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2023,6 +2027,7 @@ MonoBehaviour:
   explanation: This is basics of placing structures within Shardhold!
   settings: 04000000
   position: 0
+  highlightTiles: []
 --- !u!114 &2089000481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,6 +2046,7 @@ MonoBehaviour:
   explanation: 'Press the timer button to finsish your turn. '
   settings: 0300000004000000
   position: 0
+  highlightTiles: []
 --- !u!114 &2089000482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2060,6 +2066,9 @@ MonoBehaviour:
     has 1/2 hp and the enemy has 2/3 hp.
   settings: 02000000
   position: 0
+  highlightTiles:
+  - ringNumber: 2
+    laneNumber: 1
   ringNumber: 2
   laneNumber: 1
 --- !u!222 &10476309632679381
@@ -3396,7 +3405,9 @@ MonoBehaviour:
   - {fileID: 0}
   UIHand:
   - {fileID: 0}
+  deckDisabled: 0
   prevDeckContents: 
+  deckContinuityFolder: 
   discardButton: {fileID: 379988529139782138}
   drawChoiceMode: 1
 --- !u!1 &796184971728726617
@@ -3636,6 +3647,7 @@ MonoBehaviour:
   runAssertionTesting: 0
   saveTestOutput: 1
   saveVerificationTesting: 1
+  deckContinuityTesting: 0
 --- !u!114 &973552033383115342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14279,6 +14291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b938d522b7ef3a04abf07f51cf1e6994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipSprite: 0
 --- !u!114 &8054927642875825908
 MonoBehaviour:
   m_ObjectHideFlags: 0
