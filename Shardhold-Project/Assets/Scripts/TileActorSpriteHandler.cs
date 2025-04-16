@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class TileActorSpriteHandler : MonoBehaviour
 {
-    private Transform cameraTransform;
     private SpriteRenderer spriteRenderer;
 
     public bool flipSprite = false;
@@ -11,15 +10,7 @@ public class TileActorSpriteHandler : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        cameraTransform = Camera.main.transform;
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.LookAt(cameraTransform);
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
     }
 
     public void SpriteDamageAnimation()
