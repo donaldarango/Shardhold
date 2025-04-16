@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b938d522b7ef3a04abf07f51cf1e6994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipSprite: 1
 --- !u!212 &2034121029856621942
 SpriteRenderer:
   m_ObjectHideFlags: 0

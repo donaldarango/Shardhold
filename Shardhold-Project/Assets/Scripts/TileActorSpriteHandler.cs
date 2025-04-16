@@ -6,6 +6,8 @@ public class TileActorSpriteHandler : MonoBehaviour
     private Transform cameraTransform;
     private SpriteRenderer spriteRenderer;
 
+    public bool flipSprite = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -30,9 +32,14 @@ public class TileActorSpriteHandler : MonoBehaviour
 
     public void SetSpriteOrientation(Quadrant quadrant)
     {
-        if (quadrant == Quadrant.NW || quadrant == Quadrant.SW) // If sprite is on left half of map
+        if (flipSprite)
         {
             spriteRenderer.flipX = true;
+        }
+
+        if (quadrant == Quadrant.NW || quadrant == Quadrant.SW) // If sprite is on left half of map
+        {
+            spriteRenderer.flipX = !flipSprite;
         }
     }
 
