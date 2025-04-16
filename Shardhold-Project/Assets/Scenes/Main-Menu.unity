@@ -908,7 +908,6 @@ GameObject:
   - component: {fileID: 155206739}
   - component: {fileID: 155206738}
   - component: {fileID: 155206737}
-  - component: {fileID: 155206736}
   m_Layer: 5
   m_Name: Level 5
   m_TagString: Untagged
@@ -936,18 +935,6 @@ RectTransform:
   m_AnchoredPosition: {x: 250, y: -200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &155206736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155206734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35880920b55d004093f9a47b0cd37aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &155206737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,7 +974,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 155206738}
   m_OnClick:
     m_PersistentCalls:
@@ -2175,12 +2162,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadLevel
-        m_Mode: 5
+        m_MethodName: LoadTutorialLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 1
           m_BoolArgument: 0
@@ -2975,7 +2962,6 @@ GameObject:
   - component: {fileID: 963502246}
   - component: {fileID: 963502245}
   - component: {fileID: 963502244}
-  - component: {fileID: 963502243}
   m_Layer: 5
   m_Name: Level 2 (Tutorial)
   m_TagString: Untagged
@@ -3003,18 +2989,6 @@ RectTransform:
   m_AnchoredPosition: {x: -125, y: -200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &963502243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963502241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35880920b55d004093f9a47b0cd37aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &963502244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5354,7 +5328,6 @@ GameObject:
   - component: {fileID: 2102184566}
   - component: {fileID: 2102184565}
   - component: {fileID: 2102184564}
-  - component: {fileID: 2102184563}
   m_Layer: 5
   m_Name: Level 4
   m_TagString: Untagged
@@ -5382,18 +5355,6 @@ RectTransform:
   m_AnchoredPosition: {x: 125, y: -200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2102184563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102184561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35880920b55d004093f9a47b0cd37aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2102184564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5433,19 +5394,19 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 2102184565}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadLevel
-        m_Mode: 5
+        m_MethodName: LoadTutorialLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 1
           m_BoolArgument: 0

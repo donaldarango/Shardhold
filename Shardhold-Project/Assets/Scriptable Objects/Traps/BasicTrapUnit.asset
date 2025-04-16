@@ -16,7 +16,7 @@ MonoBehaviour:
   actorType: 2
   maxHealth: 2
   attackRange: 0
-  damage: 1
+  damage: 2
   isShielded: 0
   isPoisoned: 0
   attackClip: {fileID: 8300000, guid: dda6dd328384c7c4398a7ba3a35dd56e, type: 3}

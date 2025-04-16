@@ -70,7 +70,10 @@ public class Base : MonoBehaviour
     {
         currentHealth -= amount;
         Debug.Log("Base HP: " + currentHealth);
-        baseHP.text = currentHealth + "/" + maxHealth;
+        if (baseHP)
+        {
+            baseHP.text = currentHealth + "/" + maxHealth;
+        }
         if (currentHealth <= 0)
         {
             GameOver();
@@ -80,11 +83,14 @@ public class Base : MonoBehaviour
     public void Heal(int amount)
     {
         currentHealth += amount;
-        baseHP.text = currentHealth + "/" + maxHealth;
 
         if(currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
+        }
+        if (baseHP)
+        {
+            baseHP.text = currentHealth + "/" + maxHealth;
         }
         Debug.Log("Base healed by " + amount + ", now at " + currentHealth);
     }
