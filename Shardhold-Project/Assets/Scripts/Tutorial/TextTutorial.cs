@@ -14,17 +14,16 @@ public class TextTutorial : Tutorial
 
     public override void TutorialStart()
     {
+        base.TutorialStart();
         TutorialUIManager.Instance.ShowNextButton();
     }
 
-    public void OnNextButtonPressed()
+    public void OnNextButtonPressed(int currentOrder)
     {
-        //Debug.Log($"OnNextButtonPressed: Tutorial {order}");
-        int currentOrder = TutorialManager.Instance.GetCurrentOrder();
         if (order == currentOrder)
         {
+            Debug.Log($"Text tutorial completed: {order}");
             completed = true;
-            Debug.Log($"Completed tutorial {order}");
             TutorialManager.Instance.CompletedTutorial();
         }
     }
