@@ -3430,9 +3430,7 @@ MonoBehaviour:
   selectedCardUI: {fileID: 0}
   hand:
   - {fileID: 0}
-  - {fileID: 0}
   UIHand:
-  - {fileID: 0}
   - {fileID: 0}
   deckDisabled: 0
   prevDeckContents: 
