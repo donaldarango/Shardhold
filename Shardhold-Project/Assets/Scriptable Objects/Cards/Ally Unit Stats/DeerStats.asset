@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DeerStats
   m_EditorClassIdentifier: 
   id: 6
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: f60987a9a9610a5448e64eac3ff4d15a, type: 3}
   cardName: Deer
   targetType: 0
   range: 3

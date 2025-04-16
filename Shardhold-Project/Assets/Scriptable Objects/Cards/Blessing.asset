@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Blessing
   m_EditorClassIdentifier: 
   id: 4
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: c7955668b1a239644abfb929b7fcf60b, type: 3}
   cardName: Blessing
   targetType: 7
   range: 0
-  description: Bless you!
+  description: 'Bless you! '
   damage: 0
   hp: 0
   audioClip: {fileID: 8300000, guid: 7a22a3c7fef604142be8c84fad2c1556, type: 3}

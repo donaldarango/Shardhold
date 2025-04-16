@@ -5,8 +5,10 @@ using JetBrains.Annotations;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using NUnit.Framework;
 using UnityEngine.UI;
 using static CustomDebug;
+using System;
 
 public class Deck : MonoBehaviour
 {
@@ -42,7 +44,9 @@ public class Deck : MonoBehaviour
 
     private bool deckDisabled;
 
-    public List<int> prevDeckContents = new List<int>();
+    public List<int> prevDeckContents;    //use the same format as cardsUnlocked
+    public string deckContinuityFolder = "";
+
     public GameObject discardButton;
 
     public enum DrawChoiceMode
@@ -90,6 +94,21 @@ public class Deck : MonoBehaviour
                 unit.currentAttacks = unit.stats.attacks;
                 Transform background = unit.transform.Find("CardColor");
                 background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
+            }
+        }
+
+        if (CustomDebug.instance.deckContinuityTesting && CustomDebug.instance.runAssertionTesting)
+        {
+            if (deckContinuityFolder.Equals(""))
+            {
+                PreparePrevDeckContentsList();
+            }
+            else
+            {
+                //Assert.IsTrue(VerifyDeckContinuity(), "Deck Continuity Check");
+                if(!VerifyDeckContinuity()){
+                    Debug.LogError("Deck Continuity Check Failed");
+                }
             }
         }
     }
@@ -490,7 +509,7 @@ public class Deck : MonoBehaviour
     /// </summary>
     /// <param name="card">the int representation of the card to check</param>
     /// <returns>how many of that card are still available to add to draw pile</returns>
-    public int InstancesOfCardRemaining(int card)
+    /*public int InstancesOfCardRemaining(int card)
     {
         int numInPile = 0;
         for (int i = 0; i < drawPile.Count-1; i++)
@@ -502,14 +521,14 @@ public class Deck : MonoBehaviour
         }
 
         return cardsUnlocked[card] - numInPile;
-    }
+    }*/
 
     /// <summary>
     /// Check if the given draw pile is possible based on what cards are unlocked
     /// ASSUMES THAT DISCARD AND HAND ARE EMPTY
     /// </summary>
     /// <returns>true: pile is valid; false: pile is invalid, containing some cards that are not unlocked OR more cards of a kind than are unlcoked of that kind</returns>
-    public bool ValidatePile()
+    /*public bool ValidatePile()
     {
         //slow version; does a lot of looping that could be avoided
         //TODO make a more efficient version if necessary
@@ -521,10 +540,159 @@ public class Deck : MonoBehaviour
             }
         }
         return true;
+    }*/
+
+    public void GenerateDeckContentList(List<int> cardList)
+    {
+        if(cardList == null)
+        {
+            cardList = prevDeckContents;
+        }
+
+        cardList.Clear();
+
+        //start with draw pile
+        for (int i = 0; i < drawPile.Count; i++)
+        {
+            AddCardToDeckContentList(drawPile[i], cardList);
+        }
+
+        //now discard pile
+        for (int i = 0; i < discardPile.Count; i++)
+        {
+            AddCardToDeckContentList(discardPile[i], cardList);
+        }
+
+        //now hand
+        for (int i = 0; i < hand.Length; i++)
+        {
+            if (hand[i] != null)
+            {
+                int id = -1;
+                if (hand[i] is Card)
+                {
+                    id = ((Card)hand[i]).GetId();
+                }
+                else if (hand[i] is AllyUnitStats)
+                {
+                    id = ((AllyUnitStats)hand[i]).GetId();
+                }
+                AddCardToDeckContentList(id, cardList);
+            }
+        }
     }
 
-    
+    private void AddCardToDeckContentList(int cardId, List<int> cardList)
+    {
+        if (cardList == null)
+        {
+            cardList = prevDeckContents;
+        }
 
+        while(cardList.Count <= cardId)
+        {
+            cardList.Add(0);
+        }
+        cardList[cardId]++;
+    }
+
+    public bool VerifyDeckContinuity()
+    {
+        List<int> curDeck = new List<int>();
+
+        GenerateDeckContentList(curDeck);
+
+        return EqualDeckContents(curDeck, "Current Deck", prevDeckContents, "Original Deck");
+    }
+
+    public bool EqualDeckContents(List<int> lhs, string lhsName, List<int> rhs, string rhsName)
+    {
+        DateTime compareDate = DateTime.Now;
+        string logFile = "DeckContinuityTest_" + compareDate.ToFileTimeUtc() + ".txt";
+        bool output = true;
+        string log = "Deck Continuity Check - Results\n";
+        log += "Date/Time:" + Tab() + compareDate.ToString("G") + "\n\n";
+
+        log += "Comparing " + lhsName + " to " + rhsName;
+
+        log += "\n\nDeck list count: ";
+        if(lhs.Count != rhs.Count)
+        {
+            output = false;
+            log += "MISMATCH; " + lhs.Count + " vs " + rhs.Count;
+        }
+        else
+        {
+            log += "MATCH; " + lhs.Count;
+        }
+
+        for (int i = 0; i < lhs.Count && i < rhs.Count; i++)
+        {
+            log += "\nCard " + i + ":\t" + lhs[i] + " vs " + rhs[i] + "\t- ";
+            if(lhs[i] != rhs[i])
+            {
+                output = false;
+                log += "MISMATCH";
+            }
+            else
+            {
+                log += "match";
+            }
+        }
+
+        log += "\n\nOVERALL RESULT:\n";
+        if (output)
+        {
+            log += "MATCH";
+        }
+        else
+        {
+            log += "MISTMATCH";
+        }
+
+        FinishTest(log, logFile, deckContinuityFolder);
+
+        return output;
+    }
+
+    public void PreparePrevDeckContentsList()
+    {
+        prevDeckContents = new List<int>();
+        GenerateDeckContentList(prevDeckContents);
+        DateTime folderDate = DateTime.Now;
+        string folderName = "DeckContinuityTest_" + folderDate.ToFileTimeUtc();
+        deckContinuityFolder = SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging) + "/" + folderName;
+
+        if (CustomDebug.Debugging(DebuggingType.Normal))
+        {
+            Debug.Log($"deckContinuityFolder: {deckContinuityFolder}");
+        }
+
+        if (CustomDebug.instance.saveTestOutput)
+        {
+            if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
+            {
+                SavePrevDeck(folderDate);
+            }
+        }
+
+    }
+
+    public void SavePrevDeck(DateTime timeOfSave)
+    {
+        string logFile = "BasisOfDeckContinuity.txt";
+        string log = "Deck Continuity Check - Basis\n";
+        log += "Date/Time:" + Tab() + timeOfSave.ToString("G") + "\n\n";
+
+        log += "Deck list count: " + prevDeckContents.Count;
+
+        for (int i = 0; i < prevDeckContents.Count; i++)
+        {
+            log += "\nCard " + i + ":\t" + prevDeckContents[i];
+        }
+
+        FinishTest(log, logFile, deckContinuityFolder);
+    }
 
     #endregion
 
