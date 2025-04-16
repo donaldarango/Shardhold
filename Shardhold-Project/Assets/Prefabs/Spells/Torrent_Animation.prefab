@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5647206590085231623}
   - component: {fileID: 194914345386347173}
   - component: {fileID: 5833197748785514646}
+  - component: {fileID: 1325518633170941385}
   m_Layer: 0
   m_Name: Torrent_Animation
   m_TagString: Untagged
@@ -121,5 +122,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e31b0bfaf09403e4fa6f1b4e7a05542f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1325518633170941385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610051754861526081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9a446af6aaa8d48a10eba03bdcca10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
