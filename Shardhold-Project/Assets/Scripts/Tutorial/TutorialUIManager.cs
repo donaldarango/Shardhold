@@ -8,7 +8,7 @@ public class TutorialUIManager : MonoBehaviour
     private static TutorialUIManager _instance;
     public static TutorialUIManager Instance { get { return _instance; } }
 
-    public delegate void NextButtonPressedHandler();
+    public delegate void NextButtonPressedHandler(int currentOrder);
     public static event NextButtonPressedHandler NextButtonPressed;
 
     public RectTransform tutorialUITransfom;
@@ -66,8 +66,8 @@ public class TutorialUIManager : MonoBehaviour
 
     public void NextButton()
     {
-        Debug.Log("Tutorial Next Button Pressed");
-        NextButtonPressed?.Invoke();
+        int currentOrder = TutorialManager.Instance.GetCurrentOrder();
+        NextButtonPressed?.Invoke(currentOrder);
     }
 
     public void SetPosition(TutorialUIPosition tutorialUIPosition)

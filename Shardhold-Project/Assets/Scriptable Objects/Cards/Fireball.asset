@@ -25,3 +25,5 @@ MonoBehaviour:
   heal: 0
   friendlyFire: 1
   unincludeUnits: 0
+  animation: {fileID: 7331125501523982078, guid: 55f040190faf5574f85f77c58c161f5c, type: 3}
+  yOffset: 0.6

@@ -24,6 +24,7 @@ public class TutorialManager : MonoBehaviour
 
     [SerializeField] private List<Tutorial> tutorials = new List<Tutorial>();
     [SerializeField] private Tutorial currentTutorial;
+    [SerializeField] private int currentTutorialIndex;
 
     private void Awake()
     {
@@ -54,15 +55,16 @@ public class TutorialManager : MonoBehaviour
 
     public void CompletedTutorial()
     {
-        Debug.Log($"Setting next tutorial to {currentTutorial.order + 1}");
+        currentTutorial.StopTileHighlight();
         SetNextTutorial(currentTutorial.order + 1);
     }
 
     public void SetNextTutorial(int currentOrder)
     {
         currentTutorial = GetTutorialByOrder(currentOrder);
+        currentTutorialIndex = currentOrder;
 
-        if(!currentTutorial)
+        if (!currentTutorial)
         {
             TutorialUIManager.Instance.ToggleTutorialUI(false);
 
@@ -126,10 +128,10 @@ public class TutorialManager : MonoBehaviour
                 UIManager.Instance.ResumeTurnTimer();
                 break;
             case (TutorialSetting.disablesCards):
-                Deck.Instance.DisableDeckInteraction();
+                Deck.Instance.TutorialDisableCards();
                 break;
             case (TutorialSetting.enablesCards):
-                Deck.Instance.EnableDeckInteraction();
+                Deck.Instance.TutorialEnableCards();
                 break;
         }
     }
