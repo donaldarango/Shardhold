@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: LightningBolt
   m_EditorClassIdentifier: 
   id: 1
-  cardImage: {fileID: 0}
-  cardName: LightningBolt
+  cardImage: {fileID: 21300000, guid: a2b34bcdd3b4aa243ad8ab2329390a5a, type: 3}
+  cardName: Bolt
   targetType: 0
   range: 4
-  description: Zap!
+  description: 
   damage: 3
   hp: 0
   audioClip: {fileID: 8300000, guid: 2dd5dbd6b8e98ec4880197d8d6fbd21d, type: 3}
   audioVolume: 10
   heal: 0
   friendlyFire: 0
+  unincludeUnits: 0

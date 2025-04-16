@@ -85,13 +85,17 @@ public class CardUI : MonoBehaviour
             if (card is Spell)
             {
                 hp.text = "0";
-                cardDescription.text += "\nThis card deals damage in a " + card.targetType + ".";
+                if (card.cardName == "Blessing") {
+                    cardDescription.text += "Heals 4 base HP";
+                }
+                else {
+                    cardDescription.text += "Damages in a " + card.targetType;
+                }
                 background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
             }
             if (card is Placer)
             {
                 hp.text = ((Placer)card).stats.maxHealth.ToString();
-                // background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
             }
             range.text = card.range.ToString();
             damage.text = card.damage.ToString();
@@ -112,30 +116,11 @@ public class CardUI : MonoBehaviour
             range.text = allystats.range.ToString();
             damage.text = allystats.damage.ToString();
         }
-
-        //card_ = card;
-        //Transform background = transform.Find("CardColor");
-        //cardImage.sprite = card.cardImage;
-        //cardName.text = card.cardName;
-        //cardDescription.text = card.description;
-        //if (card is Spell) {
-        //    hp.text = "0";
-        //    cardDescription.text += "\nThis card deals damage in a " + card.targetType + ".";
-        //    background.GetComponent<UnityEngine.UI.Image>().color = Color.green;
-        //}
-        //if (card is Placer) {
-        //    hp.text = ((Placer)card).stats.maxHealth.ToString();
-        //    // background.GetComponent<UnityEngine.UI.Image>().color = Color.red;
-        //}
-        //range.text = card.range.ToString();
-        //damage.text = card.damage.ToString();
     }
     public void OnCardSelected(){
         MapGenerator mapGenerator = FindFirstObjectByType<MapGenerator>();
         Debug.Log("Card selected/clicked: " + cardName.text);
         Debug.Log("Hand Index: " + cardIndex);
-        //mapGenerator.selectedHandIndex = cardIndex;
-
         if (card_ != null)
         {
             Debug.Log("Card selected/clicked: " + cardName.text);

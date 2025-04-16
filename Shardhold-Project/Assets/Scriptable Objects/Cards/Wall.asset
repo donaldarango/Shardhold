@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wall
   m_EditorClassIdentifier: 
   id: 3
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: cf1e1acf3cdfeee4381f7379287c81eb, type: 3}
   cardName: Wall
   targetType: 2
   range: 2
