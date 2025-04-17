@@ -11,6 +11,7 @@ public class Base : MonoBehaviour
     public GameObject gameOverScreen;
     public TMP_Text gameOverText;
     public TMP_Text restartText;
+    [SerializeField] private TMP_Text baseHP;
 
     bool setupComplete = false;
 
@@ -54,6 +55,7 @@ public class Base : MonoBehaviour
         if (!setupComplete)
         {
             currentHealth = maxHealth;
+            baseHP.text = currentHealth + "/" + maxHealth;
             if(GameManager.Instance.baseStartHealth != -1)
             {
                 currentHealth = GameManager.Instance.baseStartHealth;
@@ -70,7 +72,10 @@ public class Base : MonoBehaviour
     {
         currentHealth -= amount;
         Debug.Log("Base HP: " + currentHealth);
-
+        if (baseHP)
+        {
+            baseHP.text = currentHealth + "/" + maxHealth;
+        }
         if (currentHealth <= 0)
         {
             GameOver();
@@ -80,9 +85,14 @@ public class Base : MonoBehaviour
     public void Heal(int amount)
     {
         currentHealth += amount;
+
         if(currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
+        }
+        if (baseHP)
+        {
+            baseHP.text = currentHealth + "/" + maxHealth;
         }
         Debug.Log("Base healed by " + amount + ", now at " + currentHealth);
     }

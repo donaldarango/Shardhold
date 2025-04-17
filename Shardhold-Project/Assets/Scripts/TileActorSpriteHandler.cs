@@ -3,21 +3,14 @@ using UnityEngine;
 
 public class TileActorSpriteHandler : MonoBehaviour
 {
-    private Transform cameraTransform;
     private SpriteRenderer spriteRenderer;
+
+    public bool flipSprite = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        cameraTransform = Camera.main.transform;
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.LookAt(cameraTransform);
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
     }
 
     public void SpriteDamageAnimation()
@@ -30,9 +23,14 @@ public class TileActorSpriteHandler : MonoBehaviour
 
     public void SetSpriteOrientation(Quadrant quadrant)
     {
-        if (quadrant == Quadrant.NW || quadrant == Quadrant.SW) // If sprite is on left half of map
+        if (flipSprite)
         {
             spriteRenderer.flipX = true;
+        }
+
+        if (quadrant == Quadrant.NW || quadrant == Quadrant.SW) // If sprite is on left half of map
+        {
+            spriteRenderer.flipX = !flipSprite;
         }
     }
 

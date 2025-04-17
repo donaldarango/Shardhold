@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2386779281966005913}
   - component: {fileID: 3813313640588697007}
   - component: {fileID: 4173426550529552452}
+  - component: {fileID: -5002840052128725259}
   m_Layer: 0
   m_Name: BrawlerPrefab
   m_TagString: Untagged
@@ -98,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b938d522b7ef3a04abf07f51cf1e6994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipSprite: 0
 --- !u!212 &4173426550529552452
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -153,3 +155,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-5002840052128725259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9028454918137198027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9a446af6aaa8d48a10eba03bdcca10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

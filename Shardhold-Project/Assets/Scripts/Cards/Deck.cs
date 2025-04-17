@@ -42,7 +42,8 @@ public class Deck : MonoBehaviour
     public GameObject[] UIHand;
     private int cardsInHand = 0;
 
-    private bool deckDisabled;
+    [SerializeField] private bool deckDisabled;
+    private bool tutorialDisabled;
 
     public List<int> prevDeckContents;    //use the same format as cardsUnlocked
     public string deckContinuityFolder = "";
@@ -113,8 +114,21 @@ public class Deck : MonoBehaviour
         }
     }
 
+    public void TutorialDisableCards()
+    {
+        tutorialDisabled = true;
+        DisableDeckInteraction();
+    }
+
+    public void TutorialEnableCards()
+    {
+        tutorialDisabled = false;
+        EnableDeckInteraction();
+    }
+
     public void DisableDeckInteraction()
     {
+        Debug.Log("Deck Disabled");
         deckDisabled = true;
         foreach(GameObject obj in UIHand)
         {
@@ -132,6 +146,10 @@ public class Deck : MonoBehaviour
 
     public void EnableDeckInteraction()
     {
+        if (tutorialDisabled)
+            return;
+
+        Debug.Log("Deck Enabled");
         deckDisabled = false;
         foreach (GameObject obj in UIHand)
         {
