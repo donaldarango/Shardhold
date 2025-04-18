@@ -6282,8 +6282,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8326646412675506030}
   - component: {fileID: 6377719548095743471}
-  - component: {fileID: 8054029211131718876}
   - component: {fileID: 8492159789930509756}
+  - component: {fileID: 1948870010420914763}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -6361,19 +6361,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8054029211131718876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4290756305565184076}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b938d522b7ef3a04abf07f51cf1e6994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flipSprite: 0
 --- !u!114 &8492159789930509756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6390,6 +6377,18 @@ MonoBehaviour:
   currentHealth: 0
   gameOverScreen: {fileID: 2247068987989680839}
   baseHP: {fileID: 4605092632060772585}
+--- !u!114 &1948870010420914763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4290756305565184076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9a446af6aaa8d48a10eba03bdcca10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4308672353276323095
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ public class AllyUnitStats : ScriptableObject
     public int hp;
     public int attacks;
     public AudioClip audioClip;
+    public GameObject animation;
+    public Vector3 animationOffset;
 
     public int GetId()
     {
