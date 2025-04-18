@@ -341,6 +341,7 @@ public class TileActorManager : MonoBehaviour
             {
                 restartText.text = "PLAY AGAIN";
             }
+            Time.timeScale = 0;
         }
     }
 
