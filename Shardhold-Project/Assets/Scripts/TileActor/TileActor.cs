@@ -35,6 +35,7 @@ public abstract class TileActor : MonoBehaviour
 
     [SerializeField] protected TileActorSpriteHandler spriteHandler;
     [SerializeField] protected GameObject damageIndicatorPrefab;
+    [SerializeField] protected GameObject shieldSprite;
 
     protected bool actorDataSet = false;
     public abstract void Spawn(MapTile tile);
@@ -60,6 +61,11 @@ public abstract class TileActor : MonoBehaviour
         damagedClip = tileActorStats.damagedClip;
         placementClip = tileActorStats.placementClip;
         deathClip = tileActorStats.deathClip;
+
+        if(isShielded && shieldSprite)
+        {
+            shieldSprite.SetActive(true);
+        }
         
         actorDataSet = true;
     }
@@ -168,6 +174,17 @@ public abstract class TileActor : MonoBehaviour
         if(isShielded)
         {
             isShielded = false;
+
+            if(shieldSprite)
+            {
+                shieldSprite.SetActive(false);
+            }
+
+            if (damagedClip)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(damagedClip, gameObject.transform, .3f);
+            }
+
             ShowDamageIndicator(0, false);
             Debug.Log($"{gameObject.name}'s shield took the blow and shattered!");
             return;
@@ -207,7 +224,7 @@ public abstract class TileActor : MonoBehaviour
         TMP_Text text = indicator.GetComponent<TMP_Text>();
 
         // Set text and color
-        text.text = (isHealing ? "+" : "-") + Mathf.Abs(amount).ToString();
+        text.text = (isHealing ? "+ " : "- ") + Mathf.Abs(amount).ToString();
         text.color = isHealing ? Color.green : Color.red;
 
         float scaleFactor = Mathf.Clamp01((float)amount / 5); // between 0 and 1
