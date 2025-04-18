@@ -117,6 +117,7 @@ public class TileActorManager : MonoBehaviour
     public GameObject gameOverScreen;
     public TMP_Text gameOverText;
     public TMP_Text restartText;
+    public bool useWinConditions = true;    //true for most levels, but set to false for other, special win conditions that are handled elsewhere (namely tutorial levels should be false)
 
 
     public static TileActorManager Instance { get { return _instance; } }
@@ -328,7 +329,7 @@ public class TileActorManager : MonoBehaviour
 
     public void VictoryCheck()
     {
-        if(NoMoreToSpawn() == 0 && AliveEnemies() == 0)
+        if(useWinConditions && NoMoreToSpawn() == 0 && AliveEnemies() == 0)
         {
             //victory!
             gameOverScreen.SetActive(true);
