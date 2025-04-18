@@ -1530,8 +1530,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Congratulations! You have finished the third tutorial. Exit back to the
-    Main Menu where you can continue onto Tutorial Level 4.
+  m_text: Congratulations! You have finished the final tutorial. Exit back to the
+    Main Menu where you can begin your first level of Shardhold!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15221,6 +15221,7 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   gameOverScreen: {fileID: 2247068988486567915}
+  baseHP: {fileID: 0}
 --- !u!224 &8495513711712129328
 RectTransform:
   m_ObjectHideFlags: 0
