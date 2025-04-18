@@ -25,7 +25,7 @@ public class StructureUnit: TileActor
 
         spriteHandler = GetComponent<TileActorSpriteHandler>();
         spriteHandler.SetSpriteOrientation(tile.GetQuadrant());
-        spriteHandler.StructureSpawnAnimation();
+        spriteHandler.StructureSpawnAnimation(tileActorStats.yOffset);
     }
     
     public BasicStructureStats GetStructureStats()

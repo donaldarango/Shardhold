@@ -77,7 +77,7 @@ public class MapManager : MonoBehaviour
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
         BasicTrapStats ta = TileActorManager.Instance.GetTrapTileActorByName(unitName);
-        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0, tile.GetTileCenter().z);
+        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, ta.yOffset, tile.GetTileCenter().z);
         GameObject trapUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         trapUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         TrapUnit trapUnit = trapUnitPrefab.GetComponent<TrapUnit>();
@@ -91,7 +91,7 @@ public class MapManager : MonoBehaviour
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
         BasicStructureStats ta = TileActorManager.Instance.GetStructureTileActorByName(unitName);
-        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
+        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, ta.yOffset, tile.GetTileCenter().z);
         GameObject structureUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         structureUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         StructureUnit structureUnit = structureUnitPrefab.GetComponent<StructureUnit>();
@@ -105,7 +105,7 @@ public class MapManager : MonoBehaviour
     {
         MapTile tile = GetTile(ringNumber, laneNumber);
         BasicEnemyStats ta = TileActorManager.Instance.GetEnemyTileActorByName(unitName);
-        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, 0.35f, tile.GetTileCenter().z);
+        Vector3 tilePosition = new Vector3(tile.GetTileCenter().x, ta.yOffset, tile.GetTileCenter().z);
         GameObject enemyUnitPrefab = Instantiate(ta.actorPrefab, tilePosition, Quaternion.identity);
         enemyUnitPrefab.transform.parent = TileActorManager.Instance.transform;
         EnemyUnit enemyUnit = enemyUnitPrefab.GetComponent<EnemyUnit>();
