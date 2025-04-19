@@ -170,8 +170,16 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        Debug.Log("Restarted Level");
-        LoadLevel(currentLevel);
+        //Debug.Log("Restarted Level");
+        if (Instance.levelType == LevelType.LevelSettingsFile)
+        {
+            LoadLevel(currentLevel);
+        }
+        else if(Instance.levelType == LevelType.LevelSaveFile)
+        {
+            LoadLevelFromSaveFile(currentLevel);
+        }
+        
     }
 
     public void LoadMainMenu()

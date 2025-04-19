@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Defective.JSON;
+using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -112,6 +113,11 @@ public class TileActorManager : MonoBehaviour
     public delegate void EndEnemyTurnHandler();
     public static event EndEnemyTurnHandler EndEnemyTurn;
     public int currentRound = 0;
+
+    public GameObject gameOverScreen;
+    public TMP_Text gameOverText;
+    public TMP_Text restartText;
+    public bool useWinConditions = true;    //true for most levels, but set to false for other, special win conditions that are handled elsewhere (namely tutorial levels should be false)
 
 
     public static TileActorManager Instance { get { return _instance; } }
@@ -319,6 +325,34 @@ public class TileActorManager : MonoBehaviour
     public void SetSpawnList(List<RoundSpawnInfo> list)
     {
         gameSpawnList = list;
+    }
+
+    public void VictoryCheck()
+    {
+        if(useWinConditions && NoMoreToSpawn() == 0 && AliveEnemies() == 0)
+        {
+            //victory!
+            gameOverScreen.SetActive(true);
+            if (gameOverText != null)
+            {
+                gameOverText.text = "YOU WIN!";
+            }
+            if (restartText != null)
+            {
+                restartText.text = "PLAY AGAIN";
+            }
+            Time.timeScale = 0;
+        }
+    }
+
+    public int NoMoreToSpawn()
+    {
+        return gameSpawnList.Count;
+    }
+
+    public int AliveEnemies()
+    {
+        return currentEnemyUnits.Count;
     }
 
 }
