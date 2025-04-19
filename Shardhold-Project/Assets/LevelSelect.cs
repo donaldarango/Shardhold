@@ -16,10 +16,6 @@ public class LevelSelect : MonoBehaviour
         {
             continueButton.interactable = SaveLoad.saveLoad.CheckIfDefaultSaveExists();
         }
-        if (debugLevels != null)
-        {
-            debugLevels.SetActive(GameManager.Instance.showDebugLevelsInMenu);
-        }
         if (selectLevel == false)
         {
             ShowMainMenuOptions();
