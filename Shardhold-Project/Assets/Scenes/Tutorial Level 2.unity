@@ -1959,7 +1959,7 @@ MonoBehaviour:
   title: Placing a Wall
   explanation: Now that your wall has impeded the enemy movement, press the turn
     timer to allow them to attack. This enemy is a ranged enemy, so they can attack
-    from 2 tiles away
+    from 2 tiles away.
   settings: 04000000
   position: 0
   highlightTiles: []
@@ -15456,6 +15456,8 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   gameOverScreen: {fileID: 2247068988397589286}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
   baseHP: {fileID: 4605092632435601672}
   damageIndicatorPrefab: {fileID: 7567642599611975315, guid: 21d7a78cb384cd84fa89233cd3a6dacb, type: 3}
   spriteRenderer: {fileID: 6377719547412624398}
@@ -16548,6 +16550,10 @@ MonoBehaviour:
   currentEnemyUnits: []
   gameSpawnList: []
   currentRound: 0
+  gameOverScreen: {fileID: 0}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
+  useWinConditions: 0
 --- !u!114 &9199840547457219165
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -723,7 +723,7 @@ MonoBehaviour:
   order: 7
   title: Deck and Cards
   explanation: The green circle represents range. This tells you the amount of rows
-    from the base that this card can be placed
+    from the base that this card can be placed.
   settings: 
   position: 1
   highlightTiles: []
@@ -743,7 +743,7 @@ MonoBehaviour:
   order: 9
   title: Deck and Cards
   explanation: Attack the enemy by selecting the Lightning spell then selecting the
-    tile that contains the enemy
+    tile that contains the enemy.
   settings: 05000000
   position: 1
   highlightTiles:
@@ -1596,7 +1596,7 @@ MonoBehaviour:
   completed: 0
   order: 3
   title: Enemy Stats
-  explanation: Here you can see the enemy's stats on the top right
+  explanation: Here you can see the enemy's stats on the top right.
   settings: 
   position: 0
   highlightTiles: []
@@ -15620,6 +15620,8 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   gameOverScreen: {fileID: 2247068988380138327}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
   baseHP: {fileID: 4605092632452557177}
   damageIndicatorPrefab: {fileID: 7567642599611975315, guid: 21d7a78cb384cd84fa89233cd3a6dacb, type: 3}
   spriteRenderer: {fileID: 6377719547429252223}
@@ -16712,6 +16714,10 @@ MonoBehaviour:
   currentEnemyUnits: []
   gameSpawnList: []
   currentRound: 0
+  gameOverScreen: {fileID: 0}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
+  useWinConditions: 0
 --- !u!114 &9199840547439764012
 MonoBehaviour:
   m_ObjectHideFlags: 0

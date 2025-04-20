@@ -2072,7 +2072,7 @@ MonoBehaviour:
   title: Enemies
   explanation: Lastly, this is the Glass Cannon. They are a special enemy with 1
     range and 1 hp, but can deal 5 damage. They are equipped with a shield that can
-    be broken by taking damage or when they damage themselves upon attacking
+    be broken by taking damage or when they damage themselves upon attacking.
   settings: 
   position: 0
   highlightTiles:
@@ -15483,6 +15483,8 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   gameOverScreen: {fileID: 2247068987949748318}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
   baseHP: {fileID: 4605092632025182832}
   damageIndicatorPrefab: {fileID: 7567642599611975315, guid: 21d7a78cb384cd84fa89233cd3a6dacb, type: 3}
   spriteRenderer: {fileID: 6377719548127131510}
@@ -16575,6 +16577,10 @@ MonoBehaviour:
   currentEnemyUnits: []
   gameSpawnList: []
   currentRound: 0
+  gameOverScreen: {fileID: 0}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
+  useWinConditions: 0
 --- !u!114 &9199840546810149157
 MonoBehaviour:
   m_ObjectHideFlags: 0

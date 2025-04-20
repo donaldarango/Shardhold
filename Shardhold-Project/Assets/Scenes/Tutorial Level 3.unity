@@ -893,7 +893,7 @@ MonoBehaviour:
   title: Ally Units
   explanation: An Ally Unit card has been added to your hand! These cards contain
     a hp value. They can select an enemy and attack them, being dealt back any damage
-    from the enemy in return. If they Ally Unit survives, they will be returned to
+    from the enemy in return. If the Ally Unit survives, they will be returned to
     your hand with any remaining hp.
   settings: 02000000
   position: 1
@@ -15506,6 +15506,8 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   gameOverScreen: {fileID: 2247068986878183308}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
   baseHP: {fileID: 4605092633096775074}
   damageIndicatorPrefab: {fileID: 7567642599611975315, guid: 21d7a78cb384cd84fa89233cd3a6dacb, type: 3}
   spriteRenderer: {fileID: 6377719547051368612}
@@ -16598,6 +16600,10 @@ MonoBehaviour:
   currentEnemyUnits: []
   gameSpawnList: []
   currentRound: 0
+  gameOverScreen: {fileID: 0}
+  gameOverText: {fileID: 0}
+  restartText: {fileID: 0}
+  useWinConditions: 0
 --- !u!114 &9199840547886067447
 MonoBehaviour:
   m_ObjectHideFlags: 0
