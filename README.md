@@ -4,7 +4,7 @@
 by Team Shardhold
 04/22/2025 <br/>
 
--CONTROLS-
+### CONTROLS<br/>
 The entire game is played through the mouse.<br/>
 Hover over tiles with your cursor to see card ranges and enemy, structure, or trap information.<br/>
 Left click to select a card.<br/>
