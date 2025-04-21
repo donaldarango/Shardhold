@@ -4,7 +4,8 @@
     "level": -1,
     "sectorCount": 3,
     "maxActualRange": 4,
-    "curTurn": 0,
+    "curTurn": 1,
+    "turnTimer": 28.24640464782715,
     "lanes": [
         {
             "terrains": [
@@ -105,35 +106,45 @@
     ],
     "baseHP": 20,
     "baseWeapon": -1,
-    "spawnedTileActors": [],
-    "spawnList": [
+    "spawnedTileActors": [
         {
-            "roundNumber": 1,
-            "roundSpawnList": [
-                {
-                    "laneNumber": 2,
-                    "enemyUnit": "Basic Melee Enemy"
-                },
-                {
-                    "laneNumber": 5,
-                    "enemyUnit": "Basic Ranged Enemy"
-                }
-            ]
+            "name": "Glass Cannon",
+            "curHealth": 1,
+            "pos": {
+                "x": 3,
+                "y": 2
+            },
+            "type": 0,
+            "isShielded": true,
+            "isPoisoned": false
         },
+        {
+            "name": "Ranger",
+            "curHealth": 1,
+            "pos": {
+                "x": 3,
+                "y": 5
+            },
+            "type": 0,
+            "isShielded": false,
+            "isPoisoned": false
+        }
+    ],
+    "spawnList": [
         {
             "roundNumber": 2,
             "roundSpawnList": [
                 {
                     "laneNumber": 8,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 },
                 {
                     "laneNumber": 3,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 11,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 }
             ]
         },
@@ -142,11 +153,11 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 4,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 10,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 }
             ]
         },
@@ -155,15 +166,15 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 1,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 },
                 {
                     "laneNumber": 7,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 9,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 }
             ]
         },
@@ -172,42 +183,54 @@
             "roundSpawnList": [
                 {
                     "laneNumber": 0,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 3,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 },
                 {
                     "laneNumber": 6,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 },
                 {
                     "laneNumber": 8,
-                    "enemyUnit": "Basic Melee Enemy"
+                    "enemyUnit": "Brawler"
                 },
                 {
                     "laneNumber": 10,
-                    "enemyUnit": "Basic Ranged Enemy"
+                    "enemyUnit": "Ranger"
                 },
                 {
                     "laneNumber": 11,
-                    "enemyUnit": "Basic Tank Enemy"
+                    "enemyUnit": "Bulwark"
                 }
             ]
         }
     ],
-    "trapUnits": [],
     "drawPile": [
         1,
-        2,
-        3,
         0,
-        4,
         5,
         6,
         7
     ],
     "discardPile": [],
-    "hand": []
+    "hand": [
+        {
+            "cardId": 4,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 2,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 3,
+            "cardHealth": 0,
+            "uses": 0
+        }
+    ]
 }
