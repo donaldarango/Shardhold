@@ -26,4 +26,4 @@ MonoBehaviour:
   friendlyFire: 0
   unincludeUnits: 0
   animation: {fileID: 1610051754861526081, guid: 75b068e6a0ebd3d49af19049ebdb9f20, type: 3}
-  yOffset: 0.6
+  animationOffset: {x: 0, y: 0.6, z: 0}

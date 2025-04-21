@@ -104,7 +104,7 @@
             ]
         }
     ],
-    "baseHP": 500,
+    "baseHP": 50,
     "baseWeapon": -1,
     "spawnedTileActors": [
         {
@@ -787,13 +787,14 @@
         0,
         6,
         7,
-        4,
-        1
+        0,
+        1,
+        2
     ],
     "discardPile": [],
     "hand": [
         {
-            "cardId": 5,
+            "cardId": 2,
             "cardHealth": 0,
             "uses": 0
         },

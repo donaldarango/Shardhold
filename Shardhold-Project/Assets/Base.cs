@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class Base : MonoBehaviour
 {
@@ -9,7 +10,11 @@ public class Base : MonoBehaviour
     public int maxHealth = 20;
     [SerializeField] private int currentHealth;
     public GameObject gameOverScreen;
+    public TMP_Text gameOverText;
+    public TMP_Text restartText;
     [SerializeField] private TMP_Text baseHP;
+    [SerializeField] public GameObject damageIndicatorPrefab;
+    public SpriteRenderer spriteRenderer;
 
     bool setupComplete = false;
 
@@ -69,6 +74,10 @@ public class Base : MonoBehaviour
     public void OnTakeDamage(int amount)
     {
         currentHealth -= amount;
+
+        ShowDamageIndicator(amount, false);
+        SpriteDamageAnimation();
+
         Debug.Log("Base HP: " + currentHealth);
         if (baseHP)
         {
@@ -83,6 +92,9 @@ public class Base : MonoBehaviour
     public void Heal(int amount)
     {
         currentHealth += amount;
+
+        ShowDamageIndicator(amount, true);
+        SpriteHealAnimation();
 
         if(currentHealth > maxHealth)
         {
@@ -100,6 +112,14 @@ public class Base : MonoBehaviour
         Debug.Log("Game Over! The base was destroyed.");
         Destroy(gameObject);
         gameOverScreen.SetActive(true);
+        if(gameOverText != null)
+        {
+            gameOverText.text = "GAME OVER";
+        }
+        if (restartText != null)
+        {
+            restartText.text = "TRY AGAIN";
+        }
         Time.timeScale = 0;
     }
 
@@ -111,5 +131,47 @@ public class Base : MonoBehaviour
     public int GetBaseHealth()
     {
         return currentHealth;
+    }
+
+    public void ShowDamageIndicator(int amount, bool isHealing)
+    {
+        if (IndicatorUIManager.Instance == null || IndicatorUIManager.Instance.damageCanvas == null)
+        {
+            Debug.LogError("UIManager or DamageCanvas not set!");
+            return;
+        }
+
+        Vector3 offset = new Vector3(UnityEngine.Random.Range(-0.7f, 0.7f), 0.0f, 0); // world-space offset to left & slightly up
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + offset);
+        GameObject indicator = Instantiate(damageIndicatorPrefab, IndicatorUIManager.Instance.damageCanvas.transform);
+        indicator.transform.position = screenPos;
+
+        TMP_Text text = indicator.GetComponent<TMP_Text>();
+
+        // Set text and color
+        text.text = (isHealing ? "+ " : "- ") + Mathf.Abs(amount).ToString();
+        text.color = isHealing ? Color.green : Color.red;
+
+        float scaleFactor = Mathf.Clamp01((float)amount / 5); // between 0 and 1
+        float baseScale = 1f;
+        float extraScale = 0.5f;
+
+        indicator.transform.localScale = Vector3.one * (baseScale + scaleFactor * extraScale);
+    }
+
+    public void SpriteDamageAnimation()
+    {
+        Sequence mySequence = DOTween.Sequence();
+        Color originalColor = spriteRenderer.material.color;
+        mySequence.Append(spriteRenderer.material.DOColor(Color.red, 0.2f));
+        mySequence.Append(spriteRenderer.material.DOColor(originalColor, 0.2f));
+    }
+
+    public void SpriteHealAnimation()
+    {
+        Sequence mySequence = DOTween.Sequence();
+        Color originalColor = spriteRenderer.material.color;
+        mySequence.Append(spriteRenderer.material.DOColor(Color.green, 0.2f));
+        mySequence.Append(spriteRenderer.material.DOColor(originalColor, 0.2f));
     }
 }

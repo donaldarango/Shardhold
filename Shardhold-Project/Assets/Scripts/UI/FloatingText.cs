@@ -12,14 +12,12 @@ public class FloatingText : MonoBehaviour
     private RectTransform rect;
     private float timeElapsed = 0f;
     private Color originalColor;
-
-    void Awake()
+    void Start()
     {
         text = GetComponent<TMP_Text>();
         rect = GetComponent<RectTransform>();
-        originalColor = text.color;
+        originalColor = text.color; // Capture AFTER the color is set externally
     }
-
     void Update()
     {
         timeElapsed += Time.deltaTime;

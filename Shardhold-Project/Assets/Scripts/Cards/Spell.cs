@@ -16,7 +16,7 @@ class Spell : Card
     public bool unincludeUnits;
 
     public GameObject animation;
-    public float yOffset = 0.0f;
+    public Vector3 animationOffset = new Vector3(0.0f, 0.0f, 0.0f);
 
     public override CardType cardType => CardType.Spell;
 
@@ -76,7 +76,7 @@ class Spell : Card
             {
                 var Base = GameObject.Find("Base");
                 Base.GetComponent<Base>().Heal(heal);
-                PlaySpellAnimation(new Vector3(0,0.5f,0));
+                PlaySpellAnimation(new Vector3(0,0,0));
             }
             else
             {
@@ -113,14 +113,14 @@ class Spell : Card
 
     private void PlaySpellAnimation(Vector3 tileCoords)
     {
-        Vector3 pos = new Vector3(tileCoords.x, yOffset, tileCoords.z);
+        Vector3 pos = tileCoords + animationOffset;
         if (animation != null)
         {
             GameObject obj = Instantiate(animation, pos, Quaternion.identity);
             SpellAnimation spellAnimation = obj.GetComponent<SpellAnimation>();
             if (spellAnimation == null)
             {
-                Debug.LogWarning("Prefab does not have AnimationAutoDestroy script attached.");
+                Debug.LogWarning("Prefab does not have SpellAnimation script attached.");
             }
         }
     }

@@ -24,5 +24,6 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: bd779682bb4812a40a9106772a8ebed5, type: 3}
   placementClip: {fileID: 8300000, guid: 5a789614bac84a744b031e95ebc61819, type: 3}
   actorPrefab: {fileID: 9028454918137198027, guid: 12b102072b35e794c8be544b7cb52a03, type: 3}
+  yOffset: 0.35
   moveSpeed: 1
   movementClip: {fileID: 8300000, guid: bfc4e07ddcbbed84f8176f515f9bfe0d, type: 3}
