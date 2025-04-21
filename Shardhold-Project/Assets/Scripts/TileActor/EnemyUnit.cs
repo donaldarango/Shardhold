@@ -73,6 +73,7 @@ public class EnemyUnit : TileActor
     {
         GetCurrentTile().SetCurrentTileActor(null);
         TileActorManager.Instance.RemoveEnemyFromCurrentEnemyList(this);
+        TileActorManager.Instance.VictoryCheck();
         base.Die();
     }
 

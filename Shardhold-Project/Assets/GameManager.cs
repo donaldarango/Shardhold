@@ -124,7 +124,6 @@ public class GameManager : MonoBehaviour
         Instance.levelType = LevelType.LevelSaveFile;
         currentLevel = level;
         SceneManager.LoadScene("BaseLevel");
-        //Base.Instance.Setup();
     }
 
 
@@ -144,14 +143,43 @@ public class GameManager : MonoBehaviour
     public void LoadTutorialLevel(int levelNumber)
     {
         Instance.baseStartHealth = -1;
+        Instance.levelType = LevelType.LevelSettingsFile;
+        currentLevel = "Tutorial_" + levelNumber;
+        SceneManager.LoadScene("Tutorial Level " + levelNumber);
+    }
+
+    public void LoadTutorialLevelFromSaveFile(int levelNumber)
+    {
+        if (CustomDebug.Debugging(CustomDebug.DebuggingType.Normal))
+        {
+            Debug.Log($"running LoadTutorialLevelFromSaveFile: {levelNumber}");
+        }
+        if (!SaveLoad.saveLoad.CheckIfFileExists($"Level_Tutorial_{levelNumber}_Save.json", SaveLoad.SaveType.levelFile))
+        {
+            if (CustomDebug.Debugging(CustomDebug.DebuggingType.ErrorOnly))
+            {
+                Debug.Log($"Cannot load non-existant save file: Level_{levelNumber}_Save.json");
+            }
+            return;
+        }
+        Instance.baseStartHealth = -1;
+        Instance.levelType = LevelType.LevelSaveFile;
         currentLevel = "Tutorial_" + levelNumber;
         SceneManager.LoadScene("Tutorial Level " + levelNumber);
     }
 
     public void RestartLevel()
     {
-        Debug.Log("Restarted Level");
-        LoadLevel(currentLevel);
+        //Debug.Log("Restarted Level");
+        if (Instance.levelType == LevelType.LevelSettingsFile)
+        {
+            LoadLevel(currentLevel);
+        }
+        else if(Instance.levelType == LevelType.LevelSaveFile)
+        {
+            LoadLevelFromSaveFile(currentLevel);
+        }
+        
     }
 
     public void LoadMainMenu()

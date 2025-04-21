@@ -10,6 +10,8 @@ public class Base : MonoBehaviour
     public int maxHealth = 20;
     [SerializeField] private int currentHealth;
     public GameObject gameOverScreen;
+    public TMP_Text gameOverText;
+    public TMP_Text restartText;
     [SerializeField] private TMP_Text baseHP;
     [SerializeField] public GameObject damageIndicatorPrefab;
     public SpriteRenderer spriteRenderer;
@@ -110,6 +112,14 @@ public class Base : MonoBehaviour
         Debug.Log("Game Over! The base was destroyed.");
         Destroy(gameObject);
         gameOverScreen.SetActive(true);
+        if(gameOverText != null)
+        {
+            gameOverText.text = "GAME OVER";
+        }
+        if (restartText != null)
+        {
+            restartText.text = "TRY AGAIN";
+        }
         Time.timeScale = 0;
     }
 

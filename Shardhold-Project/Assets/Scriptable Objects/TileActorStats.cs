@@ -22,4 +22,5 @@ public abstract class TileActorStats : ScriptableObject
 
     [Header("Tile Actor Prefab")]
     public GameObject actorPrefab; // Prefab reference for the actor (enemy, structure, trap)
+    public float yOffset; // Value to raise sprite object to prevent clipping through floor
 }

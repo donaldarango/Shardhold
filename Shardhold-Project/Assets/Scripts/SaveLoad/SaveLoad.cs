@@ -633,6 +633,8 @@ public class SaveLoad : MonoBehaviour
                     }
                 }
             }
+            Deck.Instance.drawPile = data.drawPile;
+            Deck.Instance.discardPile = data.discardPile;
 
             #endregion
 

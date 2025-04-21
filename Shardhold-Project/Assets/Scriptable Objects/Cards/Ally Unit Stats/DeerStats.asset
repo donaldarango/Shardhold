@@ -22,3 +22,5 @@ MonoBehaviour:
   hp: 4
   attacks: 1
   audioClip: {fileID: 8300000, guid: 1ce1f8b36a605684fa9dba11175eb96b, type: 3}
+  animation: {fileID: 8114271306143014135, guid: 280c865cab609df43bd29a7379f19b14, type: 3}
+  animationOffset: {x: 0.5, y: 0.6, z: 0}

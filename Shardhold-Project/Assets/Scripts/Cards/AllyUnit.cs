@@ -45,7 +45,7 @@ public class AllyUnit : MonoBehaviour
 
             if (actor && actor.GetTileActorType() == TileActor.TileActorType.EnemyUnit) //attack enemy. recieve damage. return to hand
             {
-
+                PlayAllyUnitAnimation(target.GetTileCenter());
                 actor.TakeDamage(stats.damage);
                 currentHealth -= actor.tileActorStats.damage;
                 UpdateUIHealth();
@@ -67,5 +67,19 @@ public class AllyUnit : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void PlayAllyUnitAnimation(Vector3 tileCoords)
+    {
+        Vector3 pos = tileCoords + stats.animationOffset;
+        if (stats.animation != null)
+        {
+            GameObject obj = Instantiate(stats.animation, pos, Quaternion.identity);
+            SpellAnimation spellAnimation = obj.GetComponent<SpellAnimation>();
+            if (spellAnimation == null)
+            {
+                Debug.LogWarning("Prefab does not have SpellAnimation script attached.");
+            }
+        }
     }
 }

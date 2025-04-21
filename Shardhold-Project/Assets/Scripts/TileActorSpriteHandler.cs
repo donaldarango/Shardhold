@@ -45,7 +45,7 @@ public class TileActorSpriteHandler : MonoBehaviour
         mySequence.Append(spriteRenderer.material.DOFade(1, 0.5f));
     }
 
-    public void StructureSpawnAnimation()
+    public void StructureSpawnAnimation(float yOffset)
     {
         // initialize starting values
         Color color = spriteRenderer.material.color;
@@ -57,6 +57,6 @@ public class TileActorSpriteHandler : MonoBehaviour
 
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(spriteRenderer.material.DOFade(1, 0.5f));
-        mySequence.Append(transform.DOLocalMoveY(.3f, .1f));
+        mySequence.Append(transform.DOLocalMoveY(yOffset, .1f));
     }
 }
