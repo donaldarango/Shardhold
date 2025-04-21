@@ -98,28 +98,28 @@ public class SaveLoad : MonoBehaviour
         return true;
     }*/
 
-    // public bool CreateFolder(string folder, string folderLocation)
-    // {
+    public bool CreateFolder(string folder, string folderLocation)
+    {
 
-    //     try
-    //     {
-    //         AssetDatabase.CreateFolder(folderLocation, folder);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         if (CustomDebug.Debugging(DebuggingType.ErrorOnly))
-    //         {
-    //             Debug.LogError("ERROR when trying to create folder \"" + folder + "\" at location \"" + folderLocation + "\""  + "\", see message: " + e.Message);
-    //         }
-    //         return false;
-    //     }
-    //     return true;
-    // }
+        try
+        {
+            AssetDatabase.CreateFolder(folderLocation, folder);
+        }
+        catch (Exception e)
+        {
+            if (CustomDebug.Debugging(DebuggingType.ErrorOnly))
+            {
+                Debug.LogError("ERROR when trying to create folder \"" + folder + "\" at location \"" + folderLocation + "\""  + "\", see message: " + e.Message);
+            }
+            return false;
+        }
+        return true;
+    }
 
-    // public bool CreateFolder(string folder, SaveType saveType)
-    // {
-    //     return CreateFolder(folder, GetSaveLocation(saveType));
-    // }
+    public bool CreateFolder(string folder, SaveType saveType)
+    {
+        return CreateFolder(folder, GetSaveLocation(saveType));
+    }
 
     public void WriteFile(string filename, string fileLocation, string contents)
     {

@@ -688,10 +688,10 @@ public class Deck : MonoBehaviour
 
         if (CustomDebug.instance.saveTestOutput)
         {
-            // if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
-            // {
-            //     SavePrevDeck(folderDate);
-            // }
+            if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
+            {
+                SavePrevDeck(folderDate);
+            }
         }
 
     }
