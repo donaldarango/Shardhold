@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 410481226}
   - component: {fileID: 410481230}
   - component: {fileID: 410481229}
+  - component: {fileID: 410481235}
   - component: {fileID: 410481231}
   - component: {fileID: 410481232}
   - component: {fileID: 410481233}
@@ -740,7 +741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   completed: 0
-  order: 9
+  order: 10
   title: Deck and Cards
   explanation: Attack the enemy by selecting the Lightning spell then selecting the
     tile that contains the enemy.
@@ -764,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   completed: 0
-  order: 10
+  order: 11
   title: Deck and Cards
   explanation: 'Press the timer to end your turn and draw a new card. '
   settings: 0300000004000000
@@ -783,7 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   completed: 0
-  order: 11
+  order: 12
   title: Deck and Cards
   explanation: If you are unhappy with the card(s) that you have drawn, you can discard
     one card per turn. This will replace the discarded card with a new one from the
@@ -805,12 +806,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   completed: 0
-  order: 12
+  order: 13
   title: Deck and Cards
   explanation: For example, select the 'Blessing' card and then press the discard
     button. Since your deck has run out of cards, it is refilled, shuffled, then
     drawn from. In normal gameplay, the drawing of cards will be randomized.
   settings: 05000000
+  position: 1
+  highlightTiles: []
+--- !u!114 &410481235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410481224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09894b9a770cee0428ac1a765f8488dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  completed: 0
+  order: 9
+  title: Deck and Cards
+  explanation: You can select the card by left clicking it with your mouse. To deselect
+    any card, you can right click the selected card from your hand.
+  settings: 
   position: 1
   highlightTiles: []
 --- !u!1 &507900575
