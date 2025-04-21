@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Wall Unit
   actorType: 1
-  maxHealth: 10
+  maxHealth: 5
   attackRange: 0
   damage: 0
   isShielded: 0
