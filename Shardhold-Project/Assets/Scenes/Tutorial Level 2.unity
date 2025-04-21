@@ -2063,7 +2063,7 @@ MonoBehaviour:
   order: 6
   title: Placing a Trap
   explanation: If you hover over the Basic Melee Enemy, you can see that the trap
-    has 1/2 hp and the enemy has 2/3 hp.
+    has 1/2 hp and the enemy has 1/3 hp.
   settings: 02000000
   position: 0
   highlightTiles:
