@@ -23,7 +23,7 @@ public abstract class TileActor : MonoBehaviour
     [SerializeField]protected int maxHealth;
     [SerializeField]protected int attackRange;
     [SerializeField]protected int damage;
-    [SerializeReference]protected PrefabAssetType actorPrefab;
+    [SerializeReference]protected GameObject actorPrefab;
     [SerializeField] protected bool isShielded = false;
     [SerializeField] protected bool isPoisoned = false;
 
