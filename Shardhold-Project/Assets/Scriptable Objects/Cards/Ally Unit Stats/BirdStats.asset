@@ -17,7 +17,7 @@ MonoBehaviour:
   cardName: Bird
   targetType: 0
   range: 4
-  description: 
+  description: Can attack twice in one round
   damage: 1
   hp: 2
   attacks: 2
