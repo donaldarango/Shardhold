@@ -1,0 +1,352 @@
+{
+    "initialized": true,
+    "saveVersion": "1.00",
+    "level": -1,
+    "sectorCount": 3,
+    "maxActualRange": 4,
+    "curTurn": 1,
+    "turnTimer": 40,
+    "lanes": [
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "terrains": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "baseHP": 500,
+    "baseWeapon": -1,
+    "spawnedTileActors": [
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 1
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 2
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 3
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 4
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 5
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 6
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 7
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 8
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 9
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 10
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        },
+        {
+            "name": "Brawler",
+            "curHealth": 3,
+            "pos": {
+                "x": 0,
+                "y": 11
+            },
+            "type": 0,
+            "damage": 1,
+            "attackRange": 1,
+            "isShielded": false,
+            "isPoisoned": false
+        }
+    ],
+    "spawnList": [
+        {
+            "roundNumber": 3,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 4,
+                    "enemyUnit": "Brawler"
+                },
+                {
+                    "laneNumber": 10,
+                    "enemyUnit": "Bulwark"
+                }
+            ]
+        },
+        {
+            "roundNumber": 4,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 1,
+                    "enemyUnit": "Ranger"
+                },
+                {
+                    "laneNumber": 7,
+                    "enemyUnit": "Brawler"
+                },
+                {
+                    "laneNumber": 9,
+                    "enemyUnit": "Ranger"
+                }
+            ]
+        },
+        {
+            "roundNumber": 5,
+            "roundSpawnList": [
+                {
+                    "laneNumber": 0,
+                    "enemyUnit": "Brawler"
+                },
+                {
+                    "laneNumber": 3,
+                    "enemyUnit": "Ranger"
+                },
+                {
+                    "laneNumber": 6,
+                    "enemyUnit": "Bulwark"
+                },
+                {
+                    "laneNumber": 8,
+                    "enemyUnit": "Brawler"
+                },
+                {
+                    "laneNumber": 10,
+                    "enemyUnit": "Ranger"
+                },
+                {
+                    "laneNumber": 11,
+                    "enemyUnit": "Bulwark"
+                }
+            ]
+        }
+    ],
+    "drawPile": [
+        2,
+        5,
+        0,
+        6,
+        7,
+        4,
+        1
+    ],
+    "discardPile": [],
+    "hand": [
+        {
+            "cardId": 3,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 3,
+            "cardHealth": 0,
+            "uses": 0
+        },
+        {
+            "cardId": 5,
+            "cardHealth": 0,
+            "uses": 0
+        }
+    ]
+}
