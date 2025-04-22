@@ -331,17 +331,18 @@ public class TileActorManager : MonoBehaviour
     {
         if(useWinConditions && NoMoreToSpawn() == 0 && AliveEnemies() == 0)
         {
-            //victory!
-            gameOverScreen.SetActive(true);
-            if (gameOverText != null)
-            {
-                gameOverText.text = "YOU WIN!";
-            }
-            if (restartText != null)
-            {
-                restartText.text = "PLAY AGAIN";
-            }
-            Time.timeScale = 0;
+            GameManager.Instance.LoadByIndex(1);
+            // //victory!
+            // gameOverScreen.SetActive(true);
+            // if (gameOverText != null)
+            // {
+            //     gameOverText.text = "YOU WIN!";
+            // }
+            // if (restartText != null)
+            // {
+            //     restartText.text = "PLAY AGAIN";
+            // }
+            // Time.timeScale = 0;
         }
     }
 
