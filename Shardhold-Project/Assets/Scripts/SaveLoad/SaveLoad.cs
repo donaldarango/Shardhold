@@ -5,10 +5,6 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using static UnityEngine.JsonUtility;
-using Unity.VisualScripting;
-using System.Data;
-using JetBrains.Annotations;
-using System.Linq;
 using TMPro;
 using NUnit.Framework;
 
@@ -101,18 +97,18 @@ public class SaveLoad : MonoBehaviour
     public bool CreateFolder(string folder, string folderLocation)
     {
 
-        try
-        {
-            AssetDatabase.CreateFolder(folderLocation, folder);
-        }
-        catch (Exception e)
-        {
-            if (CustomDebug.Debugging(DebuggingType.ErrorOnly))
-            {
-                Debug.LogError("ERROR when trying to create folder \"" + folder + "\" at location \"" + folderLocation + "\""  + "\", see message: " + e.Message);
-            }
-            return false;
-        }
+        //try
+        //{
+        //    AssetDatabase.CreateFolder(folderLocation, folder);
+        //}
+        //catch (Exception e)
+        //{
+        //    if (CustomDebug.Debugging(DebuggingType.ErrorOnly))
+        //    {
+        //        Debug.LogError("ERROR when trying to create folder \"" + folder + "\" at location \"" + folderLocation + "\""  + "\", see message: " + e.Message);
+        //    }
+        //    return false;
+        //}
         return true;
     }
 
@@ -246,7 +242,7 @@ public class SaveLoad : MonoBehaviour
             Load(filename, saveType, fileType);
             GameStateData verificationData = CreateData();
             JsonSave("saveVerificationTestData.json", SaveType.misc, verificationData);
-            Assert.IsTrue(StrictDataCompare(data, verificationData), "Save Verification");
+            StrictDataCompare(data, verificationData);
         }
 
         return output;

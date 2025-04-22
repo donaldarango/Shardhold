@@ -17,7 +17,7 @@ MonoBehaviour:
   cardName: Deer
   targetType: 0
   range: 3
-  description: 
+  description: Attacks with antlers
   damage: 2
   hp: 4
   attacks: 1
