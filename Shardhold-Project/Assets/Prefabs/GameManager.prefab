@@ -64,10 +64,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultFileType: 2
   fileToUse: current_save.json
-  saveFolder: Assets/Resources/PlayerSaves
-  levelsFolder: Assets/Resources/LevelSettings
-  miscFolder: Assets/Resources/Misc
-  debugFolder: Assets/Resources/Debug
+  saveFolder: SaveFiles/Resources/PlayerSaves
+  levelsFolder: SaveFiles/Resources/LevelSettings
+  miscFolder: SaveFiles/Resources/Misc
+  debugFolder: SaveFiles/Resources/Debug
   playerStats:
     nextLevel: 0
     cardsUnlocked: 

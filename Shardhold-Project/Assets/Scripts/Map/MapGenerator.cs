@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Assertions;
 using static Card;
 #nullable enable 
 
@@ -89,8 +86,6 @@ public class MapGenerator : MonoBehaviour
 
     void Start()
     {
-        //all prior code from here was moved to GenerateMap()
-
         GenerateMap();
     }
 
@@ -109,11 +104,6 @@ public class MapGenerator : MonoBehaviour
         targetedTiles = new HashSet<(int, int)>();
         clickedTiles = new HashSet<(int, int)>();
 
-
-        // Debugging
-        Assert.IsTrue(circleRadii.Length > 0);
-        Assert.IsTrue(laneCount > 0);
-        Assert.IsTrue(ringCount > 0);
 
         for (int i = 0; i < ringCount + 1; i++)
         {

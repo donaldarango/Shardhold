@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using NUnit.Framework;
 using UnityEngine.UI;
 using static CustomDebug;
 using System;
@@ -688,10 +687,10 @@ public class Deck : MonoBehaviour
 
         if (CustomDebug.instance.saveTestOutput)
         {
-            if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
-            {
-                SavePrevDeck(folderDate);
-            }
+            //if (SaveLoad.saveLoad.CreateFolder(folderName, SaveLoad.saveLoad.GetSaveLocation(SaveLoad.SaveType.debugging)))
+            //{
+            //    SavePrevDeck(folderDate);
+            //}
         }
 
     }

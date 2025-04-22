@@ -1473,10 +1473,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultFileType: 2
   fileToUse: current_save.json
-  saveFolder: Assets/Resources/PlayerSaves
-  levelsFolder: Assets/Resources/LevelSettings
-  miscFolder: Assets/Resources/Misc
-  debugFolder: Assets/Resources/Debug
+  saveFolder: SaveFiles/Resources/PlayerSaves
+  levelsFolder: SaveFiles/Resources/LevelSettings
+  miscFolder: SaveFiles/Resources/Misc
+  debugFolder: SaveFiles/Resources/Debug
   playerStats:
     nextLevel: 0
     cardsUnlocked: 
@@ -3718,6 +3718,7 @@ MonoBehaviour:
   gameOverScreen: {fileID: 2247068987989680839}
   gameOverText: {fileID: 5525997536522023801}
   restartText: {fileID: 7969912805891518657}
+  useWinConditions: 1
 --- !u!1 &2695178402277915178
 GameObject:
   m_ObjectHideFlags: 0
