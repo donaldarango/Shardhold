@@ -1,0 +1,120 @@
+{
+    "Terrain": {
+        // Sets TerrainType for entire Map
+        "Map": {
+            "TerrainType": "Default"
+        },
+        // Sets TerrainType for specific Quadrants
+        "Quadrants": [
+            {
+                "QuadrantNumber": 0,
+                "TerrainType": "Mountain"
+            },
+            {
+                "QuadrantNumber": 1,
+                "TerrainType": "Mountain"
+            }
+        ],
+        // Sets TerrainType for specific Tile at "rowNumber, laneNumber"
+        "Tiles": [
+            {
+                "RowNumber": 0,
+                "LaneNumber": 0,
+                "TerrainType": "Default"
+            }
+        ]
+    },
+    "EnemySpawnData": {
+        "Rounds": [
+            {
+                "RoundNumber": 1,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Glass Cannon",
+                        "LaneNumber": 2
+                    },
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 5
+                    }
+                ]
+            },
+            {
+                "RoundNumber": 2,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Bulwark",
+                        "LaneNumber": 8
+                    },
+                    {
+                        "EnemyUnit": "Brawler",
+                        "LaneNumber": 3
+                    },
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 11
+                    }
+                ]
+            },
+            {
+                "RoundNumber": 3,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Brawler",
+                        "LaneNumber": 4
+                    },
+                    {
+                        "EnemyUnit": "Bulwark",
+                        "LaneNumber": 10
+                    }
+                ]
+            },
+            {
+                "RoundNumber": 4,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 1
+                    },
+                    {
+                        "EnemyUnit": "Brawler",
+                        "LaneNumber": 7
+                    },
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 9
+                    }
+                ]
+            },
+            {
+                "RoundNumber": 5,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Brawler",
+                        "LaneNumber": 0
+                    },
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 3
+                    },
+                    {
+                        "EnemyUnit": "Bulwark",
+                        "LaneNumber": 6
+                    },
+                    {
+                        "EnemyUnit": "Brawler",
+                        "LaneNumber": 8
+                    },
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 10
+                    },
+                    {
+                        "EnemyUnit": "Bulwark",
+                        "LaneNumber": 11
+                    }
+                ]
+            }
+        ]
+    }
+}

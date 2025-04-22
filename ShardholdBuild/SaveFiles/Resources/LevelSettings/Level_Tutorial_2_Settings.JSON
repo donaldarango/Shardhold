@@ -1,0 +1,49 @@
+{
+    "Terrain": {
+        // Sets TerrainType for entire Map
+        "Map": {
+            "TerrainType": "Default"
+        },
+        // Sets TerrainType for specific Quadrants
+        "Quadrants": [
+            {
+                "QuadrantNumber": 0,
+                "TerrainType": "Mountain"
+            },
+            {
+                "QuadrantNumber": 1,
+                "TerrainType": "Mountain"
+            }
+        ],
+        // Sets TerrainType for specific Tile at "rowNumber, laneNumber"
+        "Tiles": [
+            {
+                "RowNumber": 0,
+                "LaneNumber": 0,
+                "TerrainType": "Default"
+            }
+        ]
+    },
+    "EnemySpawnData": {
+        "Rounds": [
+            {
+                "RoundNumber": 1,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Ranger",
+                        "LaneNumber": 0
+                    }
+                ]
+            },
+            {
+                "RoundNumber": 2,
+                "RoundSpawnList": [
+                    {
+                        "EnemyUnit": "Brawler",
+                        "LaneNumber": 1
+                    }
+                ]
+            }
+        ]
+    }
+}
