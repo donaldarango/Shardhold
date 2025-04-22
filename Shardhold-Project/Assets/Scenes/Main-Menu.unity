@@ -2398,18 +2398,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
-      propertyPath: playerTurn
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
-      propertyPath: currentLevel
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8400422571670886522, guid: b9e62bd4a24952c498c2bbc2f3587393, type: 3}
-      propertyPath: _currentLevel
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
