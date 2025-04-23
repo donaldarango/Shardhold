@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6cd668fdef09e74d95747922add51b7, type: 3}
   m_Name: BasicStructureUnit
   m_EditorClassIdentifier: 
-  unitName: Wall Unit
+  unitName: Tree
   actorType: 1
   maxHealth: 5
   attackRange: 0
