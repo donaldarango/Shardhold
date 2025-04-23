@@ -35,4 +35,5 @@ Ally Cards remain in your hand until the ally loses all its health in battle.<br
 If you're struggling on the final, full gameplay level then make sure to utilize traps and structures as well as your one discard a turn to maximize your card usage.
 <br/>
 ### GAME BREAKING BUGS <br/>
-None that we are aware of at the moment.<br/>
+- Tutorials need to be completed as directed, if a spell is played on the wrong tile for example, the tutorial will not be able to continue and the level will need to be restarted
+- For actual gameplay there are none that we are aware of at the moment.<br/>
